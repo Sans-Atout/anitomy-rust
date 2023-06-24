@@ -11,3 +11,4 @@ categories = ["parsing"]
 repository = "https://github.com/Sans-Atout/anitomy-rust"
 
 [dependencies]
+error-stack = "0.3.1"
