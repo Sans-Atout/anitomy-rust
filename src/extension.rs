@@ -1,6 +1,6 @@
 use std::path::Path;
 
-fn is_valid_extension(tested_extension : &str) -> bool{
+fn is_valid_extension(tested_extension: &str) -> bool {
     let valid_extension = vec![
         ".php".to_string(),
         ".html".to_string(),
@@ -180,8 +180,7 @@ fn is_valid_extension(tested_extension : &str) -> bool{
         ".conf".to_string(),
         ".mysql-query".to_string(),
         ".session-start".to_string(),
-        ".uk".to_string()
-        .to_string(),
+        ".uk".to_string(),
         ".TXT".to_string(),
         ".orig".to_string(),
         ".settings.php".to_string(),
@@ -302,7 +301,7 @@ fn is_valid_extension(tested_extension : &str) -> bool{
         ".ssf".to_string(),
         ".stm".to_string(),
         ".txt.gz".to_string(),
-                ".Web.UI.WebResource.axd".to_string(),
+        ".Web.UI.WebResource.axd".to_string(),
         ".as".to_string(),
         ".asp.asp".to_string(),
         ".au".to_string(),
@@ -381,8 +380,7 @@ fn is_valid_extension(tested_extension : &str) -> bool{
         ".taf".to_string(),
         ".war".to_string(),
         ".xslt".to_string(),
-        ".1.6".to_string()
-        .to_string(),
+        ".1.6".to_string(),
         ".2a".to_string(),
         ".8.1".to_string(),
         ".CSS".to_string(),
@@ -1769,9 +1767,8 @@ fn is_valid_extension(tested_extension : &str) -> bool{
     valid_extension.contains(&tested_extension.to_string())
 }
 
-
 #[test]
-fn test_valid_extension(){
+fn test_valid_extension() {
     assert!(is_valid_extension(".mkv"));
     assert!(is_valid_extension(".mp4"));
     assert!(is_valid_extension(".avi"));
@@ -1779,26 +1776,26 @@ fn test_valid_extension(){
 }
 
 #[test]
-fn test_invalid_extension(){
+fn test_invalid_extension() {
     assert!(!is_valid_extension("mkv"));
     assert!(!is_valid_extension(".non an extension"));
     assert!(!is_valid_extension("avi"));
 }
 
-pub fn remove_extension(file_name : &str) -> String {
+pub fn remove_extension(file_name: &str) -> String {
     let path = Path::new(file_name);
 
     let extension = path.extension();
-    if extension.is_none(){
+    if extension.is_none() {
         return file_name.to_string();
     }
 
-    let file_extension = format!(".{}",extension.unwrap().to_str().unwrap());
+    let file_extension = format!(".{}", extension.unwrap().to_str().unwrap());
 
-    if !is_valid_extension(&file_extension){
-        return file_name.to_string(); 
+    if !is_valid_extension(&file_extension) {
+        return file_name.to_string();
     }
 
-    let file_with_no_extension = &file_name[..file_name.len()-file_extension.len()];
+    let file_with_no_extension = &file_name[..file_name.len() - file_extension.len()];
     file_with_no_extension.to_string()
 }

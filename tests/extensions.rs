@@ -26,9 +26,7 @@ fn test_mkv() {
         "[chibi-Doki] Seikon no Qwaser - 13v0 (Uncensored Director's Cut) [988DB090]"
     );
     assert_eq!(
-        remove_extension(
-            "[Chihiro]_Kono_Aozora_ni_Yakusoku_Wo_10_v2_[DVD][h264][C83D206B].mkv"
-        ),
+        remove_extension("[Chihiro]_Kono_Aozora_ni_Yakusoku_Wo_10_v2_[DVD][h264][C83D206B].mkv"),
         "[Chihiro]_Kono_Aozora_ni_Yakusoku_Wo_10_v2_[DVD][h264][C83D206B]"
     );
     assert_eq!(
@@ -102,15 +100,11 @@ fn test_mkv() {
         "Eve no Jikan 2 [88F4F7F0]"
     );
     assert_eq!(
-        remove_extension(
-            "Gin'iro_no_Kami_no_Agito_(2006)_[1080p,BluRay,x264,DTS]_-_THORA.mkv"
-        ),
+        remove_extension("Gin'iro_no_Kami_no_Agito_(2006)_[1080p,BluRay,x264,DTS]_-_THORA.mkv"),
         "Gin'iro_no_Kami_no_Agito_(2006)_[1080p,BluRay,x264,DTS]_-_THORA"
     );
     assert_eq!(
-        remove_extension(
-            "Magical Girl Lyrical Nanoha A's - 01.DVD[H264.AAC][DGz][7A8A7769].mkv"
-        ),
+        remove_extension("Magical Girl Lyrical Nanoha A's - 01.DVD[H264.AAC][DGz][7A8A7769].mkv"),
         "Magical Girl Lyrical Nanoha A's - 01.DVD[H264.AAC][DGz][7A8A7769]"
     );
     assert_eq!(remove_extension("Mobile_Suit_Gundam_00_Season_2_Ep07_A_Reunion_and_a_Parting_[1080p,BluRay,x264]_-_THORA.mkv"),"Mobile_Suit_Gundam_00_Season_2_Ep07_A_Reunion_and_a_Parting_[1080p,BluRay,x264]_-_THORA");
@@ -123,9 +117,7 @@ fn test_mkv() {
         "ponyo_on_the_cliff_by_the_sea[h264.dts][niizk]"
     );
     assert_eq!(
-        remove_extension(
-            "[Seto_Otaku]_AIKa_ZERO_OVA_-_01_[BD][1920x1080_H264-Flac][6730D40A].mkv"
-        ),
+        remove_extension("[Seto_Otaku]_AIKa_ZERO_OVA_-_01_[BD][1920x1080_H264-Flac][6730D40A].mkv"),
         "[Seto_Otaku]_AIKa_ZERO_OVA_-_01_[BD][1920x1080_H264-Flac][6730D40A]"
     );
     assert_eq!(
@@ -135,9 +127,7 @@ fn test_mkv() {
     assert_eq!(remove_extension("Ghost_in_the_Shell_Stand_Alone_Complex_2nd_GIG_Ep05v2_EXCAVATION_[720p,HDTV,x264,AAC_5.1]_-_THORA.mkv"),"Ghost_in_the_Shell_Stand_Alone_Complex_2nd_GIG_Ep05v2_EXCAVATION_[720p,HDTV,x264,AAC_5.1]_-_THORA");
     assert_eq!(remove_extension("Ghost_in_the_Shell_Stand_Alone_Complex_2nd_GIG_Ep06_Pu239_[720p,HDTV,x264,AAC_5.1]_-_THORA.mkv"),"Ghost_in_the_Shell_Stand_Alone_Complex_2nd_GIG_Ep06_Pu239_[720p,HDTV,x264,AAC_5.1]_-_THORA");
     assert_eq!(
-        remove_extension(
-            "Fate_Stay_Night_Ep05_The_Two_Magi_Part1_[720p,BluRay,x264]_-_THORA.mkv"
-        ),
+        remove_extension("Fate_Stay_Night_Ep05_The_Two_Magi_Part1_[720p,BluRay,x264]_-_THORA.mkv"),
         "Fate_Stay_Night_Ep05_The_Two_Magi_Part1_[720p,BluRay,x264]_-_THORA"
     );
     assert_eq!(
@@ -145,9 +135,7 @@ fn test_mkv() {
         "[RaX]Mezzo(DSA)_-_05_-_[x264_ogg]_[585d9971]"
     );
     assert_eq!(
-        remove_extension(
-            "[AKH-SWE]_Fullmetal_Alchemist_(2009)_02v2_[H.264.AAC][7B2C5E8B].mkv"
-        ),
+        remove_extension("[AKH-SWE]_Fullmetal_Alchemist_(2009)_02v2_[H.264.AAC][7B2C5E8B].mkv"),
         "[AKH-SWE]_Fullmetal_Alchemist_(2009)_02v2_[H.264.AAC][7B2C5E8B]"
     );
     assert_eq!(
@@ -170,9 +158,7 @@ fn test_mkv() {
         "[Himatsubushi]_Sora_no_Woto_-_01_-_H264_-_720p_-_E83AD672"
     );
     assert_eq!(
-        remove_extension(
-            "[EroGaKi-Team]_Nurse_Witch_Komugi-chan_Magikarte_02.5_[902BB314].mkv"
-        ),
+        remove_extension("[EroGaKi-Team]_Nurse_Witch_Komugi-chan_Magikarte_02.5_[902BB314].mkv"),
         "[EroGaKi-Team]_Nurse_Witch_Komugi-chan_Magikarte_02.5_[902BB314]"
     );
     assert_eq!(
@@ -258,9 +244,7 @@ fn test_mkv() {
         "[R-R] Diebuster.EP1 (720p.Hi10p.AC3) [82E36A36]"
     );
     assert_eq!(
-        remove_extension(
-            "Aim_For_The_Top!_Gunbuster-ep1.BD(H264.FLAC.10bit)[KAA][69ECCDCF].mkv"
-        ),
+        remove_extension("Aim_For_The_Top!_Gunbuster-ep1.BD(H264.FLAC.10bit)[KAA][69ECCDCF].mkv"),
         "Aim_For_The_Top!_Gunbuster-ep1.BD(H264.FLAC.10bit)[KAA][69ECCDCF]"
     );
     assert_eq!(
@@ -274,9 +258,7 @@ fn test_mkv() {
         "[Jumonji-Giri]_[Shinsen-Subs][ASF]_D.C.II_Da_Capo_II_Ep01_(a1fc58a7)"
     );
     assert_eq!(
-        remove_extension(
-            "[52wy][SlamDunk][001][Jpn_Chs_Cht][x264_aac][DVDRip][7FE2C873].mkv"
-        ),
+        remove_extension("[52wy][SlamDunk][001][Jpn_Chs_Cht][x264_aac][DVDRip][7FE2C873].mkv"),
         "[52wy][SlamDunk][001][Jpn_Chs_Cht][x264_aac][DVDRip][7FE2C873]"
     );
     assert_eq!(
@@ -300,9 +282,7 @@ fn test_mkv() {
         "Evangelion Shin Gekijouban Q (BDrip 1920x1080 x264 FLACx2 5.1ch)-ank"
     );
     assert_eq!(
-        remove_extension(
-            "Howl's_Moving_Castle_(2004)_[1080p,BluRay,flac,dts,x264]_-_THORA v2.mkv"
-        ),
+        remove_extension("Howl's_Moving_Castle_(2004)_[1080p,BluRay,flac,dts,x264]_-_THORA v2.mkv"),
         "Howl's_Moving_Castle_(2004)_[1080p,BluRay,flac,dts,x264]_-_THORA v2"
     );
     assert_eq!(
@@ -324,9 +304,7 @@ fn test_mkv() {
         "Mary Bell (DVD) - 02 [h-b]"
     );
     assert_eq!(
-        remove_extension(
-            "The Irregular at Magic High School - S01E01- Enrollment Part I.mkv"
-        ),
+        remove_extension("The Irregular at Magic High School - S01E01- Enrollment Part I.mkv"),
         "The Irregular at Magic High School - S01E01- Enrollment Part I"
     );
     assert_eq!(
@@ -346,9 +324,7 @@ fn test_mkv() {
         "[Urusai]_Bokura_Ga_Ita_01_[DVD_h264_AC3]_[BFCE1627][Fixed]"
     );
     assert_eq!(
-        remove_extension(
-            "[Coalgirls]_Bakemonogatari_OP4a_(1280x720_Blu-Ray_FLAC)_[327A2375].mkv"
-        ),
+        remove_extension("[Coalgirls]_Bakemonogatari_OP4a_(1280x720_Blu-Ray_FLAC)_[327A2375].mkv"),
         "[Coalgirls]_Bakemonogatari_OP4a_(1280x720_Blu-Ray_FLAC)_[327A2375]"
     );
     assert_eq!(
@@ -369,9 +345,7 @@ fn test_mkv() {
         "The iDOLM@STER 765 Pro to Iu Monogatari"
     );
     assert_eq!(
-        remove_extension(
-            "[Coalgirls]_Fate_Zero_OVA3.5_(1280x720_Blu-ray_FLAC)_[5F5AD026].mkv"
-        ),
+        remove_extension("[Coalgirls]_Fate_Zero_OVA3.5_(1280x720_Blu-ray_FLAC)_[5F5AD026].mkv"),
         "[Coalgirls]_Fate_Zero_OVA3.5_(1280x720_Blu-ray_FLAC)_[5F5AD026]"
     );
     assert_eq!(
@@ -387,9 +361,7 @@ fn test_mkv() {
         "[SpoonSubs]_Hidamari_Sketch_x365_-_04.1_(DVD)[B6CE8458]"
     );
     assert_eq!(
-        remove_extension(
-            "[Hatsuyuki]_Kuroko_no_Basuke_S3_-_01_(51)_[720p][10bit][619C57A0].mkv"
-        ),
+        remove_extension("[Hatsuyuki]_Kuroko_no_Basuke_S3_-_01_(51)_[720p][10bit][619C57A0].mkv"),
         "[Hatsuyuki]_Kuroko_no_Basuke_S3_-_01_(51)_[720p][10bit][619C57A0]"
     );
     assert_eq!(
@@ -414,9 +386,7 @@ fn test_mkv() {
         "[ANE] Yosuga no Sora - Ep01 Preview (Yorihime ver) [BDRip 1080p x264 FLAC]"
     );
     assert_eq!(
-        remove_extension(
-            "[B-G_&_m.3.3.w]_Myself_Yourself_12.DVD(H.264_DD2.0)_[CB2B37F1].mkv"
-        ),
+        remove_extension("[B-G_&_m.3.3.w]_Myself_Yourself_12.DVD(H.264_DD2.0)_[CB2B37F1].mkv"),
         "[B-G_&_m.3.3.w]_Myself_Yourself_12.DVD(H.264_DD2.0)_[CB2B37F1]"
     );
     assert_eq!(
@@ -436,21 +406,15 @@ fn test_mkv() {
         "[ReDone] Memories Off 3.5 - 04 (DVD 10-bit)"
     );
     assert_eq!(
-        remove_extension(
-            "[FFF] Seirei Tsukai no Blade Dance - SP01 [BD][720p-AAC][F1FF8588].mkv"
-        ),
+        remove_extension("[FFF] Seirei Tsukai no Blade Dance - SP01 [BD][720p-AAC][F1FF8588].mkv"),
         "[FFF] Seirei Tsukai no Blade Dance - SP01 [BD][720p-AAC][F1FF8588]"
     );
     assert_eq!(
-        remove_extension(
-            "[Hatsuyuki] Dragon Ball Kai (2014) - 002 (100) [1280x720][DD66AFB7].mkv"
-        ),
+        remove_extension("[Hatsuyuki] Dragon Ball Kai (2014) - 002 (100) [1280x720][DD66AFB7].mkv"),
         "[Hatsuyuki] Dragon Ball Kai (2014) - 002 (100) [1280x720][DD66AFB7]"
     );
     assert_eq!(
-        remove_extension(
-            "[Deep] Tegami Bachi (REVERSE) - Letter Bee - 29 (04) [5203142B].mkv"
-        ),
+        remove_extension("[Deep] Tegami Bachi (REVERSE) - Letter Bee - 29 (04) [5203142B].mkv"),
         "[Deep] Tegami Bachi (REVERSE) - Letter Bee - 29 (04) [5203142B]"
     );
     assert_eq!(
@@ -468,15 +432,11 @@ fn test_mkv() {
         "[TardRaws] 0 [640x360]"
     );
     assert_eq!(
-        remove_extension(
-            "[Hatsuyuki-Kaitou]_Fairy_Tail_2_-_52_(227)_[720p][10bit][9DF6B8D5].mkv"
-        ),
+        remove_extension("[Hatsuyuki-Kaitou]_Fairy_Tail_2_-_52_(227)_[720p][10bit][9DF6B8D5].mkv"),
         "[Hatsuyuki-Kaitou]_Fairy_Tail_2_-_52_(227)_[720p][10bit][9DF6B8D5]"
     );
     assert_eq!(
-        remove_extension(
-            "[FBI] Baby Princess 3D Paradise Love 01v0 [BD][720p-AAC][457CC066].mkv"
-        ),
+        remove_extension("[FBI] Baby Princess 3D Paradise Love 01v0 [BD][720p-AAC][457CC066].mkv"),
         "[FBI] Baby Princess 3D Paradise Love 01v0 [BD][720p-AAC][457CC066]"
     );
     assert_eq!(
@@ -531,14 +491,8 @@ fn test_avi() {
         remove_extension("[Ayako]_Infinite_Stratos_-_IS_-_01v2_[XVID][400p][29675B71].avi"),
         "[Ayako]_Infinite_Stratos_-_IS_-_01v2_[XVID][400p][29675B71]"
     );
-    assert_eq!(
-        remove_extension("Juuni.Kokki.Ep.5.avi"),
-        "Juuni.Kokki.Ep.5"
-    );
-    assert_eq!(
-        remove_extension("Juuni Kokki Ep.5.avi"),
-        "Juuni Kokki Ep.5"
-    );
+    assert_eq!(remove_extension("Juuni.Kokki.Ep.5.avi"), "Juuni.Kokki.Ep.5");
+    assert_eq!(remove_extension("Juuni Kokki Ep.5.avi"), "Juuni Kokki Ep.5");
     assert_eq!(
         remove_extension("[Keroro].148.[Xvid.mp3].[FE68D5F1].avi"),
         "[Keroro].148.[Xvid.mp3].[FE68D5F1]"
@@ -574,9 +528,7 @@ fn test_mp4() {
     );
     assert_eq!(remove_extension("[Mobile Suit Gundam Seed Destiny HD REMASTER][07][Big5][720p][AVC_AAC][encoded by SEED].mp4"),"[Mobile Suit Gundam Seed Destiny HD REMASTER][07][Big5][720p][AVC_AAC][encoded by SEED]");
     assert_eq!(
-        remove_extension(
-            "「K」 Image Blu-ray WHITE & BLACK - Main (BD 1280x720 AVC AAC).mp4"
-        ),
+        remove_extension("「K」 Image Blu-ray WHITE & BLACK - Main (BD 1280x720 AVC AAC).mp4"),
         "「K」 Image Blu-ray WHITE & BLACK - Main (BD 1280x720 AVC AAC)"
     );
     assert_eq!(
@@ -590,16 +542,12 @@ fn test_mp4() {
         "[Hakugetsu&Speed&MGRT][Dragon_Ball_Z_Battle_of_Gods][BDRIP][BIG5][1280x720]"
     );
     assert_eq!(
-        remove_extension(
-            "[Hakugetsu&MGRT][Evangelion 3.0 You Can (Not) Redo][480P][V0].mp4"
-        ),
+        remove_extension("[Hakugetsu&MGRT][Evangelion 3.0 You Can (Not) Redo][480P][V0].mp4"),
         "[Hakugetsu&MGRT][Evangelion 3.0 You Can (Not) Redo][480P][V0]"
     );
     assert_eq!(remove_extension("[TV-J] Kidou Senshi Gundam UC Unicorn - episode.02 [BD 1920x1080 h264+AAC(5.1ch JP+EN) +Sub(JP-EN-SP-FR-CH) Chap].mp4"),"[TV-J] Kidou Senshi Gundam UC Unicorn - episode.02 [BD 1920x1080 h264+AAC(5.1ch JP+EN) +Sub(JP-EN-SP-FR-CH) Chap]");
     assert_eq!(
-        remove_extension(
-            "[Zero-Raws] Shingeki no Kyojin - 25 END (MBS 1280x720 x264 AAC).mp4"
-        ),
+        remove_extension("[Zero-Raws] Shingeki no Kyojin - 25 END (MBS 1280x720 x264 AAC).mp4"),
         "[Zero-Raws] Shingeki no Kyojin - 25 END (MBS 1280x720 x264 AAC)"
     );
     assert_eq!(
@@ -632,9 +580,7 @@ fn test_mp4() {
         "[모에-Raws] Abarenbou Rikishi!! Matsutarou #04 (ABC 1280x720 x264 AAC)"
     );
     assert_eq!(
-        remove_extension(
-            "[바카-Raws] Nekomonogatari (Black) #1-4 (BS11 1280x720 x264 AAC).mp4"
-        ),
+        remove_extension("[바카-Raws] Nekomonogatari (Black) #1-4 (BS11 1280x720 x264 AAC).mp4"),
         "[바카-Raws] Nekomonogatari (Black) #1-4 (BS11 1280x720 x264 AAC)"
     );
     assert_eq!(
@@ -655,7 +601,6 @@ fn test_mp4() {
 
 #[test]
 fn test_no_extension() {
-
     assert_eq!(
         remove_extension("To_Aru_Kagaku_no_Railgun_13-15_[BD_1080p][AtsA]"),
         "To_Aru_Kagaku_no_Railgun_13-15_[BD_1080p][AtsA]"
@@ -728,9 +673,7 @@ fn test_no_extension() {
         "Ep. 01 - The Boy in the Iceberg"
     );
     assert_eq!(
-        remove_extension(
-            "Byousoku 5 Centimeter [Blu-Ray][1920x1080 H.264][2.0ch AAC][SOFTSUBS]"
-        ),
+        remove_extension("Byousoku 5 Centimeter [Blu-Ray][1920x1080 H.264][2.0ch AAC][SOFTSUBS]"),
         "Byousoku 5 Centimeter [Blu-Ray][1920x1080 H.264][2.0ch AAC][SOFTSUBS]"
     );
     assert_eq!(
@@ -743,9 +686,7 @@ fn test_no_extension() {
         "Gekkan Shoujo Nozaki-kun [HorribleSubs] (1080p)"
     );
     assert_eq!(
-        remove_extension(
-            "[BM&T] Toradora! - 07v2 - Pool Opening [720p Hi10 ] [BD] [8F59F2BA]"
-        ),
+        remove_extension("[BM&T] Toradora! - 07v2 - Pool Opening [720p Hi10 ] [BD] [8F59F2BA]"),
         "[BM&T] Toradora! - 07v2 - Pool Opening [720p Hi10 ] [BD] [8F59F2BA]"
     );
     assert_eq!(remove_extension("[EveTaku] AKB0048 Vol.03 - Making of Kibou-ni-Tsuite Music Video (BDRip 1080i H.264-Hi10P FLAC)[C09462E2]"),"[EveTaku] AKB0048 Vol.03 - Making of Kibou-ni-Tsuite Music Video (BDRip 1080i H.264-Hi10P FLAC)[C09462E2]");
@@ -803,7 +744,7 @@ fn test_no_extension() {
 }
 
 #[test]
-fn other_extension(){
+fn other_extension() {
     assert_eq!(
         remove_extension(
             "[Yuurisan-Subs]_Darker_than_Black_-_Gemini_of_the_Meteor_-_01v2_[65274FDE].patch.7z"
