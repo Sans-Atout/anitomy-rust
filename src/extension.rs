@@ -1,3 +1,5 @@
+use std::path::Path;
+
 fn is_valid_extension(tested_extension : &str) -> bool{
     let valid_extension = vec![
         ".php".to_string(),
@@ -1783,3 +1785,20 @@ fn test_invalid_extension(){
     assert!(!is_valid_extension("avi"));
 }
 
+pub fn remove_extension(file_name : &str) -> String {
+    let path = Path::new(file_name);
+
+    let extension = path.extension();
+    if extension.is_none(){
+        return file_name.to_string();
+    }
+
+    let file_extension = format!(".{}",extension.unwrap().to_str().unwrap());
+
+    if !is_valid_extension(&file_extension){
+        return file_name.to_string(); 
+    }
+
+    let file_with_no_extension = &file_name[..file_name.len()-file_extension.len()];
+    file_with_no_extension.to_string()
+}
