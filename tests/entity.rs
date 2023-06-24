@@ -1,10 +1,10 @@
 use std::fmt::Debug;
 
-use anitomy_rust::elements::{Element, Elements, Category};
+use anitomy_rust::elements::{Category, Element, Elements};
 
 fn has_send_sync<T: Sized + Send + Sync + Unpin>() {}
 fn has_needed<T: Clone + Debug>() {}
-fn has_copy<T : Copy>(){}
+fn has_copy<T: Copy>() {}
 
 /// Test if all Entity int this library has Send and Sync trait implemented
 ///

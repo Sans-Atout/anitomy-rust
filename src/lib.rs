@@ -20,7 +20,7 @@ impl Parser {
         Parser {
             file_name: f_name.to_string(),
             ignored_string: Vec::new(),
-            allowed_delimiters: vec![' ','_','.','&','+',',','|'],
+            allowed_delimiters: vec![' ', '_', '.', '&', '+', ',', '|'],
             ep_number: true,
             ep_title: true,
             file_extension: true,
@@ -28,37 +28,37 @@ impl Parser {
         }
     }
 
-    pub fn ep_number(&mut self, need_to_parse : bool) -> Parser {
+    pub fn ep_number(&mut self, need_to_parse: bool) -> Parser {
         self.ep_number = need_to_parse;
         self.to_owned()
     }
 
-    pub fn ep_title(&mut self, need_to_parse : bool) -> Parser {
+    pub fn ep_title(&mut self, need_to_parse: bool) -> Parser {
         self.ep_title = need_to_parse;
         self.to_owned()
     }
 
-    pub fn file_extension(&mut self, need_to_parse : bool) -> Parser {
+    pub fn file_extension(&mut self, need_to_parse: bool) -> Parser {
         self.file_extension = need_to_parse;
         self.to_owned()
     }
 
-    pub fn release_group(&mut self, need_to_parse : bool) -> Parser {
+    pub fn release_group(&mut self, need_to_parse: bool) -> Parser {
         self.release_group = need_to_parse;
         self.to_owned()
     }
 
-    pub fn file_name(&mut self, name : &str) -> Parser {
+    pub fn file_name(&mut self, name: &str) -> Parser {
         self.file_name = name.to_string();
         self.to_owned()
     }
 
-    pub fn ignored_string(&mut self, i : Vec<String>) -> Parser {
+    pub fn ignored_string(&mut self, i: Vec<String>) -> Parser {
         self.ignored_string = i;
         self.to_owned()
     }
 
-    pub fn allowed_delimiters(&mut self, d : Vec<char>) -> Parser {
+    pub fn allowed_delimiters(&mut self, d: Vec<char>) -> Parser {
         self.allowed_delimiters = d;
         self.to_owned()
     }
@@ -67,5 +67,4 @@ impl Parser {
         let _e = Elements::new();
         todo!();
     }
-
 }
