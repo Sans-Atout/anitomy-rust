@@ -1781,9 +1781,14 @@ pub fn remove_extension(file_name: &str) -> String {
         return file_name.to_string();
     }
 
-    let file_with_no_extension = &file_name[..file_name.len() - file_extension.len()];
-    file_with_no_extension.to_string()
+pub fn remove_ignored_string(working_string : &str,ignored_str : Vec<&str>) -> String{
+    let mut return_string = working_string.to_string();
+    for i_s in ignored_str {
+        return_string = return_string.replace(i_s, "");
+    }
+    return_string
 }
+
 
 /// private function test
 #[test]
