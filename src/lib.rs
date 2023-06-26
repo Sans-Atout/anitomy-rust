@@ -57,8 +57,8 @@ impl Parser {
     }
 
     pub fn ignored_string(&mut self, i: Vec<&str>) -> Parser {
-        let mut ignored : Vec<String> = Vec::new();
-        for s in i{
+        let mut ignored: Vec<String> = Vec::new();
+        for s in i {
             ignored.push(s.to_string());
         }
         self.ignored_string = ignored;
@@ -74,13 +74,13 @@ impl Parser {
         let mut _e = Elements::new().add(elements::Category::FileName, &self.file_name);
 
 
-        let mut to_parse_str = remove_extension(&self.file_name);
+        let to_parse_str = remove_extension(&self.file_name);
         if to_parse_str.is_empty() {
             return Err(Report::new(ParsingError::StringIsEmpty)
                 .attach_printable(format!("Can not parse file : {}", self.file_name)));
         }
-        
-        to_parse_str = remove_ignored_string(&to_parse_str,self.ignored_string.to_owned());
+
+        remove_ignored_string(&to_parse_str, self.ignored_string.to_owned());
         Ok(_e)
     }
 }

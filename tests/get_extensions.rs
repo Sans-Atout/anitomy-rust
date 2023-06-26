@@ -500,7 +500,6 @@ fn get_extension_mkv() {
         "mkv"
     );
 }
-
 #[test]
 fn get_extension_avi() {
     assert_eq!(
@@ -541,7 +540,6 @@ fn get_extension_avi() {
     );
     assert_eq!(get_extension("[KLF]_D.Gray-man_04V2.avi").unwrap(), "avi");
 }
-
 #[test]
 fn get_extension_mp4() {
     assert_eq!(
@@ -623,7 +621,6 @@ fn get_extension_mp4() {
         "mp4"
     );
 }
-
 #[test]
 fn get_extension_none() {
     assert!(get_extension("To_Aru_Kagaku_no_Railgun_13-15_[BD_1080p][AtsA]").is_none());
@@ -695,7 +692,6 @@ fn get_extension_none() {
     assert!(get_extension("[HorribleSubs] Momokuri - 01+02 [720p]").is_none());
     assert!(get_extension("").is_none());
 }
-
 #[test]
 fn get_other_extension() {
     assert_eq!(

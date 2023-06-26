@@ -14,15 +14,14 @@ impl fmt::Display for CategoryNotFound {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ParsingError {
     StringIsEmpty,
-    NoExtension
+    NoExtension,
 }
-impl Context for ParsingError{}
+impl Context for ParsingError {}
 impl fmt::Display for ParsingError {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             ParsingError::StringIsEmpty => fmt.write_str("Parsing Error : nothing to parse"),
             ParsingError::NoExtension => fmt.write_str("Parsing Error : no extension"),
         }
-        
     }
 }

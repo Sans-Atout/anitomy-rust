@@ -1,5 +1,5 @@
+use regex::Regex;
 use std::path::Path;
-use regex::Regex; 
 
 fn is_valid_extension(tested_extension: &str) -> bool {
     let valid_extension = vec![
@@ -1774,14 +1774,14 @@ pub fn remove_extension(file_name: &str) -> String {
         return file_name.to_owned();
     }
 
-    let regex_string = format!(r"\.{}$",extension.unwrap());
+    let regex_string = format!(r"\.{}$", extension.unwrap());
     let extension_regex = Regex::new(&regex_string).unwrap();
     let removed = extension_regex.replace_all(file_name, "");
-    
-    format!("{}",removed)
+
+    format!("{}", removed)
 }
 
-pub fn get_extension(file_name: &str) -> Option<String>{
+pub fn get_extension(file_name: &str) -> Option<String> {
     let path = Path::new(file_name);
     let p_extension = path.extension()?;
     let string_extension = format!(".{}", p_extension.to_str().unwrap());
@@ -1789,17 +1789,15 @@ pub fn get_extension(file_name: &str) -> Option<String>{
         return None;
     }
     Some(p_extension.to_str().unwrap().to_string())
-
 }
 
-pub fn remove_ignored_string(working_string : &str,ignored_str : Vec<String>) -> String{
+pub fn remove_ignored_string(working_string: &str, ignored_str: Vec<String>) -> String {
     let mut return_string = working_string.to_string();
     for i_s in ignored_str {
         return_string = return_string.replace(&i_s, "");
     }
     return_string
 }
-
 
 /// private function test
 #[test]
