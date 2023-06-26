@@ -53,8 +53,12 @@ impl Parser {
         self.to_owned()
     }
 
-    pub fn ignored_string(&mut self, i: Vec<String>) -> Parser {
-        self.ignored_string = i;
+    pub fn ignored_string(&mut self, i: Vec<&str>) -> Parser {
+        let mut ignored : Vec<String> = Vec::new();
+        for s in i{
+            ignored.push(s.to_string());
+        }
+        self.ignored_string = ignored;
         self.to_owned()
     }
 
