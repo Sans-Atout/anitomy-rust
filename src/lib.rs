@@ -2,7 +2,7 @@ use elements::Elements;
 
 pub mod elements;
 pub mod errors;
-pub mod extension;
+pub mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Parser {

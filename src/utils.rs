@@ -1767,21 +1767,6 @@ fn is_valid_extension(tested_extension: &str) -> bool {
     valid_extension.contains(&tested_extension.to_string())
 }
 
-#[test]
-fn test_valid_extension() {
-    assert!(is_valid_extension(".mkv"));
-    assert!(is_valid_extension(".mp4"));
-    assert!(is_valid_extension(".avi"));
-    assert!(is_valid_extension(".html"));
-}
-
-#[test]
-fn test_invalid_extension() {
-    assert!(!is_valid_extension("mkv"));
-    assert!(!is_valid_extension(".non an extension"));
-    assert!(!is_valid_extension("avi"));
-}
-
 pub fn remove_extension(file_name: &str) -> String {
     let path = Path::new(file_name);
 
@@ -1798,4 +1783,20 @@ pub fn remove_extension(file_name: &str) -> String {
 
     let file_with_no_extension = &file_name[..file_name.len() - file_extension.len()];
     file_with_no_extension.to_string()
+}
+
+/// private function test
+#[test]
+fn test_valid_extension() {
+    assert!(is_valid_extension(".mkv"));
+    assert!(is_valid_extension(".mp4"));
+    assert!(is_valid_extension(".avi"));
+    assert!(is_valid_extension(".html"));
+}
+
+#[test]
+fn test_invalid_extension() {
+    assert!(!is_valid_extension("mkv"));
+    assert!(!is_valid_extension(".non an extension"));
+    assert!(!is_valid_extension("avi"));
 }
