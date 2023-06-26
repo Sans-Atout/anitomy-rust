@@ -1,11 +1,13 @@
 use elements::Elements;
 use error_stack::{Report, Result};
 use errors::ParsingError;
+use tokenizer::tokenize;
 use utils::{get_extension, remove_extension, remove_ignored_string};
 
 pub mod elements;
 pub mod errors;
 pub mod utils;
+pub mod tokenizer;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Parser {
@@ -85,7 +87,7 @@ impl Parser {
                 .attach_printable(format!("Can not parse file : {}", self.file_name)));
         }
 
-        remove_ignored_string(&to_parse_str, self.ignored_string.to_owned());
+        let _tokens = tokenize(&remove_ignored_string(&to_parse_str, self.ignored_string.to_owned()));
         Ok(_e)
     }
 }
