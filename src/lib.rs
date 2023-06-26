@@ -73,6 +73,11 @@ impl Parser {
     pub fn parse(&self) -> Result<Elements, ParsingError> {
         let mut _e = Elements::new().add(elements::Category::FileName, &self.file_name);
 
+        // Remove file name extension
+        let extension = get_extension(&self.file_name).unwrap_or_default();
+        if !extension.is_empty() {
+            _e.add(elements::Category::FileExtension, &extension);
+        }
 
         let to_parse_str = remove_extension(&self.file_name);
         if to_parse_str.is_empty() {
