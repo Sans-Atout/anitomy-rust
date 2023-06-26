@@ -1,7 +1,7 @@
-use anitomy_rust::extension::remove_extension;
+use anitomy_rust::utils::remove_extension;
 
 #[test]
-fn test_mkv() {
+fn mkv() {
     assert_eq!(remove_extension("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD].mkv"),"[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD]");
     assert_eq!(
         remove_extension("[ANBU]_Princess_Lover!_-_01_[2048A39A].mkv"),
@@ -474,7 +474,7 @@ fn test_mkv() {
 }
 
 #[test]
-fn test_avi() {
+fn avi() {
     assert_eq!(
         remove_extension("[DB]_Bleach_225_[C63D149C].avi"),
         "[DB]_Bleach_225_[C63D149C]"
@@ -521,7 +521,7 @@ fn test_avi() {
 }
 
 #[test]
-fn test_mp4() {
+fn mp4() {
     assert_eq!(
         remove_extension("[Taka]_Fullmetal_Alchemist_(2009)_04_[720p][40F2A957].mp4"),
         "[Taka]_Fullmetal_Alchemist_(2009)_04_[720p][40F2A957]"
@@ -600,7 +600,7 @@ fn test_mp4() {
 }
 
 #[test]
-fn test_no_extension() {
+fn no_extension() {
     assert_eq!(
         remove_extension("To_Aru_Kagaku_no_Railgun_13-15_[BD_1080p][AtsA]"),
         "To_Aru_Kagaku_no_Railgun_13-15_[BD_1080p][AtsA]"
@@ -754,5 +754,15 @@ fn other_extension() {
     assert_eq!(
         remove_extension("[Hard-Boiled FS]FullMetalAlchemist_09.rmvb"),
         "[Hard-Boiled FS]FullMetalAlchemist_09"
+    );
+}
+
+#[test]
+fn try_bypass() {
+    assert_eq!(
+        remove_extension(
+            "[Yuurisan-Subs]_Darker_than_Black_-_Gemini_of_the_Meteor_-_01v2_[65274FDE].7z.patch.7z"
+        ),
+        "[Yuurisan-Subs]_Darker_than_Black_-_Gemini_of_the_Meteor_-_01v2_[65274FDE].7z.patch"
     );
 }
