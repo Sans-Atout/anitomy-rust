@@ -1,4 +1,7 @@
 use elements::Elements;
+use error_stack::{Report, Result};
+use errors::ParsingError;
+use utils::{get_extension, remove_extension, remove_ignored_string};
 
 pub mod elements;
 pub mod errors;
@@ -67,8 +70,17 @@ impl Parser {
         self.to_owned()
     }
 
-    pub fn parse() -> Elements {
-        let _e = Elements::new();
-        todo!();
+    pub fn parse(&self) -> Result<Elements, ParsingError> {
+        let mut _e = Elements::new().add(elements::Category::FileName, &self.file_name);
+
+
+        let mut to_parse_str = remove_extension(&self.file_name);
+        if to_parse_str.is_empty() {
+            return Err(Report::new(ParsingError::StringIsEmpty)
+                .attach_printable(format!("Can not parse file : {}", self.file_name)));
+        }
+        
+        to_parse_str = remove_ignored_string(&to_parse_str,self.ignored_string.to_owned());
+        Ok(_e)
     }
 }
