@@ -1,3 +1,4 @@
+use regex::Regex;
 use std::path::Path;
 
 fn is_valid_extension(tested_extension: &str) -> bool {
@@ -1767,6 +1768,38 @@ fn is_valid_extension(tested_extension: &str) -> bool {
     valid_extension.contains(&tested_extension.to_string())
 }
 
+pub fn remove_extension(file_name: &str) -> String {
+    let extension = get_extension(file_name);
+    if extension.is_none() {
+        return file_name.to_owned();
+    }
+
+    let regex_string = format!(r"\.{}$", extension.unwrap());
+    let extension_regex = Regex::new(&regex_string).unwrap();
+    let removed = extension_regex.replace_all(file_name, "");
+
+    format!("{}", removed)
+}
+
+pub fn get_extension(file_name: &str) -> Option<String> {
+    let path = Path::new(file_name);
+    let p_extension = path.extension()?;
+    let string_extension = format!(".{}", p_extension.to_str().unwrap());
+    if !is_valid_extension(&string_extension) {
+        return None;
+    }
+    Some(p_extension.to_str().unwrap().to_string())
+}
+
+pub fn remove_ignored_string(working_string: &str, ignored_str: Vec<String>) -> String {
+    let mut return_string = working_string.to_string();
+    for i_s in ignored_str {
+        return_string = return_string.replace(&i_s, "");
+    }
+    return_string
+}
+
+/// private function test
 #[test]
 fn test_valid_extension() {
     assert!(is_valid_extension(".mkv"));
@@ -1780,22 +1813,4 @@ fn test_invalid_extension() {
     assert!(!is_valid_extension("mkv"));
     assert!(!is_valid_extension(".non an extension"));
     assert!(!is_valid_extension("avi"));
-}
-
-pub fn remove_extension(file_name: &str) -> String {
-    let path = Path::new(file_name);
-
-    let extension = path.extension();
-    if extension.is_none() {
-        return file_name.to_string();
-    }
-
-    let file_extension = format!(".{}", extension.unwrap().to_str().unwrap());
-
-    if !is_valid_extension(&file_extension) {
-        return file_name.to_string();
-    }
-
-    let file_with_no_extension = &file_name[..file_name.len() - file_extension.len()];
-    file_with_no_extension.to_string()
 }

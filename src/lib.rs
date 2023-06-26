@@ -1,8 +1,11 @@
 use elements::Elements;
+use error_stack::{Report, Result};
+use errors::ParsingError;
+use utils::{get_extension, remove_extension, remove_ignored_string};
 
 pub mod elements;
 pub mod errors;
-pub mod extension;
+pub mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Parser {
@@ -53,8 +56,12 @@ impl Parser {
         self.to_owned()
     }
 
-    pub fn ignored_string(&mut self, i: Vec<String>) -> Parser {
-        self.ignored_string = i;
+    pub fn ignored_string(&mut self, i: Vec<&str>) -> Parser {
+        let mut ignored: Vec<String> = Vec::new();
+        for s in i {
+            ignored.push(s.to_string());
+        }
+        self.ignored_string = ignored;
         self.to_owned()
     }
 
@@ -63,8 +70,22 @@ impl Parser {
         self.to_owned()
     }
 
-    pub fn parse() -> Elements {
-        let _e = Elements::new();
-        todo!();
+    pub fn parse(&self) -> Result<Elements, ParsingError> {
+        let mut _e = Elements::new().add(elements::Category::FileName, &self.file_name);
+
+        // Remove file name extension
+        let extension = get_extension(&self.file_name).unwrap_or_default();
+        if !extension.is_empty() {
+            _e.add(elements::Category::FileExtension, &extension);
+        }
+
+        let to_parse_str = remove_extension(&self.file_name);
+        if to_parse_str.is_empty() {
+            return Err(Report::new(ParsingError::StringIsEmpty)
+                .attach_printable(format!("Can not parse file : {}", self.file_name)));
+        }
+
+        remove_ignored_string(&to_parse_str, self.ignored_string.to_owned());
+        Ok(_e)
     }
 }
