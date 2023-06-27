@@ -1810,6 +1810,12 @@ pub fn normalize(to_normalize: &str) -> String{
     }
     normalized_char.iter().cloned().collect::<String>().to_uppercase()
 }
+
+pub fn is_hexa(p_hexa : &str) -> bool{
+    let hexa_char = Regex::new(r"^[0-9A-F]+$").unwrap();
+    hexa_char.is_match(&p_hexa.to_uppercase())
+}
+
 /// private function test
 #[test]
 fn test_valid_extension() {

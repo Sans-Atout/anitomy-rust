@@ -1,4 +1,4 @@
-use anitomy_rust::utils::{remove_ignored_string, normalize};
+use anitomy_rust::utils::{remove_ignored_string, normalize, is_hexa};
 
 #[test]
 fn remove_one_string() {
@@ -39,4 +39,14 @@ fn real_test_remove() {
 fn normalize_test(){
     assert_eq!("HELLO WORLD !",normalize("Hello World !"));
     assert_eq!("EPISODE1",normalize("épisode1"));
+}
+
+#[test]
+fn test_hexa(){
+    assert!(is_hexa("028934"));
+    assert!(is_hexa("FFF"));
+    assert!(is_hexa("0123456789ABCDEF"));
+    assert!(!is_hexa("G015021"));
+    assert!(is_hexa("acbdef"));
+    assert!(!is_hexa("00000fg"))
 }
