@@ -8,6 +8,7 @@ pub mod elements;
 pub mod errors;
 pub mod utils;
 pub mod tokenizer;
+pub mod keyword;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Parser {
