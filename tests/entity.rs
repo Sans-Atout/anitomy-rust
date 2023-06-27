@@ -29,3 +29,16 @@ fn has_entity_needed() {
     has_needed::<Elements>();
     has_copy::<Category>();
 }
+
+
+#[test]
+fn category_singular(){
+    assert!(!Category::AnimeSeason.is_singular());
+    assert!(Category::AnimeYear.is_singular());
+}
+
+#[test]
+fn category_search(){
+    assert!(Category::AnimeType.is_searchable());
+    assert!(!Category::AnimeSeason.is_searchable())
+}
