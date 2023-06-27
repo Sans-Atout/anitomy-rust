@@ -1,5 +1,6 @@
 use regex::Regex;
 use std::path::Path;
+use unicode_normalization::UnicodeNormalization;
 
 fn is_valid_extension(tested_extension: &str) -> bool {
     let valid_extension = vec![
@@ -1799,6 +1800,16 @@ pub fn remove_ignored_string(working_string: &str, ignored_str: Vec<String>) -> 
     return_string
 }
 
+pub fn normalize(to_normalize: &str) -> String{
+    let all_char = to_normalize.nfkd();
+    let mut normalized_char : Vec<char> = vec![];
+    for c in all_char {
+        if c.is_ascii(){
+            normalized_char.push(c);
+        }
+    }
+    normalized_char.iter().cloned().collect::<String>().to_uppercase()
+}
 /// private function test
 #[test]
 fn test_valid_extension() {

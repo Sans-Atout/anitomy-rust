@@ -13,3 +13,4 @@ repository = "https://github.com/Sans-Atout/anitomy-rust"
 [dependencies]
 error-stack = "0.3.1"
 regex = "1.8.4"
+unicode-normalization = "0.1.22"
