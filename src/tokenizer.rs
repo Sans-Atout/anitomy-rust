@@ -48,6 +48,19 @@ impl Token {
         }
     }
 
+    pub fn parse(&self, e : &mut Elements){
+        for sub_token in self.tokens.clone() {
+            if sub_token.value.is_empty() {
+                continue;
+            }
+            if is_digit(&sub_token.value) && sub_token.value.len() != 8 {
+                continue;
+            }
+            if is_crc32(&sub_token.value) && e.is_category_empty(Category::FileExtension){
+                e.add(Category::FileExtension, &sub_token.value);
+            }
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

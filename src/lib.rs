@@ -1,7 +1,7 @@
 use elements::Elements;
 use error_stack::{Report, Result};
 use errors::ParsingError;
-use tokenizer::tokenize;
+use tokenizer::{tokenize, Token};
 use utils::{get_extension, remove_extension, remove_ignored_string};
 
 pub mod elements;
@@ -93,7 +93,10 @@ impl Parser {
             &to_parse_str,
             self.ignored_string.to_owned(),
         ));
-        let _e = parsing::parsing(all_found_tokens, _e, self.allowed_delimiters.clone()).unwrap();
+        
+        for t in all_found_tokens {
+            Token::new(&t, &self.allowed_delimiters).parse(&mut _e);
+        }
         Ok(_e)
     }
 }
