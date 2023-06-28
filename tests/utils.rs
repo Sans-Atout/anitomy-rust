@@ -1,4 +1,4 @@
-use anitomy_rust::utils::{is_digit, is_hexa, normalize, remove_ignored_string};
+use anitomy_rust::utils::{is_digit, is_hexa, normalize, remove_ignored_string, split_by_delimiter};
 
 #[test]
 fn remove_one_string() {
@@ -56,4 +56,12 @@ fn test_isdigit() {
     assert!(is_digit("256"));
     assert!(is_digit("-120"));
     assert!(!is_digit("Hello World"));
+}
+
+#[test]
+fn split_regex() {
+    let d: Vec<char> = vec![' ', '_', '.', '&', '+', ',', '|'];
+    let s = "hello_world I.m&a+beautifull,rust|test";
+    let e: Vec<&str> = vec!["hello","world","I","m","a","beautifull","rust","test"];
+    assert_eq!(e, split_by_delimiter(s,d))
 }
