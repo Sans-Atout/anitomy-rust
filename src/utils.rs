@@ -1820,6 +1820,11 @@ pub fn is_hexa(p_hexa: &str) -> bool {
     hexa_char.is_match(&p_hexa.to_uppercase())
 }
 
+pub fn is_digit(w: &str) -> bool {
+    let digit_regex = Regex::new(r"^[-+0-9A-F]+$").unwrap();
+    digit_regex.is_match(&w.to_uppercase())
+}
+
 /// private function test
 #[test]
 fn test_valid_extension() {

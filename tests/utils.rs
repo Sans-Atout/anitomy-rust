@@ -49,3 +49,11 @@ fn test_hexa() {
     assert!(is_hexa("acbdef"));
     assert!(!is_hexa("00000fg"))
 }
+
+#[test]
+fn test_isdigit() {
+    assert!(is_digit("FFF"));
+    assert!(is_digit("256"));
+    assert!(is_digit("-120"));
+    assert!(!is_digit("Hello World"));
+}
