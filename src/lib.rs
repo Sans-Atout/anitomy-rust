@@ -93,6 +93,7 @@ impl Parser {
             &to_parse_str,
             self.ignored_string.to_owned(),
         ));
+        let _e = parsing::parsing(all_found_tokens, _e, self.allowed_delimiters.clone()).unwrap();
         Ok(_e)
     }
 }
