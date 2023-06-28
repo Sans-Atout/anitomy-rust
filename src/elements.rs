@@ -143,4 +143,8 @@ impl Elements {
     pub fn is_empty(&self) -> bool {
         self.elements.is_empty()
     }
+
+    pub fn is_category_empty(&self, c: Category) -> bool {
+        self.count(c) == 0
+    }
 }
