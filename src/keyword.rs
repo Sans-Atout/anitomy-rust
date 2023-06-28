@@ -177,7 +177,10 @@ impl Manager {
             .add("PS3", Keyword::new(Category::DeviceCompatibility))
             .add("XBOX", Keyword::new(Category::DeviceCompatibility))
             .add("XBOX360", Keyword::new(Category::DeviceCompatibility))
-            .add("ANDROID", Keyword::new(Category::DeviceCompatibility).identifiable(false))
+            .add(
+                "ANDROID",
+                Keyword::new(Category::DeviceCompatibility).identifiable(false),
+            )
             .add("EP", Keyword::new(Category::EpisodePrefix))
             .add("EP.", Keyword::new(Category::EpisodePrefix))
             .add("EPS", Keyword::new(Category::EpisodePrefix))
@@ -204,8 +207,14 @@ impl Manager {
             .add("COMPLETE", Keyword::new(Category::ReleaseInformation))
             .add("PATCH", Keyword::new(Category::ReleaseInformation))
             .add("REMUX", Keyword::new(Category::ReleaseInformation))
-            .add("END", Keyword::new(Category::ReleaseInformation).identifiable(false))
-            .add("FINAL", Keyword::new(Category::ReleaseInformation).identifiable(false))
+            .add(
+                "END",
+                Keyword::new(Category::ReleaseInformation).identifiable(false),
+            )
+            .add(
+                "FINAL",
+                Keyword::new(Category::ReleaseInformation).identifiable(false),
+            )
             .add("V0", Keyword::new(Category::ReleaseVersion))
             .add("V1", Keyword::new(Category::ReleaseVersion))
             .add("V2", Keyword::new(Category::ReleaseVersion))
@@ -261,7 +270,7 @@ impl Manager {
         self.to_owned()
     }
 
-    pub fn find(&self, s : &str) -> Option<&Keyword> {
+    pub fn find(&self, s: &str) -> Option<&Keyword> {
         self.keywords.get(s)
     }
 }

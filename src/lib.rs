@@ -6,10 +6,10 @@ use utils::{get_extension, remove_extension, remove_ignored_string};
 
 pub mod elements;
 pub mod errors;
-pub mod utils;
-pub mod tokenizer;
-pub mod parsing;
 pub mod keyword;
+pub mod parsing;
+pub mod tokenizer;
+pub mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Parser {
@@ -89,7 +89,10 @@ impl Parser {
                 .attach_printable(format!("Can not parse file : {}", self.file_name)));
         }
 
-        let _tokens = tokenize(&remove_ignored_string(&to_parse_str, self.ignored_string.to_owned()));
+        let all_found_tokens = tokenize(&remove_ignored_string(
+            &to_parse_str,
+            self.ignored_string.to_owned(),
+        ));
         Ok(_e)
     }
 }

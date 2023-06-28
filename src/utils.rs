@@ -1800,18 +1800,22 @@ pub fn remove_ignored_string(working_string: &str, ignored_str: Vec<String>) -> 
     return_string
 }
 
-pub fn normalize(to_normalize: &str) -> String{
+pub fn normalize(to_normalize: &str) -> String {
     let all_char = to_normalize.nfkd();
-    let mut normalized_char : Vec<char> = vec![];
+    let mut normalized_char: Vec<char> = vec![];
     for c in all_char {
-        if c.is_ascii(){
+        if c.is_ascii() {
             normalized_char.push(c);
         }
     }
-    normalized_char.iter().cloned().collect::<String>().to_uppercase()
+    normalized_char
+        .iter()
+        .cloned()
+        .collect::<String>()
+        .to_uppercase()
 }
 
-pub fn is_hexa(p_hexa : &str) -> bool{
+pub fn is_hexa(p_hexa: &str) -> bool {
     let hexa_char = Regex::new(r"^[0-9A-F]+$").unwrap();
     hexa_char.is_match(&p_hexa.to_uppercase())
 }

@@ -10,9 +10,9 @@ fn non_normal_situation() {
         "_04_".to_string(),
         "720p".to_string(),
         "40F2A957".to_string(),
-        ".mp4".to_string()
+        ".mp4".to_string(),
     ];
-    assert_eq!(tokens,wanted_token)
+    assert_eq!(tokens, wanted_token)
 }
 
 #[test]
@@ -26,5 +26,5 @@ fn normal_situation() {
         "720p".to_string(),
         "40F2A957".to_string(),
     ];
-    assert_eq!(tokens,wanted_token)
+    assert_eq!(tokens, wanted_token)
 }
