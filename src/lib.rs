@@ -89,11 +89,11 @@ impl Parser {
                 .attach_printable(format!("Can not parse file : {}", self.file_name)));
         }
 
-        let all_found_tokens = tokenize(&remove_ignored_string(
-            &to_parse_str,
-            self.ignored_string.to_owned(),
-        ),&self.allowed_delimiters);
-        
+        let all_found_tokens = tokenize(
+            &remove_ignored_string(&to_parse_str, self.ignored_string.to_owned()),
+            &self.allowed_delimiters,
+        );
+
         for t in all_found_tokens {
             t.parse(&mut _e);
         }

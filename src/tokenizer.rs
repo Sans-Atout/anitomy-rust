@@ -1,6 +1,10 @@
-use crate::{utils::{split_by_delimiter, is_digit}, elements::{Elements, Category}, parsing::is_crc32};
+use crate::{
+    elements::{Category, Elements},
+    parsing::is_crc32,
+    utils::{is_digit, split_by_delimiter},
+};
 
-pub fn tokenize(string_to_tokenize: &str, delimiter : &Vec<char>) -> Vec<Token> {
+pub fn tokenize(string_to_tokenize: &str, delimiter: &Vec<char>) -> Vec<Token> {
     let mut all_token: Vec<Token> = vec![];
     let token_char_vec: Vec<char> = string_to_tokenize.chars().collect();
     let mut index = 0;
@@ -39,11 +43,11 @@ pub fn tokenize(string_to_tokenize: &str, delimiter : &Vec<char>) -> Vec<Token> 
 pub struct Token {
     tokens: Vec<SubToken>,
     raw_token: String,
-    inside_delimiter : bool,
+    inside_delimiter: bool,
 }
 
 impl Token {
-    pub fn new(raw: &str, delimiter: &Vec<char>, in_delimiter : bool) -> Token {
+    pub fn new(raw: &str, delimiter: &Vec<char>, in_delimiter: bool) -> Token {
         let splited_token = split_by_delimiter(raw, delimiter.to_owned());
         let mut all_tokens: Vec<SubToken> = Vec::new();
         for token in splited_token {
@@ -52,11 +56,11 @@ impl Token {
         Token {
             tokens: all_tokens,
             raw_token: raw.to_string(),
-            inside_delimiter : in_delimiter
+            inside_delimiter: in_delimiter,
         }
     }
 
-    pub fn parse(&self, e : &mut Elements){
+    pub fn parse(&self, e: &mut Elements) {
         for sub_token in self.tokens.clone() {
             if sub_token.value.is_empty() {
                 continue;
@@ -64,7 +68,7 @@ impl Token {
             if is_digit(&sub_token.value) && sub_token.value.len() != 8 {
                 continue;
             }
-            if is_crc32(&sub_token.value) && e.is_category_empty(Category::FileExtension){
+            if is_crc32(&sub_token.value) && e.is_category_empty(Category::FileExtension) {
                 e.add(Category::FileExtension, &sub_token.value);
             }
         }

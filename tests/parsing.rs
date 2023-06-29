@@ -10,7 +10,7 @@ fn crc32() {
 }
 
 #[test]
-fn resolution(){
+fn resolution() {
     assert!(is_resolution("1080p"));
     assert!(is_resolution("2K"));
     assert!(is_resolution("1920x1080"));
