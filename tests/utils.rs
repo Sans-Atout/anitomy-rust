@@ -1,4 +1,4 @@
-use anitomy_rust::utils::{is_digit, is_hexa, normalize, remove_ignored_string, split_by_delimiter};
+use anitomy_rust::utils::{is_digit, is_hexa, normalize, remove_ignored_string, split_by_delimiter, ordinals_to_nb};
 
 #[test]
 fn remove_one_string() {
@@ -64,4 +64,12 @@ fn split_regex() {
     let s = "hello_world I.m&a+beautifull,rust|test";
     let e: Vec<&str> = vec!["hello","world","I","m","a","beautifull","rust","test"];
     assert_eq!(e, split_by_delimiter(s,d))
+}
+
+#[test]
+fn ordinal(){
+    assert_eq!(ordinals_to_nb("First"),"1");
+    assert_eq!(ordinals_to_nb("second"),"2");
+    assert_eq!(ordinals_to_nb("5th"),"5");
+    assert_eq!(ordinals_to_nb("5the"),"");
 }

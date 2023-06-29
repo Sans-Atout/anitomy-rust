@@ -1834,6 +1834,23 @@ pub fn split_by_delimiter(raw : &str, delimiter : Vec<char>) -> Vec<&str> {
     let split_regex = Regex::new(&regex_split_str).unwrap();
     split_regex.split(raw).collect::<Vec<&str>>()
 }
+
+pub fn ordinals_to_nb(ordinal: &str) -> &str {
+    let ordinal_raw = ordinal.to_lowercase();
+    match ordinal_raw.as_str() {
+        "1st" | "first" => "1",
+        "2nd" | "second" => "2",
+        "3rd" | "third" => "3",
+        "4th" | "fourth" => "4",
+        "5th" | "fifth" => "5",
+        "6th" | "sixth" => "6",
+        "7th" | "seventh" => "7",
+        "8th" | "eighth" => "8",
+        "9th" | "Ninth" => "9",
+        _ => "",
+    }
+}
+
 /// private function test
 #[test]
 fn test_valid_extension() {
