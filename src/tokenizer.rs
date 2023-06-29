@@ -1,18 +1,24 @@
 use crate::{utils::{split_by_delimiter, is_digit}, elements::{Elements, Category}, parsing::is_crc32};
 
-pub fn tokenize(string_to_tokenize: &str) -> Vec<String> {
-    let mut all_token: Vec<String> = vec![];
+pub fn tokenize(string_to_tokenize: &str, delimiter : &Vec<char>) -> Vec<Token> {
+    let mut all_token: Vec<Token> = vec![];
     let token_char_vec: Vec<char> = string_to_tokenize.chars().collect();
     let mut index = 0;
     let mut tmp_token: Vec<char> = vec![];
     while index < token_char_vec.len() {
         let char = token_char_vec.get(index).unwrap();
         match char {
-            '[' | ']' | '(' | ')' | '{' | '}' | '\u{300C}' | '\u{300D}' | '\u{300E}'
-            | '\u{300F}' | '\u{3011}' | '\u{3010}' | '\u{FF08}' | '\u{FF09}' => {
+            '[' | '(' | '{' | '\u{300C}' | '\u{300E}' | '\u{3011}' | '\u{FF08}' => {
                 if !tmp_token.is_empty() {
-                    let token = tmp_token.iter().cloned().collect::<String>();
-                    all_token.push(token);
+                    let token_str = tmp_token.iter().cloned().collect::<String>();
+                    all_token.push(Token::new(&token_str, delimiter, false));
+                }
+                tmp_token = vec![];
+            }
+            ']' | ')' | '}' | '\u{300D}' | '\u{300F}' | '\u{3010}' | '\u{FF09}' => {
+                if !tmp_token.is_empty() {
+                    let token_str = tmp_token.iter().cloned().collect::<String>();
+                    all_token.push(Token::new(&token_str, delimiter, true));
                 }
                 tmp_token = vec![];
             }
@@ -23,8 +29,8 @@ pub fn tokenize(string_to_tokenize: &str) -> Vec<String> {
         index += 1;
     }
     if !tmp_token.is_empty() {
-        let token = tmp_token.iter().cloned().collect::<String>();
-        all_token.push(token);
+        let token_str = tmp_token.iter().cloned().collect::<String>();
+        all_token.push(Token::new(&token_str, delimiter, false));
     }
     all_token
 }
@@ -33,10 +39,11 @@ pub fn tokenize(string_to_tokenize: &str) -> Vec<String> {
 pub struct Token {
     tokens: Vec<SubToken>,
     raw_token: String,
+    inside_delimiter : bool,
 }
 
 impl Token {
-    pub fn new(raw: &str, delimiter: &Vec<char>) -> Token {
+    pub fn new(raw: &str, delimiter: &Vec<char>, in_delimiter : bool) -> Token {
         let splited_token = split_by_delimiter(raw, delimiter.to_owned());
         let mut all_tokens: Vec<SubToken> = Vec::new();
         for token in splited_token {
@@ -45,6 +52,7 @@ impl Token {
         Token {
             tokens: all_tokens,
             raw_token: raw.to_string(),
+            inside_delimiter : in_delimiter
         }
     }
 
