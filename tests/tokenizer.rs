@@ -1,4 +1,4 @@
-use anitomy_rust::{tokenizer::{tokenize, Token}, elements::Elements};
+use anitomy_rust::{tokenizer::{tokenize, Token, SubToken, SubTokenCategory}, elements::Elements};
 use anitomy_rust::elements::Category;
 
 #[test]
@@ -42,4 +42,20 @@ fn token_parsing(){
     let mut t = Token::new("40F2A957", &d, true);
     tmp_e = t.parse(&mut tmp_e);
     assert!(!tmp_e.is_category_empty(Category::FileChecksum))
+}
+
+#[test]
+fn found_a_token(){
+    let d: Vec<char> = vec![' ', '_', '.', '&', '+', ',', '|'];
+    let mut tmp_e = Elements::new();
+    let mut t = Token::new("40F2A957", &d, true);
+    tmp_e = t.keyword_found(Category::FileChecksum, 0, &mut tmp_e);
+    assert_eq!(tmp_e,Elements::new().add(Category::FileChecksum, "40F2A957"));
+}
+
+
+#[test]
+fn is_subtoken_found(){
+    assert!(!SubToken::new("40F2A957").is_found());
+    assert!(SubToken::new("40F2A957").category(SubTokenCategory::Found).is_found());
 }

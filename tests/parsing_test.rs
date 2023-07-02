@@ -67,7 +67,12 @@ fn testing_file_extension() {
 }
 #[test]
 fn testing_file_name() {
-    // TODO
+    let elements = Parser::new("my_test_file.mp4").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::FileName);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::FileName, "my_test_file.mp4");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_language() {
