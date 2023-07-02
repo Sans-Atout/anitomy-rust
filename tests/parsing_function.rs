@@ -1,4 +1,4 @@
-use anitomy_rust::parsing::{is_crc32, is_resolution};
+use anitomy_rust::parsing::{is_crc32, is_resolution, ordinals_to_nb};
 
 #[test]
 fn crc32() {
@@ -17,4 +17,13 @@ fn resolution() {
     assert!(is_resolution("720p"));
     assert!(!is_resolution("Hello world"));
     assert!(is_resolution("1080×720"));
+}
+
+
+#[test]
+fn ordinal() {
+    assert_eq!(ordinals_to_nb("First"), "1");
+    assert_eq!(ordinals_to_nb("second"), "2");
+    assert_eq!(ordinals_to_nb("5th"), "5");
+    assert_eq!(ordinals_to_nb("5the"), "");
 }

@@ -48,7 +48,6 @@ fn ignored() {
     assert!(tested.parse().is_ok());
 }
 
-
 #[test]
 fn delimiter() {
     let tested = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD].mkv")
