@@ -46,6 +46,10 @@ impl Keyword {
     pub fn is_valid(&self) -> bool {
         self.valid
     }
+
+    pub fn get_category(&self) -> Category{
+        self.category
+    }
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Eq)]
