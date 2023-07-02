@@ -1,4 +1,5 @@
-use anitomy_rust::tokenizer::{tokenize, Token};
+use anitomy_rust::{tokenizer::{tokenize, Token, SubToken, SubTokenCategory}, elements::Elements};
+use anitomy_rust::elements::Category;
 
 #[test]
 fn non_normal_situation() {
@@ -32,4 +33,13 @@ fn normal_situation() {
         Token::new("40F2A957", &d, true),
     ];
     assert_eq!(tokens, wanted_token)
+}
+
+#[test]
+fn token_parsing(){
+    let d: Vec<char> = vec![' ', '_', '.', '&', '+', ',', '|'];
+    let mut tmp_e = Elements::new();
+    let t = Token::new("40F2A957", &d, true);
+    tmp_e = t.parse(&mut tmp_e);
+    assert!(tmp_e.is_category_empty(Category::FileChecksum))
 }
