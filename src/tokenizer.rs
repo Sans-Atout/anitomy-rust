@@ -60,7 +60,7 @@ impl Token {
         }
     }
 
-    pub fn parse(&self, e: &mut Elements) {
+    pub fn parse(&self, e: &mut Elements) -> Elements{
         for sub_token in self.tokens.clone() {
             if sub_token.value.is_empty() {
                 continue;
@@ -72,6 +72,7 @@ impl Token {
                 e.add(Category::FileExtension, &sub_token.value);
             }
         }
+        e.to_owned()
     }
 }
 
@@ -89,8 +90,9 @@ impl SubToken {
         }
     }
 
-    pub fn category(&mut self, c: SubTokenCategory) {
+    pub fn category(&mut self, c: SubTokenCategory) -> SubToken {
         self.category = c;
+        self.to_owned()
     }
 }
 
