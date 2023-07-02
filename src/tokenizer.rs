@@ -1,6 +1,6 @@
 use crate::{
     elements::{Category, Elements},
-    parsing::is_crc32,
+    parsing::{is_crc32, is_resolution},
     utils::{is_digit, split_by_delimiter},
 };
 
@@ -60,19 +60,33 @@ impl Token {
         }
     }
 
-    pub fn parse(&self, e: &mut Elements) -> Elements{
-        for sub_token in self.tokens.clone() {
-            if sub_token.value.is_empty() {
+    pub fn parse(&mut self, e: &mut Elements) -> Elements {
+        let mut tmp_elements = e.to_owned();
+        for st_index in 0..self.tokens.len() {
+
+            if self.tokens[st_index].value.is_empty() {
                 continue;
             }
-            if is_digit(&sub_token.value) && sub_token.value.len() != 8 {
+            if is_digit(&self.tokens[st_index].value) && self.tokens[st_index].value.len() != 8 {
                 continue;
             }
-            if is_crc32(&sub_token.value) && e.is_category_empty(Category::FileExtension) {
-                e.add(Category::FileExtension, &sub_token.value);
+            if is_crc32(&self.tokens[st_index].value) && e.is_category_empty(Category::FileChecksum) {
+                tmp_elements = self.keyword_found(Category::FileChecksum, st_index, &mut tmp_elements);
+                continue;
+            }
+            if is_resolution(&self.tokens[st_index].value) {
+                tmp_elements = self.keyword_found(Category::VideoResolution, st_index, &mut tmp_elements);
+                continue;
             }
         }
-        e.to_owned()
+        tmp_elements.to_owned()
+    }
+
+    fn keyword_found(&mut self, c : Category, id : usize, e : &mut Elements) -> Elements{
+        let mut tmp_elements = e.to_owned();
+        tmp_elements = tmp_elements.add(c, &self.tokens[id].value);
+        self.tokens[id].category = SubTokenCategory::Found;
+        tmp_elements
     }
 }
 
@@ -102,4 +116,5 @@ pub enum SubTokenCategory {
     Unknow,
     Delimiter,
     Invalid,
+    Found
 }

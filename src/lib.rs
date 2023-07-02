@@ -1,7 +1,7 @@
 use elements::Elements;
 use error_stack::{Report, Result};
 use errors::ParsingError;
-use tokenizer::tokenize;
+use tokenizer::{tokenize, Token};
 use utils::{get_extension, remove_extension, remove_ignored_string};
 
 pub mod elements;
@@ -89,13 +89,15 @@ impl Parser {
                 .attach_printable(format!("Can not parse file : {}", self.file_name)));
         }
 
-        let all_found_tokens = tokenize(
+        let raw_token = tokenize(
             &remove_ignored_string(&to_parse_str, self.ignored_string.to_owned()),
             &self.allowed_delimiters,
         );
+        let mut tokens_no_keyword : Vec<Token> = Vec::default();
 
-        for t in all_found_tokens {
-            t.parse(&mut _e);
+        for mut t in raw_token {
+            _e = t.parse(&mut _e);
+            tokens_no_keyword.push(t);
         }
         Ok(_e)
     }

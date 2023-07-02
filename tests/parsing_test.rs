@@ -1,5 +1,5 @@
 use anitomy_rust::{
-    elements::{Category, Elements, Element},
+    elements::{Category, Element},
     Parser,
 };
 
@@ -49,11 +49,21 @@ fn testing_episode_title() {
 }
 #[test]
 fn testing_file_checksum() {
-    // TODO
+    let elements = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD].mkv").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::FileChecksum);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::FileChecksum, "1234ABCD");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_file_extension() {
-    // TODO
+    let elements = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD].mkv").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::FileExtension);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::FileExtension, "mkv");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_file_name() {
@@ -89,7 +99,12 @@ fn testing_subtitles() {
 }
 #[test]
 fn testing_video_resolution() {
-    // TODO
+    let elements = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD].mkv").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::VideoResolution);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::VideoResolution, "1280x720");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_video_term() {
