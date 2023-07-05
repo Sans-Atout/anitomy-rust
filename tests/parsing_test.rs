@@ -27,7 +27,12 @@ fn testing_anime_title() {
 }
 #[test]
 fn testing_anime_type() {
-    // TODO
+    let elements = Parser::new("Ushio to Tora (TV)").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::AnimeType);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::AnimeType, "TV");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_anime_year() {
@@ -68,7 +73,12 @@ fn testing_episode_number_alt() {
 }
 #[test]
 fn testing_episode_prefix() {
-    // TODO
+    let elements = Parser::new("[Kira-Fansub] Uchuu no Stellvia ep 14 (BD 1280x960 24fps AAC) [06EE7355].mkv").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::EpisodePrefix);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::EpisodePrefix, "ep");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_episode_title() {

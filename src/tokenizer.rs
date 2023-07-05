@@ -1,7 +1,8 @@
 use crate::{
     elements::{Category, Elements},
+    keyword::{Keyword, Manager},
     parsing::{is_crc32, is_resolution, ordinals_to_nb},
-    utils::{is_digit, split_by_delimiter}, keyword::{Keyword, Manager},
+    utils::{is_digit, split_by_delimiter},
 };
 
 pub fn tokenize(string_to_tokenize: &str, delimiter: &Vec<char>) -> Vec<Token> {
@@ -61,44 +62,47 @@ impl Token {
     }
 
     pub fn parse(&mut self, e: &mut Elements) -> Elements {
-        let keyword_manager   = Manager::new(); 
+        let keyword_manager = Manager::new();
         let mut tmp_elements = e.to_owned();
         for st_index in 0..self.tokens.len() {
-
             if self.tokens[st_index].value.is_empty() || self.tokens[st_index].is_found() {
                 continue;
             }
             if is_digit(&self.tokens[st_index].value) && self.tokens[st_index].value.len() != 8 {
                 continue;
             }
-            if is_crc32(&self.tokens[st_index].value) && e.is_category_empty(Category::FileChecksum) {
-                tmp_elements = self.keyword_found(Category::FileChecksum, st_index, &mut tmp_elements);
+            if is_crc32(&self.tokens[st_index].value) && e.is_category_empty(Category::FileChecksum)
+            {
+                tmp_elements =
+                    self.keyword_found(Category::FileChecksum, st_index, &mut tmp_elements);
                 continue;
             }
             if is_resolution(&self.tokens[st_index].value) {
-                tmp_elements = self.keyword_found(Category::VideoResolution, st_index, &mut tmp_elements);
+                tmp_elements =
+                    self.keyword_found(Category::VideoResolution, st_index, &mut tmp_elements);
                 continue;
             }
 
-            if let Some(key_match) =  keyword_manager.find(&self.tokens[st_index].value) {
+            if let Some(key_match) = keyword_manager.find(&self.tokens[st_index].value.to_uppercase()) {
                 tmp_elements = self.manage_found_keyword(key_match, st_index, &tmp_elements);
             }
-
         }
         tmp_elements.to_owned()
     }
 
-    pub fn keyword_found(&mut self, c : Category, id : usize, e : &mut Elements) -> Elements{
+    pub fn keyword_found(&mut self, c: Category, id: usize, e: &mut Elements) -> Elements {
         let mut tmp_elements = e.to_owned();
         tmp_elements = tmp_elements.add(c, &self.tokens[id].value);
         self.tokens[id].category = SubTokenCategory::Found;
         tmp_elements
     }
 
-    pub fn manage_found_keyword(&mut self, keyword : &Keyword, id : usize, e :&Elements) -> Elements{
+    pub fn manage_found_keyword(&mut self, keyword: &Keyword, id: usize, e: &Elements) -> Elements {
         let mut tmp_elements = e.to_owned();
         let tmp_category = keyword.get_category();
-        if (!tmp_category.is_searchable()) || (tmp_category.is_singular() && !e.is_category_empty(tmp_category) ) {
+        if (!tmp_category.is_searchable())
+            || (tmp_category.is_singular() && !e.is_category_empty(tmp_category))
+        {
             return tmp_elements;
         }
         if tmp_category == Category::AnimeSeasonPrefix {
@@ -113,12 +117,15 @@ impl Token {
             if id + 1 < self.tokens.len(){
                 let next = self.tokens[id + 1].clone(); 
                 if is_digit(&next.value) {
-                    tmp_elements = tmp_elements.add(Category::AnimeSeason, &next.value);
-                    self.tokens[id + 1].category = SubTokenCategory::Found;
+                    tmp_elements = self.keyword_found(Category::AnimeSeason, id+1, &mut tmp_elements);
                 }
             }
             tmp_elements = self.keyword_found(keyword.get_category(), id, &mut tmp_elements);
             return tmp_elements;
+        }
+        if tmp_category == Category::EpisodePrefix && id + 1 < self.tokens.len(){
+            tmp_elements = self.keyword_found(Category::EpisodeNumber, id+1, &mut tmp_elements);
+            tmp_elements = self.keyword_found(Category::EpisodePrefix, id, &mut tmp_elements);
         }
         if tmp_category == Category::ReleaseVersion {
             let release_id = self.tokens[id].value.clone().to_lowercase().replace('v',"");
@@ -153,7 +160,7 @@ impl SubToken {
         self.to_owned()
     }
 
-    pub fn is_found(&self) -> bool{
+    pub fn is_found(&self) -> bool {
         self.category == SubTokenCategory::Found
     }
 }
@@ -164,5 +171,5 @@ pub enum SubTokenCategory {
     Unknow,
     Delimiter,
     Invalid,
-    Found
+    Found,
 }
