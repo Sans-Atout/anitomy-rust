@@ -5,11 +5,21 @@ use anitomy_rust::{
 
 #[test]
 fn testing_anime_season() {
-    // TODO
+    let elements = Parser::new("Episode 14 Ore no Imouto ga Konnani Kawaii Wake ga Nai. (saison 2) VOSTFR").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::AnimeSeason);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::AnimeSeason, "2");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_anime_season_prefix() {
-    // TODO
+    let elements = Parser::new("Episode 14 Ore no Imouto ga Konnani Kawaii Wake ga Nai. (saison 2) VOSTFR").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::AnimeSeasonPrefix);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::AnimeSeasonPrefix, "saison");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_anime_title() {

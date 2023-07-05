@@ -102,20 +102,24 @@ impl Token {
             return tmp_elements;
         }
         if tmp_category == Category::AnimeSeasonPrefix {
-            tmp_elements = self.keyword_found(Category::AnimeSeasonPrefix, id, &mut tmp_elements);
-            if let Some(previous) = self.tokens.get(id-1){
+            if id as i32 - 1 > 0  {
+                let previous = self.tokens[id -1].clone();
                 let ordinal_saeson = ordinals_to_nb(&previous.value);
                 if !ordinal_saeson.is_empty() {
                     tmp_elements = tmp_elements.add(Category::AnimeSeason, ordinal_saeson);
-                    self.tokens[id-1].category = SubTokenCategory::Found;
+                    self.tokens[id - 1].category = SubTokenCategory::Found;
                 }
             }
-            if let Some(next) = self.tokens.get(id+1){
-                if is_digit(&next.value){
+            if id + 1 < self.tokens.len(){
+                let next = self.tokens[id + 1].clone(); 
+                if is_digit(&next.value) {
                     tmp_elements = tmp_elements.add(Category::AnimeSeason, &next.value);
-                    self.tokens[id+1].category = SubTokenCategory::Found;
+                    self.tokens[id + 1].category = SubTokenCategory::Found;
                 }
             }
+            tmp_elements = self.keyword_found(keyword.get_category(), id, &mut tmp_elements);
+            return tmp_elements;
+        }
         if tmp_category == Category::ReleaseVersion {
             let release_id = self.tokens[id].value.clone().to_lowercase().replace('v',"");
             tmp_elements = tmp_elements.add(Category::ReleaseVersion, &release_id);
