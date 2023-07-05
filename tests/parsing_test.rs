@@ -92,7 +92,13 @@ fn testing_release_information() {
 }
 #[test]
 fn testing_release_version() {
-    // TODO
+    let elements = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01_v2_-_Tiger_and_Dragon_[XBOX][1280x720_H.264_FLAC][1234ABCD].mkv").parse();
+    assert!(elements.is_ok());
+    println!("{:?}",elements);
+    let tested = elements.unwrap().find(Category::ReleaseVersion);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::ReleaseVersion, "2");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_source() {

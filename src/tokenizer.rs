@@ -116,6 +116,11 @@ impl Token {
                     self.tokens[id+1].category = SubTokenCategory::Found;
                 }
             }
+        if tmp_category == Category::ReleaseVersion {
+            let release_id = self.tokens[id].value.clone().to_lowercase().replace('v',"");
+            tmp_elements = tmp_elements.add(Category::ReleaseVersion, &release_id);
+            self.tokens[id].category = SubTokenCategory::Found;
+            return tmp_elements;
         }
         
         
