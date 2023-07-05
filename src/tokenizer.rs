@@ -126,8 +126,10 @@ impl Token {
             self.tokens[id].category = SubTokenCategory::Found;
             return tmp_elements;
         }
-        
-        
+
+        if tmp_category != Category::Unknown {
+            tmp_elements = self.keyword_found(keyword.get_category(), id, &mut tmp_elements);
+        }
         tmp_elements
     }
 }
