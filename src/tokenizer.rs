@@ -123,8 +123,10 @@ impl Token {
             tmp_elements = self.keyword_found(keyword.get_category(), id, &mut tmp_elements);
             return tmp_elements;
         }
-        if tmp_category == Category::EpisodePrefix && id + 1 < self.tokens.len(){
-            tmp_elements = self.keyword_found(Category::EpisodeNumber, id+1, &mut tmp_elements);
+        if tmp_category == Category::EpisodePrefix {
+            if id + 1 < self.tokens.len(){
+                tmp_elements = self.keyword_found(Category::EpisodeNumber, id+1, &mut tmp_elements);
+            }
             tmp_elements = self.keyword_found(Category::EpisodePrefix, id, &mut tmp_elements);
         }
         if tmp_category == Category::ReleaseVersion {
@@ -134,6 +136,13 @@ impl Token {
             return tmp_elements;
         }
 
+        if tmp_category == Category::VolumePrefix {
+            if id + 1 < self.tokens.len(){
+                tmp_elements = self.keyword_found(Category::VolumeNumber, id+1, &mut tmp_elements);
+            }
+            tmp_elements = self.keyword_found(Category::VolumePrefix, id, &mut tmp_elements);
+            return tmp_elements;
+        }
         if tmp_category != Category::Unknown {
             tmp_elements = self.keyword_found(keyword.get_category(), id, &mut tmp_elements);
         }

@@ -122,7 +122,13 @@ fn testing_language() {
 }
 #[test]
 fn testing_other() {
-    // TODO
+    let elements = Parser::new("[Mobile Suit Gundam Seed Destiny HD REMASTER][07][Big5][720p][AVC_AAC][encoded by SEED].mp4").parse();
+    assert!(elements.is_ok());
+    println!("{:?}",elements);
+    let tested = elements.unwrap().find(Category::Other);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::Other, "REMASTER");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_release_group() {
@@ -130,7 +136,13 @@ fn testing_release_group() {
 }
 #[test]
 fn testing_release_information() {
-    // TODO
+    let elements = Parser::new("[Zero-Raws] Shingeki no Kyojin - 25 END (MBS 1280x720 x264 AAC).mp4").parse();
+    assert!(elements.is_ok());
+    println!("{:?}",elements);
+    let tested = elements.unwrap().find(Category::ReleaseInformation);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::ReleaseInformation, "END");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_release_version() {
@@ -144,11 +156,21 @@ fn testing_release_version() {
 }
 #[test]
 fn testing_source() {
-    // TODO
+    let elements = Parser::new("[Chihiro]_Kono_Aozora_ni_Yakusoku_Wo_10_v2_[DVD][h264][C83D206B].mkv").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::Source);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::Source, "DVD");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_subtitles() {
-    // TODO
+    let elements = Parser::new("[ValdikSS]_First_Squad_The_Morment_Of_Truth_[720x576_h264_dvdscr_eng_hardsub].mkv").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::Subtitles);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::Subtitles, "hardsub");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_video_resolution() {
@@ -170,13 +192,19 @@ fn testing_video_term() {
 }
 #[test]
 fn testing_volume_number() {
-    // TODO
+    let elements = Parser::new("[EveTaku] AKB0048 Vol.03 - Making of Kibou-ni-Tsuite Music Video (BDRip 1080i H.264-Hi10P FLAC)[C09462E2]").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::VolumeNumber);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::VolumeNumber, "03");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_volume_prefix() {
-    // TODO
-}
-#[test]
-fn testing_unknown() {
-    // TODO
+    let elements = Parser::new("[EveTaku] AKB0048 Vol.03 - Making of Kibou-ni-Tsuite Music Video (BDRip 1080i H.264-Hi10P FLAC)[C09462E2]").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::VolumePrefix);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::VolumePrefix, "Vol");
+    assert_eq!(tested.unwrap(),wanted)
 }
