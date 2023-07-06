@@ -1,6 +1,6 @@
 use regex::Regex;
 
-use crate::utils::is_hexa;
+use crate::utils::{is_hexa, is_digit};
 
 const ANIME_YEAR_MIN: i32 = 1917;
 const ANIME_YEAR_MAX: i32 = 2050;
@@ -30,4 +30,17 @@ pub fn ordinals_to_nb(ordinal: &str) -> &str {
         "9th" | "Ninth" => "9",
         _ => "",
     }
+}
+
+pub fn is_anime_year(tested_string : &str) -> bool{
+    if !is_digit(tested_string){
+        return false;
+    }
+    let parsed_string = tested_string.parse::<i32>();
+    if parsed_string.is_err(){
+        return false
+    }
+    let possible_year = parsed_string.unwrap();
+    (ANIME_YEAR_MIN..=ANIME_YEAR_MAX).contains(&possible_year)
+    
 }

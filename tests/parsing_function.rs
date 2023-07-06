@@ -1,4 +1,4 @@
-use anitomy_rust::parsing::{is_crc32, is_resolution, ordinals_to_nb};
+use anitomy_rust::parsing::{is_crc32, is_resolution, ordinals_to_nb, is_anime_year};
 
 #[test]
 fn crc32() {
@@ -26,4 +26,13 @@ fn ordinal() {
     assert_eq!(ordinals_to_nb("second"), "2");
     assert_eq!(ordinals_to_nb("5th"), "5");
     assert_eq!(ordinals_to_nb("5the"), "");
+}
+
+#[test]
+fn anime_year(){
+    assert!(is_anime_year("2009"));
+    assert!(is_anime_year("1920"));
+    assert!(!is_anime_year("1400"));
+    assert!(is_anime_year("2050"));
+    assert!(!is_anime_year("2500"));
 }
