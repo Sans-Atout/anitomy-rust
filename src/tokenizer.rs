@@ -148,6 +148,24 @@ impl Token {
         }
         tmp_elements
     }
+
+    pub fn contains_unknow(&self) -> bool{
+        for t in &self.tokens{
+            if t.category == SubTokenCategory::Unknow {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn is_isolated_number(&self) -> bool{
+        let first_token = self.tokens.get(0).unwrap();
+        self.tokens.len() == 1 && is_digit(&first_token.value) && !&first_token.is_found()
+    }
+
+    pub fn get_tokens(&self) -> Vec<SubToken>{
+        self.tokens.to_owned()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
