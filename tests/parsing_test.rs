@@ -36,13 +36,17 @@ fn testing_anime_type() {
 }
 #[test]
 fn testing_anime_year() {
-    // TODO
+    let elements = Parser::new("[Taka]_Fullmetal_Alchemist_(2009)_04_[720p][40F2A957].mp4").parse();
+    assert!(elements.is_ok());
+    let tested = elements.unwrap().find(Category::AnimeYear);
+    assert!(tested.is_ok());
+    let wanted = Element::new(Category::AnimeYear, "2009");
+    assert_eq!(tested.unwrap(),wanted)
 }
 #[test]
 fn testing_audio_term() {
     let elements = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[XBOX][1280x720_H.264_FLAC][1234ABCD].mkv").parse();
     assert!(elements.is_ok());
-    println!("{:?}",elements);
     let tested = elements.unwrap().find(Category::AudioTerm);
     assert!(tested.is_ok());
     let wanted = Element::new(Category::AudioTerm, "FLAC");
@@ -52,7 +56,6 @@ fn testing_audio_term() {
 fn testing_device_compatibility() {
     let elements = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[XBOX][1280x720_H.264_FLAC][1234ABCD].mkv").parse();
     assert!(elements.is_ok());
-    println!("{:?}",elements);
     let tested = elements.unwrap().find(Category::DeviceCompatibility);
     assert!(tested.is_ok());
     let wanted = Element::new(Category::DeviceCompatibility, "XBOX");
@@ -124,7 +127,6 @@ fn testing_language() {
 fn testing_other() {
     let elements = Parser::new("[Mobile Suit Gundam Seed Destiny HD REMASTER][07][Big5][720p][AVC_AAC][encoded by SEED].mp4").parse();
     assert!(elements.is_ok());
-    println!("{:?}",elements);
     let tested = elements.unwrap().find(Category::Other);
     assert!(tested.is_ok());
     let wanted = Element::new(Category::Other, "REMASTER");
@@ -138,7 +140,6 @@ fn testing_release_group() {
 fn testing_release_information() {
     let elements = Parser::new("[Zero-Raws] Shingeki no Kyojin - 25 END (MBS 1280x720 x264 AAC).mp4").parse();
     assert!(elements.is_ok());
-    println!("{:?}",elements);
     let tested = elements.unwrap().find(Category::ReleaseInformation);
     assert!(tested.is_ok());
     let wanted = Element::new(Category::ReleaseInformation, "END");
@@ -148,7 +149,6 @@ fn testing_release_information() {
 fn testing_release_version() {
     let elements = Parser::new("[TaigaSubs]_Toradora!_(2008)_-_01_v2_-_Tiger_and_Dragon_[XBOX][1280x720_H.264_FLAC][1234ABCD].mkv").parse();
     assert!(elements.is_ok());
-    println!("{:?}",elements);
     let tested = elements.unwrap().find(Category::ReleaseVersion);
     assert!(tested.is_ok());
     let wanted = Element::new(Category::ReleaseVersion, "2");

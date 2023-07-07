@@ -190,6 +190,10 @@ impl SubToken {
     pub fn is_found(&self) -> bool {
         self.category == SubTokenCategory::Found
     }
+
+    pub fn value(&self) -> String{
+        self.value.clone()
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
