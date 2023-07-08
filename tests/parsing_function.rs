@@ -35,4 +35,5 @@ fn anime_year(){
     assert!(!is_anime_year("1400"));
     assert!(is_anime_year("2050"));
     assert!(!is_anime_year("2500"));
+    assert!(!is_anime_year("gdyuighjdhgj"));
 }
