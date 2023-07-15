@@ -1,8 +1,6 @@
-use regex::Regex;
-
 use crate::{
     elements::{Category, Elements},
-    keyword::{Keyword, Manager}, parsing::number::{is_crc32, is_resolution, is_digit, ordinals_to_nb}, split::split_by_delimiter,
+    keyword::{Keyword, Manager},split::split_by_delimiter, parsing::number::{is_digit, is_crc32, is_resolution, ordinals_to_nb},
 
 };
 
@@ -164,8 +162,8 @@ impl Token {
         self.tokens.len() == 1 && is_digit(&first_token.value) && !&first_token.is_found()
     }
 
-    pub fn get_tokens(&self) -> Vec<SubToken>{
-        self.tokens.to_owned()
+    pub fn sub_tokens(&mut self) -> &mut Vec<SubToken>{
+        &mut self.tokens
     }
 
 }
@@ -195,56 +193,6 @@ impl SubToken {
 
     pub fn value(&self) -> String{
         self.value.clone()
-    }
-
-    pub fn match_episode_patern(&self, found_elements: &mut Elements) -> bool {
-        let tested_value = self.value();
-
-        // Multi episode matching test
-        let multiple_ep_regex = Regex::new(r"(?P<ep_1>\d{1,4})(?:[vV](?P<version_1>\d))?[-~&+](?P<ep_2>\d{1,4})(?:[vV](?P<version_2>\d))?$").unwrap();
-        if multiple_ep_regex.is_match(&tested_value) {
-            let multiple_ep_captures = multiple_ep_regex.captures(&tested_value).unwrap();
-            let ep_1 = multiple_ep_captures.name("ep_1").unwrap().as_str();
-            let ep_2 = multiple_ep_captures.name("ep_2").unwrap().as_str();
-            if ep_1.parse::<i32>().unwrap() > ep_2.parse::<i32>().unwrap() {
-                return false;
-            }
-            found_elements.add(Category::EpisodeNumber, ep_1);
-            found_elements.add(Category::EpisodeNumberAlt, ep_2);
-
-            if let Some(v1) = multiple_ep_captures.name("version_1") {
-                found_elements.add(Category::ReleaseVersion, v1.as_str());
-            }
-            if let Some(v2) = multiple_ep_captures.name("version_2") {
-                found_elements.add(Category::ReleaseVersion, v2.as_str());
-            }
-            return true;
-        }
-
-        // Saeson and episode
-        let season_episode_regex = Regex::new(r"S?(?P<season_1>\d{1,2})(?:-S?(?P<season_2>\d{1,2}))?(?:x|[ ._-x]?E)(?P<ep_1>\d{1,4})(?:-E?(?P<ep_2>\d{1,4}))?(?:[vV](?P<version>\d))?$").unwrap();
-        if season_episode_regex.is_match(&tested_value) {
-            let season_ep_captures = season_episode_regex.captures(&tested_value).unwrap();
-            let season_1 = season_ep_captures.name("season_1").unwrap().as_str();
-            if season_1.parse::<i32>().unwrap() == 0 {
-                return false;
-            }
-            found_elements.add(Category::AnimeSeason, season_1);
-            if let Some(season_2) = season_ep_captures.name("season_2") {
-                found_elements.add(Category::AnimeSeason, season_2.as_str());
-            }
-            let ep_1 = season_ep_captures.name("ep_1").unwrap().as_str();
-            found_elements.add(Category::EpisodeNumber, ep_1);
-            if let Some(ep_2) = season_ep_captures.name("ep_2") {
-                found_elements.add(Category::AnimeSeason, ep_2.as_str());
-            }
-            if let Some(version) = season_ep_captures.name("version") {
-                found_elements.add(Category::AnimeSeason, version.as_str());
-            }
-            return true;
-        }
-
-        false
     }
 }
 

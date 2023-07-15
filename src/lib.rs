@@ -100,7 +100,7 @@ impl Parser {
         for mut t in raw_token {
             _e = t.parse(&mut _e);
             if t.is_isolated_number() {
-                let token_value = t.get_tokens().get(0).unwrap().value();
+                let token_value = t.sub_tokens().get(0).unwrap().value();
                 if is_anime_year(&token_value) {                    
                     _e = t.keyword_found(elements::Category::AnimeYear, 0, &mut _e)
                 }

@@ -1,5 +1,3 @@
-use regex::Regex;
-use std::path::Path;
 use unicode_normalization::UnicodeNormalization;
 
 pub fn remove_ignored_string(working_string: &str, ignored_str: Vec<String>) -> String {
