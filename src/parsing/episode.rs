@@ -29,22 +29,32 @@ pub fn parse_episode_number(delimiter : &Vec<char>,tokens_to_parse : &mut Vec<To
 
 pub fn parse_single_subtoken(delimiter : &Vec<char>,string_to_parse : &str, found_elements : &mut Elements) -> bool{
     // Multi episode matching test
-    if parse_multiple_ep(string_to_parse, found_elements){
+    if match_multiple_ep(string_to_parse, found_elements){
         return true;
     }
 
     // Saeson and episode
-    if parse_season_ep_patern(string_to_parse, found_elements){
+    if match_season_ep_patern(string_to_parse, found_elements){
         return true;
     }
 
     // Parse ep and type
-    if parse_type_episode(string_to_parse, found_elements, delimiter){
+    if match_type_episode(string_to_parse, found_elements, delimiter){
         return true;
     }
 
     // Parse single ep
     if parse_single_ep(string_to_parse, found_elements){
+        return true;
+    }
+
+    // Episode like : 1.5 etc
+    if match_fractal_episode(string_to_parse, found_elements) {
+        return true;
+    }
+
+    // Japanese counter like 750話
+    if match_japanese_counter(string_to_parse, found_elements) {
         return true;
     }
     false
@@ -61,7 +71,7 @@ pub fn parse_single_ep(tested_string: &str, found_elements: &mut Elements) -> bo
     false
 }
 
-pub fn parse_multiple_ep(tested_string: &str, found_elements: &mut Elements) -> bool {
+pub fn match_multiple_ep(tested_string: &str, found_elements: &mut Elements) -> bool {
     let multiple_ep_regex = Regex::new(r"(?P<ep_1>\d{1,4})(?:[vV](?P<version_1>\d))?[-~&+](?P<ep_2>\d{1,4})(?:[vV](?P<version_2>\d))?$").unwrap();
     if multiple_ep_regex.is_match(tested_string) {
         let multiple_ep_captures = multiple_ep_regex.captures(tested_string).unwrap();
@@ -84,7 +94,7 @@ pub fn parse_multiple_ep(tested_string: &str, found_elements: &mut Elements) -> 
     false
 }
 
-pub fn parse_season_ep_patern(tested_string: &str, found_elements: &mut Elements) -> bool{
+pub fn match_season_ep_patern(tested_string: &str, found_elements: &mut Elements) -> bool{
     let season_episode_regex = Regex::new(r"S?(?P<season_1>\d{1,2})(?:-S?(?P<season_2>\d{1,2}))?(?:x|[ ._-x]?E)(?P<ep_1>\d{1,4})(?:-E?(?P<ep_2>\d{1,4}))?(?:[vV](?P<version>\d))?$").unwrap();
     if season_episode_regex.is_match(tested_string) {
         let season_ep_captures = season_episode_regex.captures(tested_string).unwrap();
@@ -109,13 +119,32 @@ pub fn parse_season_ep_patern(tested_string: &str, found_elements: &mut Elements
     false
 }
 
-pub fn parse_type_episode(tested_string: &str, found_elements: &mut Elements, delimiter : &Vec<char>) -> bool {
+pub fn match_type_episode(tested_string: &str, found_elements: &mut Elements, delimiter : &Vec<char>) -> bool {
     let (potential_keyword, data_to_parse) = split_type_and_ep(tested_string);
     let keyword_manager = Manager::new();
     let trim_keyword = potential_keyword.trim_matches(delimiter.as_slice());
     if let Some(keyword) = keyword_manager.find(&trim_keyword.to_uppercase()) {
         found_elements.add(keyword.get_category(),trim_keyword);
         parse_single_subtoken(delimiter,&data_to_parse, found_elements);
+        return true;
+    }
+    false
+}
+
+pub fn match_fractal_episode(tested_string: &str, found_elements: &mut Elements) -> bool{
+    let multiple_ep_regex = Regex::new(r"\d+\.5$").unwrap();
+    if multiple_ep_regex.is_match(tested_string){
+        found_elements.add(Category::EpisodeNumber, tested_string);
+        return true;
+    }
+    false
+}
+
+pub fn match_japanese_counter(tested_string: &str, found_elements: &mut Elements) -> bool{
+    let japanese_regex = Regex::new(r"(?P<episode_number>\d+)\u8A71$").unwrap();
+    if japanese_regex.is_match(tested_string) {
+        let episode_number = japanese_regex.captures(tested_string).unwrap().name("episode_number").unwrap().as_str();
+        found_elements.add(Category::EpisodeNumber, episode_number);
         return true;
     }
     false

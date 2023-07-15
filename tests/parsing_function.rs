@@ -1,4 +1,13 @@
-use anitomy_rust::{parsing::{number::{is_crc32, is_resolution, ordinals_to_nb, is_anime_year, contains_digit, is_hexa, is_digit}, episode::parse_single_ep}, elements::{Elements, Category}};
+use anitomy_rust::{
+    elements::{Category, Elements},
+    parsing::{
+        episode::{match_multiple_ep, match_type_episode, parse_single_ep, match_japanese_counter, match_fractal_episode, parse_single_subtoken, match_season_ep_patern},
+        number::{
+            contains_digit, is_anime_year, is_crc32, is_digit, is_hexa, is_resolution,
+            ordinals_to_nb,
+        },
+    },
+};
 
 #[test]
 fn crc32() {
@@ -65,60 +74,110 @@ fn test_isdigit() {
 
 #[test]
 fn match_single_ep_patern() {
-    
     let mut tmp_e = Elements::new();
     let wanted_element = Elements::new()
         .add(Category::EpisodeNumber, "01")
         .add(Category::ReleaseVersion, "2");
     assert!(parse_single_ep("01v2", &mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
+    assert_eq!(tmp_e, wanted_element);
 }
 
-/*
 #[test]
 fn match_multiple_ep_patern_01() {
-    let sub_token = SubToken::new("01v2-03");
     let mut tmp_e = Elements::new();
     let wanted_element = Elements::new()
         .add(Category::EpisodeNumber, "01")
         .add(Category::EpisodeNumberAlt, "03")
         .add(Category::ReleaseVersion, "2");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
+    assert!(match_multiple_ep("01v2-03", &mut tmp_e));
+    assert_eq!(tmp_e, wanted_element);
 }
 
 #[test]
 fn match_multiple_ep_patern_02() {
-    let sub_token = SubToken::new("01-03v2");
     let mut tmp_e = Elements::new();
     let wanted_element = Elements::new()
         .add(Category::EpisodeNumber, "01")
         .add(Category::EpisodeNumberAlt, "03")
         .add(Category::ReleaseVersion, "2");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
+    assert!(match_multiple_ep("01-03v2", &mut tmp_e));
+    assert_eq!(tmp_e, wanted_element);
 }
 
 #[test]
 fn match_multiple_ep_patern_03() {
-    let sub_token = SubToken::new("01v1-03v2");
     let mut tmp_e = Elements::new();
     let wanted_element = Elements::new()
         .add(Category::EpisodeNumber, "01")
         .add(Category::EpisodeNumberAlt, "03")
         .add(Category::ReleaseVersion, "1")
         .add(Category::ReleaseVersion, "2");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
+    assert!(match_multiple_ep("01v1-03v2", &mut tmp_e));
+    assert_eq!(tmp_e, wanted_element);
 }
 
 #[test]
 fn match_multiple_ep_patern_04() {
-    let sub_token = SubToken::new("01-03");
     let mut tmp_e = Elements::new();
     let wanted_element = Elements::new()
         .add(Category::EpisodeNumber, "01")
         .add(Category::EpisodeNumberAlt, "03");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
-} */
+    assert!(match_multiple_ep("01-03", &mut tmp_e));
+    assert_eq!(tmp_e, wanted_element);
+}
+
+#[test]
+fn match_episode_type() {
+    let d: Vec<char> = vec![' ', '_', '.', '&', '+', ',', '|'];
+    let mut tmp_e = Elements::new();
+    let wanted_element = Elements::new()
+        .add(Category::AnimeType, "ONA")
+        .add(Category::EpisodeNumber, "01")
+        .add(Category::ReleaseVersion, "3");
+    assert!(match_type_episode("ONA01v3", &mut tmp_e, &d));
+    assert_eq!(tmp_e, wanted_element);
+    tmp_e = Elements::new();
+    assert!(!match_type_episode("ONAFail", &mut tmp_e, &d));
+    assert_eq!(tmp_e, Elements::new());
+}
+
+#[test]
+fn test_japanese_ep() {
+    let mut tmp_e = Elements::new();
+    let wanted = Elements::new().add(Category::EpisodeNumber, "125");
+    assert!(!match_japanese_counter("ONAFail", &mut tmp_e));
+    assert!(match_japanese_counter("125話", &mut tmp_e));
+    assert_eq!(tmp_e, wanted);
+}
+
+#[test]
+fn test_fractal() {
+    let mut tmp_e = Elements::new();
+    let wanted = Elements::new().add(Category::EpisodeNumber, "1.5");
+    assert!(!match_fractal_episode("11.1", &mut tmp_e));
+    assert!(match_fractal_episode("1.5", &mut tmp_e));
+    assert_eq!(tmp_e, wanted);
+}
+
+#[test]
+fn test_parse_single_subtoken(){
+    let d: Vec<char> = vec![' ', '_', '.', '&', '+', ',', '|'];
+    let mut e = Elements::new();
+    assert!(parse_single_subtoken(&d,"01v2",&mut e));
+    assert!(parse_single_subtoken(&d,"1.5",&mut e));
+    assert!(parse_single_subtoken(&d,"01-03",&mut e));
+    assert!(parse_single_subtoken(&d,"S01E02",&mut e));
+    assert!(parse_single_subtoken(&d,"ONA1.5",&mut e));
+    assert!(parse_single_subtoken(&d,"125話",&mut e));
+    assert!(!parse_single_subtoken(&d,"03-02",&mut e));
+}
+
+#[test]
+fn test_season_ep_patern(){
+    let mut e = Elements::new();
+    assert!(match_season_ep_patern("S02E01",&mut e));
+    assert!(match_season_ep_patern("S02E01-03",&mut e));
+    assert!(!match_season_ep_patern("SAE01",&mut e));
+    assert!(match_season_ep_patern("S01-02E01",&mut e));
+    assert!(match_season_ep_patern("01x02",&mut e));
+}
