@@ -1,5 +1,5 @@
 use anitomy_rust::utils::{
-    is_digit, is_hexa, normalize, remove_ignored_string, split_by_delimiter,
+    normalize, remove_ignored_string,
 };
 
 #[test]
@@ -42,37 +42,3 @@ fn normalize_test() {
     assert_eq!("EPISODE1", normalize("épisode1"));
 }
 
-#[test]
-fn test_hexa() {
-    assert!(is_hexa("028934"));
-    assert!(is_hexa("FFF"));
-    assert!(is_hexa("0123456789ABCDEF"));
-    assert!(!is_hexa("G015021"));
-    assert!(is_hexa("acbdef"));
-    assert!(!is_hexa("00000fg"))
-}
-
-#[test]
-fn test_isdigit() {
-    assert!(is_digit("FFF"));
-    assert!(is_digit("256"));
-    assert!(is_digit("-120"));
-    assert!(!is_digit("Hello World"));
-}
-
-#[test]
-fn split_regex() {
-    let d: Vec<char> = vec![' ', '_', '.', '&', '+', ',', '|'];
-    let s = "hello_world I.m&a+beautifull,rust|test";
-    let e: Vec<&str> = vec![
-        "hello",
-        "world",
-        "I",
-        "m",
-        "a",
-        "beautifull",
-        "rust",
-        "test",
-    ];
-    assert_eq!(e, split_by_delimiter(s, d))
-}

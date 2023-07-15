@@ -1,15 +1,16 @@
 use elements::Elements;
 use error_stack::{Report, Result};
 use errors::ParsingError;
-use parsing::is_anime_year;
+use parsing::{number::is_anime_year, extensions::{get_extension, remove_extension}};
 use tokenizer::{tokenize, Token};
-use utils::{get_extension, remove_extension, remove_ignored_string};
+use utils::remove_ignored_string;
 
 pub mod elements;
 pub mod errors;
 pub mod keyword;
 pub mod parsing;
 pub mod tokenizer;
+pub mod split;
 pub mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -110,6 +111,13 @@ impl Parser {
             tokens_no_keyword.push(t);
         }
 
+        if self.ep_number {
+            //TODO parse episode number
+        }
+
+        if self.release_group {
+            //TODO parse release group 
+        }
 
         Ok(_e)
     }

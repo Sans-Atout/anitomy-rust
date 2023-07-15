@@ -1,8 +1,4 @@
-use anitomy_rust::{
-    elements::{Elements,Category},
-    parsing::{contains_digit, is_anime_year, is_crc32, is_resolution, ordinals_to_nb},
-    tokenizer::SubToken,
-};
+use anitomy_rust::parsing::number::{is_crc32, is_resolution, ordinals_to_nb, is_anime_year, contains_digit, is_hexa, is_digit};
 
 #[test]
 fn crc32() {
@@ -32,7 +28,7 @@ fn ordinal() {
 }
 
 #[test]
-fn anime_year(){
+fn anime_year() {
     assert!(is_anime_year("2009"));
     assert!(is_anime_year("1920"));
     assert!(!is_anime_year("1400"));
@@ -50,60 +46,19 @@ fn test_contains_number() {
 }
 
 #[test]
-fn match_single_ep_patern() {
-    let sub_token = SubToken::new("01v2");
-    let mut tmp_e = Elements::new();
-    let wanted_element = Elements::new()
-        .add(Category::EpisodeNumber, "01")
-        .add(Category::ReleaseVersion, "2");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
+fn test_hexa() {
+    assert!(is_hexa("028934"));
+    assert!(is_hexa("FFF"));
+    assert!(is_hexa("0123456789ABCDEF"));
+    assert!(!is_hexa("G015021"));
+    assert!(is_hexa("acbdef"));
+    assert!(!is_hexa("00000fg"))
 }
 
 #[test]
-fn match_multiple_ep_patern_01() {
-    let sub_token = SubToken::new("01v2-03");
-    let mut tmp_e = Elements::new();
-    let wanted_element = Elements::new()
-        .add(Category::EpisodeNumber, "01")
-        .add(Category::EpisodeNumberAlt, "03")
-        .add(Category::ReleaseVersion, "2");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
-}
-
-#[test]
-fn match_multiple_ep_patern_02() {
-    let sub_token = SubToken::new("01-03v2");
-    let mut tmp_e = Elements::new();
-    let wanted_element = Elements::new()
-        .add(Category::EpisodeNumber, "01")
-        .add(Category::EpisodeNumberAlt, "03")
-        .add(Category::ReleaseVersion, "2");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
-}
-
-#[test]
-fn match_multiple_ep_patern_03() {
-    let sub_token = SubToken::new("01v1-03v2");
-    let mut tmp_e = Elements::new();
-    let wanted_element = Elements::new()
-        .add(Category::EpisodeNumber, "01")
-        .add(Category::EpisodeNumberAlt, "03")
-        .add(Category::ReleaseVersion, "1")
-        .add(Category::ReleaseVersion, "2");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
-}
-
-#[test]
-fn match_multiple_ep_patern_04() {
-    let sub_token = SubToken::new("01-03");
-    let mut tmp_e = Elements::new();
-    let wanted_element = Elements::new()
-        .add(Category::EpisodeNumber, "01")
-        .add(Category::EpisodeNumberAlt, "03");
-    assert!(sub_token.match_episode_patern(&mut tmp_e));
-    assert_eq!(tmp_e,wanted_element);
+fn test_isdigit() {
+    assert!(is_digit("FFF"));
+    assert!(is_digit("256"));
+    assert!(is_digit("-120"));
+    assert!(!is_digit("Hello World"));
 }

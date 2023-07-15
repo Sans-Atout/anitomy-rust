@@ -1,4 +1,5 @@
-use anitomy_rust::utils::get_extension;
+use anitomy_rust::parsing::extensions::get_extension;
+
 
 #[test]
 fn get_extension_mkv() {
