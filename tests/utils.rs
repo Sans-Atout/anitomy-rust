@@ -1,4 +1,4 @@
-use anitomy_rust::utils::remove_ignored_string;
+use anitomy_rust::utils::{normalize, remove_ignored_string};
 
 #[test]
 fn remove_one_string() {
@@ -32,4 +32,10 @@ fn real_test_remove() {
         r2,
         "[Watakushi]_Akuma_no_Riddle_-_01v2_[720p][69A307A2].mkv"
     );
+}
+
+#[test]
+fn normalize_test() {
+    assert_eq!("HELLO WORLD !", normalize("Hello World !"));
+    assert_eq!("EPISODE1", normalize("épisode1"));
 }

@@ -1,3 +1,5 @@
+use std::vec;
+
 use crate::errors::CategoryNotFound;
 use error_stack::{Report, Result};
 
@@ -29,6 +31,47 @@ pub enum Category {
     VolumeNumber,
     VolumePrefix,
     Unknown,
+}
+
+impl Category {
+    pub fn is_singular(&self) -> bool {
+        let non_singular_categories = vec![
+            Category::AnimeSeason,
+            Category::AnimeType,
+            Category::AudioTerm,
+            Category::DeviceCompatibility,
+            Category::EpisodeNumber,
+            Category::Language,
+            Category::Other,
+            Category::ReleaseInformation,
+            Category::Source,
+            Category::VideoTerm,
+        ];
+        !non_singular_categories.contains(self)
+    }
+
+    pub fn is_searchable(&self) -> bool {
+        let searchable = vec![
+            Category::AnimeSeasonPrefix,
+            Category::AnimeType,
+            Category::AudioTerm,
+            Category::DeviceCompatibility,
+            Category::EpisodePrefix,
+            Category::FileChecksum,
+            Category::Language,
+            Category::Other,
+            Category::ReleaseGroup,
+            Category::ReleaseInformation,
+            Category::ReleaseVersion,
+            Category::Source,
+            Category::Subtitles,
+            Category::VideoResolution,
+            Category::VideoResolution,
+            Category::VideoTerm,
+            Category::VolumePrefix,
+        ];
+        searchable.contains(self)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -99,5 +142,9 @@ impl Elements {
 
     pub fn is_empty(&self) -> bool {
         self.elements.is_empty()
+    }
+
+    pub fn is_category_empty(&self, c: Category) -> bool {
+        self.count(c) == 0
     }
 }

@@ -55,6 +55,12 @@ fn find_all() {
 }
 
 #[test]
+fn find_all_not_found() {
+    let element = Elements::new();
+    assert!(element.find_all(Category::AnimeSeason).is_err());
+}
+
+#[test]
 fn size() {
     let elements = Elements::new()
         .add(Category::AnimeSeason, "01")
@@ -72,4 +78,13 @@ fn is_empty() {
         .add(Category::AnimeSeasonPrefix, "S")
         .add(Category::AnimeSeason, "02");
     assert!(!elements.is_empty());
+}
+
+#[test]
+fn empty_category() {
+    let mut e_ = Elements::new().add(Category::AnimeSeason, "01");
+    assert!(!e_.is_category_empty(Category::AnimeSeason));
+    assert!(e_.is_category_empty(Category::AnimeTitle));
+    e_.add(Category::AnimeTitle, "My Super Anime");
+    assert!(!e_.is_category_empty(Category::AnimeTitle));
 }

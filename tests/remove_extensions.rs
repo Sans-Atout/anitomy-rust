@@ -1,4 +1,4 @@
-use anitomy_rust::utils::remove_extension;
+use anitomy_rust::parsing::extensions::remove_extension;
 
 #[test]
 fn mkv() {

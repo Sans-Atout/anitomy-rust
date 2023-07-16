@@ -1,10 +1,14 @@
-use std::fmt::Debug;
+use std::fmt::{Debug, Display};
 
-use anitomy_rust::elements::{Category, Element, Elements};
+use anitomy_rust::{
+    elements::{Category, Element, Elements},
+    errors::{CategoryNotFound, ParsingError},
+};
 
 fn has_send_sync<T: Sized + Send + Sync + Unpin>() {}
 fn has_needed<T: Clone + Debug>() {}
 fn has_copy<T: Copy>() {}
+fn test_error<T: Sized + Send + Sync + Unpin + Debug + Clone + Copy + PartialEq + Eq + Display>() {}
 
 /// Test if all Entity int this library has Send and Sync trait implemented
 ///
@@ -28,4 +32,29 @@ fn has_entity_needed() {
     has_needed::<Element>();
     has_needed::<Elements>();
     has_copy::<Category>();
+}
+
+#[test]
+fn category_singular() {
+    assert!(!Category::AnimeSeason.is_singular());
+    assert!(Category::AnimeYear.is_singular());
+}
+
+#[test]
+fn category_search() {
+    assert!(Category::AnimeType.is_searchable());
+    assert!(!Category::AnimeSeason.is_searchable())
+}
+
+#[test]
+fn has_error_needed() {
+    test_error::<CategoryNotFound>();
+    test_error::<ParsingError>();
+}
+
+#[test]
+fn error_display() {
+    println!("{}", ParsingError::NoExtension);
+    println!("{}", ParsingError::StringIsEmpty);
+    println!("{}", CategoryNotFound);
 }
