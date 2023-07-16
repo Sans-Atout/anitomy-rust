@@ -35,12 +35,20 @@ pub fn parse_release_group(tokens : &mut [Token], found_elements : &mut Elements
     }
 }
 
+pub fn parse_episode_title(tokens : &mut [Token], found_elements : &mut Elements) {
+    for token in tokens.iter_mut() {
+        if token.contains_unknow() && !token.is_inside_delimiter(){
+            parse_particular_string_subtoken(token, found_elements,Category::EpisodeTitle);
+            return
+        }
+    }
+
+}
+
 pub fn parse_particular_string_subtoken(token : &mut Token, e : &mut Elements, c : Category){
     let all_subtoken = token.sub_tokens();
-
     let mut sub_token_id = 0;
     let mut string_to_categorise = String::default();
-
     while all_subtoken[sub_token_id].is_found() {
         sub_token_id += 1;
     }
@@ -55,9 +63,7 @@ pub fn parse_particular_string_subtoken(token : &mut Token, e : &mut Elements, c
         all_subtoken[sub_token_id].category(crate::tokenizer::SubTokenCategory::Found);
         sub_token_id += 1;
     }
-
     if string_to_categorise != String::default() {
         e.add(c, string_to_categorise.trim());
     }
-
 }

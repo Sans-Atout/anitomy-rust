@@ -1,7 +1,7 @@
 use elements::Elements;
 use error_stack::{Report, Result};
 use errors::ParsingError;
-use parsing::{number::is_anime_year, extensions::{get_extension, remove_extension}, string::{parse_release_group, parse_anime_title}};
+use parsing::{number::is_anime_year, extensions::{get_extension, remove_extension}, string::{parse_release_group, parse_anime_title, parse_episode_title}, episode::parse_episode_number};
 use tokenizer::{tokenize, Token};
 use utils::remove_ignored_string;
 
@@ -113,11 +113,15 @@ impl Parser {
 
         parse_anime_title(&mut tokens_no_keyword, &mut _e);
         if self.ep_number {
-            //TODO parse episode number
+            parse_episode_number(&self.allowed_delimiters, &mut tokens_no_keyword, &mut _e)
         }
 
         if self.release_group {
             parse_release_group(&mut tokens_no_keyword, &mut _e);
+        }
+
+        if self.ep_title {
+            parse_episode_title(&mut tokens_no_keyword, &mut _e);
         }
 
         Ok(_e)

@@ -9,7 +9,7 @@ use anitomy_rust::{
         number::{
             contains_digit, is_anime_year, is_crc32, is_digit, is_hexa, is_resolution,
             ordinals_to_nb,
-        }, string::{parse_anime_title, parse_release_group},
+        }, string::{parse_anime_title, parse_release_group, parse_episode_title},
     },
     tokenizer::Token,
 };
@@ -251,5 +251,26 @@ fn test_find_anime_title_002(){
     parse_anime_title(&mut parsing_data,&mut e);
     let tested = e.find(Category::AnimeTitle).unwrap();
     let wanted = Element::new(Category::AnimeTitle, "Uchuu no Stellvia");
+    assert_eq!( tested,wanted )
+}
+
+#[test]
+fn test_find_episode_title(){
+    let d: Vec<char> = vec![' ', '_', '.','-', '&', '+', ',', '|'];
+    let mut e = Elements::new();
+    let mut anime_title_subtoken: Token = Token::new(" Uchuu no Stellvia ep 14 My Super Episode title", &d, false);
+    let subtoken = anime_title_subtoken.sub_tokens();
+    subtoken[4].category(anitomy_rust::tokenizer::SubTokenCategory::Found);
+    subtoken[5].category(anitomy_rust::tokenizer::SubTokenCategory::Found);
+    let mut parsing_data = vec![
+        Token::new("Kira-Fansub", &d, true),
+        anime_title_subtoken,
+        Token::new("BD 1280x960 24fps AAC", &d, true),
+        Token::new("06EE7355", &d, true),
+    ];
+
+    parse_episode_title(&mut parsing_data,&mut e);
+    let tested = e.find(Category::EpisodeTitle).unwrap();
+    let wanted = Element::new(Category::EpisodeTitle, "Uchuu no Stellvia");
     assert_eq!( tested,wanted )
 }
