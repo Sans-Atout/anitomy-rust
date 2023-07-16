@@ -1,4 +1,4 @@
 pub mod episode;
-pub mod number;
 pub mod extensions;
+pub mod number;
 pub mod string;

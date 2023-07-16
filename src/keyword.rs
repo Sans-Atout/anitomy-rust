@@ -47,7 +47,7 @@ impl Keyword {
         self.valid
     }
 
-    pub fn get_category(&self) -> Category{
+    pub fn get_category(&self) -> Category {
         self.category
     }
 }

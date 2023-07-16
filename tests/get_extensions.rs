@@ -1,6 +1,5 @@
 use anitomy_rust::parsing::extensions::get_extension;
 
-
 #[test]
 fn get_extension_mkv() {
     assert_eq!(get_extension("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD].mkv").unwrap(),"mkv");

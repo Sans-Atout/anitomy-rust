@@ -1,6 +1,4 @@
-use anitomy_rust::utils::{
-    normalize, remove_ignored_string,
-};
+use anitomy_rust::utils::{normalize, remove_ignored_string};
 
 #[test]
 fn remove_one_string() {
@@ -41,4 +39,3 @@ fn normalize_test() {
     assert_eq!("HELLO WORLD !", normalize("Hello World !"));
     assert_eq!("EPISODE1", normalize("épisode1"));
 }
-

@@ -1,7 +1,8 @@
 use crate::{
     elements::{Category, Elements},
-    keyword::{Keyword, Manager},split::split_by_delimiter, parsing::number::{is_digit, is_crc32, is_resolution, ordinals_to_nb},
-
+    keyword::{Keyword, Manager},
+    parsing::number::{is_crc32, is_digit, is_resolution, ordinals_to_nb},
+    split::split_by_delimiter,
 };
 
 pub fn tokenize(string_to_tokenize: &str, delimiter: &Vec<char>) -> Vec<Token> {
@@ -82,7 +83,9 @@ impl Token {
                 continue;
             }
 
-            if let Some(key_match) = keyword_manager.find(&self.tokens[st_index].value.to_uppercase()) {
+            if let Some(key_match) =
+                keyword_manager.find(&self.tokens[st_index].value.to_uppercase())
+            {
                 tmp_elements = self.manage_found_keyword(key_match, st_index, &tmp_elements);
             }
         }
@@ -105,39 +108,46 @@ impl Token {
             return tmp_elements;
         }
         if tmp_category == Category::AnimeSeasonPrefix {
-            if id as i32 - 1 > 0  {
-                let previous = self.tokens[id -1].clone();
+            if id as i32 - 1 > 0 {
+                let previous = self.tokens[id - 1].clone();
                 let ordinal_saeson = ordinals_to_nb(&previous.value);
                 if !ordinal_saeson.is_empty() {
                     tmp_elements = tmp_elements.add(Category::AnimeSeason, ordinal_saeson);
                     self.tokens[id - 1].category = SubTokenCategory::Found;
                 }
             }
-            if id + 1 < self.tokens.len(){
-                let next = self.tokens[id + 1].clone(); 
+            if id + 1 < self.tokens.len() {
+                let next = self.tokens[id + 1].clone();
                 if is_digit(&next.value) {
-                    tmp_elements = self.keyword_found(Category::AnimeSeason, id+1, &mut tmp_elements);
+                    tmp_elements =
+                        self.keyword_found(Category::AnimeSeason, id + 1, &mut tmp_elements);
                 }
             }
             tmp_elements = self.keyword_found(keyword.get_category(), id, &mut tmp_elements);
             return tmp_elements;
         }
         if tmp_category == Category::EpisodePrefix {
-            if id + 1 < self.tokens.len(){
-                tmp_elements = self.keyword_found(Category::EpisodeNumber, id+1, &mut tmp_elements);
+            if id + 1 < self.tokens.len() {
+                tmp_elements =
+                    self.keyword_found(Category::EpisodeNumber, id + 1, &mut tmp_elements);
             }
             tmp_elements = self.keyword_found(Category::EpisodePrefix, id, &mut tmp_elements);
         }
         if tmp_category == Category::ReleaseVersion {
-            let release_id = self.tokens[id].value.clone().to_lowercase().replace('v',"");
+            let release_id = self.tokens[id]
+                .value
+                .clone()
+                .to_lowercase()
+                .replace('v', "");
             tmp_elements = tmp_elements.add(Category::ReleaseVersion, &release_id);
             self.tokens[id].category = SubTokenCategory::Found;
             return tmp_elements;
         }
 
         if tmp_category == Category::VolumePrefix {
-            if id + 1 < self.tokens.len(){
-                tmp_elements = self.keyword_found(Category::VolumeNumber, id+1, &mut tmp_elements);
+            if id + 1 < self.tokens.len() {
+                tmp_elements =
+                    self.keyword_found(Category::VolumeNumber, id + 1, &mut tmp_elements);
             }
             tmp_elements = self.keyword_found(Category::VolumePrefix, id, &mut tmp_elements);
             return tmp_elements;
@@ -148,8 +158,8 @@ impl Token {
         tmp_elements
     }
 
-    pub fn contains_unknow(&self) -> bool{
-        for t in &self.tokens{
+    pub fn contains_unknow(&self) -> bool {
+        for t in &self.tokens {
             if t.category == SubTokenCategory::Unknow {
                 return true;
             }
@@ -157,12 +167,12 @@ impl Token {
         false
     }
 
-    pub fn is_isolated_number(&self) -> bool{
+    pub fn is_isolated_number(&self) -> bool {
         let first_token = self.tokens.get(0).unwrap();
         self.tokens.len() == 1 && is_digit(&first_token.value) && !&first_token.is_found()
     }
 
-    pub fn sub_tokens(&mut self) -> &mut Vec<SubToken>{
+    pub fn sub_tokens(&mut self) -> &mut Vec<SubToken> {
         &mut self.tokens
     }
 
@@ -194,7 +204,7 @@ impl SubToken {
         self.category == SubTokenCategory::Found
     }
 
-    pub fn value(&self) -> String{
+    pub fn value(&self) -> String {
         self.value.clone()
     }
 }

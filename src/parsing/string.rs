@@ -1,51 +1,51 @@
-use crate::{tokenizer::Token, elements::{Elements, Category}};
+use crate::{
+    elements::{Category, Elements},
+    tokenizer::Token,
+};
 
-pub fn parse_anime_title(tokens : &mut [Token], found_elements : &mut Elements) {
+pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements) {
     for token in tokens.iter_mut() {
-        if token.contains_unknow() && !token.is_inside_delimiter(){
-            parse_particular_string_subtoken(token, found_elements,Category::AnimeTitle);
-            return
+        if token.contains_unknow() && !token.is_inside_delimiter() {
+            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle);
+            return;
         }
     }
 
     let mut is_first_inside_delimiter_token = true;
     for token in tokens.iter_mut() {
-        if token.contains_unknow() && token.is_inside_delimiter(){
-            if is_first_inside_delimiter_token{
+        if token.contains_unknow() && token.is_inside_delimiter() {
+            if is_first_inside_delimiter_token {
                 is_first_inside_delimiter_token = false;
                 continue;
             }
-            parse_particular_string_subtoken(token, found_elements,Category::AnimeTitle);
-            return
+            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle);
+            return;
         }
     }
 }
 
-
-
-pub fn parse_release_group(tokens : &mut [Token], found_elements : &mut Elements){
+pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements) {
     if !found_elements.is_category_empty(Category::ReleaseGroup) {
         return;
     }
     for token in tokens.iter_mut() {
         if token.is_inside_delimiter() && token.contains_unknow() {
-            parse_particular_string_subtoken(token, found_elements,Category::ReleaseGroup);
-            return
+            parse_particular_string_subtoken(token, found_elements, Category::ReleaseGroup);
+            return;
         }
     }
 }
 
-pub fn parse_episode_title(tokens : &mut [Token], found_elements : &mut Elements) {
+pub fn parse_episode_title(tokens: &mut [Token], found_elements: &mut Elements) {
     for token in tokens.iter_mut() {
-        if token.contains_unknow() && !token.is_inside_delimiter(){
-            parse_particular_string_subtoken(token, found_elements,Category::EpisodeTitle);
-            return
+        if token.contains_unknow() && !token.is_inside_delimiter() {
+            parse_particular_string_subtoken(token, found_elements, Category::EpisodeTitle);
+            return;
         }
     }
-
 }
 
-pub fn parse_particular_string_subtoken(token : &mut Token, e : &mut Elements, c : Category){
+pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: Category) {
     let all_subtoken = token.sub_tokens();
     let mut sub_token_id = 0;
     let mut string_to_categorise = String::default();
@@ -59,7 +59,11 @@ pub fn parse_particular_string_subtoken(token : &mut Token, e : &mut Elements, c
             string_to_categorise = String::default();
             break;
         }
-        string_to_categorise = format!("{} {}",string_to_categorise, all_subtoken[sub_token_id].value());
+        string_to_categorise = format!(
+            "{} {}",
+            string_to_categorise,
+            all_subtoken[sub_token_id].value()
+        );
         all_subtoken[sub_token_id].category(crate::tokenizer::SubTokenCategory::Found);
         sub_token_id += 1;
     }

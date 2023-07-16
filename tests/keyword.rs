@@ -1,4 +1,7 @@
-use anitomy_rust::{elements::Category, keyword::{Keyword, Manager}};
+use anitomy_rust::{
+    elements::Category,
+    keyword::{Keyword, Manager},
+};
 
 #[test]
 fn keyword_001() {
@@ -43,8 +46,7 @@ fn keyword_004() {
 
 #[test]
 fn keyword_005() {
-    let keyword = Keyword::new(Category::AnimeSeason)
-        .valid(false);
+    let keyword = Keyword::new(Category::AnimeSeason).valid(false);
     assert!(keyword.is_identifiable());
     assert!(keyword.is_searchable());
     assert!(!keyword.is_valid());
@@ -52,8 +54,7 @@ fn keyword_005() {
 
 #[test]
 fn keyword_006() {
-    let keyword = Keyword::new(Category::AnimeSeason)
-        .searchable(false);
+    let keyword = Keyword::new(Category::AnimeSeason).searchable(false);
     assert!(keyword.is_identifiable());
     assert!(!keyword.is_searchable());
     assert!(keyword.is_valid());
@@ -61,8 +62,7 @@ fn keyword_006() {
 
 #[test]
 fn keyword_007() {
-    let keyword = Keyword::new(Category::AnimeSeason)
-        .identifiable(false);
+    let keyword = Keyword::new(Category::AnimeSeason).identifiable(false);
     assert!(!keyword.is_identifiable());
     assert!(keyword.is_searchable());
     assert!(keyword.is_valid());
@@ -77,7 +77,7 @@ fn keyword_008() {
 }
 
 #[test]
-fn manager_find(){
+fn manager_find() {
     let manager = Manager::new();
     assert!(manager.find("VOLUME").is_some());
     assert!(manager.find("My CUSTOM KEYWORD").is_none());

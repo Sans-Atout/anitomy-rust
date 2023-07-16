@@ -1,20 +1,29 @@
 use regex::Regex;
 
-use crate::{elements::{Elements, Category}, split::split_type_and_ep, keyword::Manager, tokenizer::{Token, SubTokenCategory}};
+use crate::{
+    elements::{Category, Elements},
+    keyword::Manager,
+    split::split_type_and_ep,
+    tokenizer::{SubTokenCategory, Token},
+};
 
-use super::number::{is_digit, contains_digit};
+use super::number::{contains_digit, is_digit};
 
-pub fn parse_episode_number(delimiter : &Vec<char>,tokens_to_parse : &mut Vec<Token>, found_elements : &mut Elements){
+pub fn parse_episode_number(
+    delimiter: &Vec<char>,
+    tokens_to_parse: &mut Vec<Token>,
+    found_elements: &mut Elements,
+) {
     for token in tokens_to_parse {
-        if !token.contains_unknow(){
+        if !token.contains_unknow() {
             continue;
         }
         for sub_token in token.sub_tokens() {
-            if sub_token.value().is_empty(){
+            if sub_token.value().is_empty() {
                 sub_token.category(SubTokenCategory::Found);
                 continue;
             }
-            if is_digit(&sub_token.value()) || !contains_digit(&sub_token.value()){
+            if is_digit(&sub_token.value()) || !contains_digit(&sub_token.value()) {
                 continue;
             }
             if parse_single_subtoken(delimiter, &sub_token.value(), found_elements) {
@@ -22,27 +31,30 @@ pub fn parse_episode_number(delimiter : &Vec<char>,tokens_to_parse : &mut Vec<To
             }
         }
     }
-
 }
 
-pub fn parse_single_subtoken(delimiter : &Vec<char>,string_to_parse : &str, found_elements : &mut Elements) -> bool{
+pub fn parse_single_subtoken(
+    delimiter: &Vec<char>,
+    string_to_parse: &str,
+    found_elements: &mut Elements,
+) -> bool {
     // Multi episode matching test
-    if match_multiple_ep(string_to_parse, found_elements){
+    if match_multiple_ep(string_to_parse, found_elements) {
         return true;
     }
 
     // Saeson and episode
-    if match_season_ep_patern(string_to_parse, found_elements){
+    if match_season_ep_patern(string_to_parse, found_elements) {
         return true;
     }
 
     // Parse ep and type
-    if match_type_episode(string_to_parse, found_elements, delimiter){
+    if match_type_episode(string_to_parse, found_elements, delimiter) {
         return true;
     }
 
     // Parse single ep
-    if parse_single_ep(string_to_parse, found_elements){
+    if parse_single_ep(string_to_parse, found_elements) {
         return true;
     }
 
@@ -102,7 +114,7 @@ pub fn match_multiple_ep(tested_string: &str, found_elements: &mut Elements) -> 
     false
 }
 
-pub fn match_season_ep_patern(tested_string: &str, found_elements: &mut Elements) -> bool{
+pub fn match_season_ep_patern(tested_string: &str, found_elements: &mut Elements) -> bool {
     let season_episode_regex = Regex::new(r"S?(?P<season_1>\d{1,2})(?:-S?(?P<season_2>\d{1,2}))?(?:x|[ ._-x]?E)(?P<ep_1>\d{1,4})(?:-E?(?P<ep_2>\d{1,4}))?(?:[vV](?P<version>\d))?$").unwrap();
     if season_episode_regex.is_match(tested_string) {
         let season_ep_captures = season_episode_regex.captures(tested_string).unwrap();
@@ -127,31 +139,40 @@ pub fn match_season_ep_patern(tested_string: &str, found_elements: &mut Elements
     false
 }
 
-pub fn match_type_episode(tested_string: &str, found_elements: &mut Elements, delimiter : &Vec<char>) -> bool {
+pub fn match_type_episode(
+    tested_string: &str,
+    found_elements: &mut Elements,
+    delimiter: &Vec<char>,
+) -> bool {
     let (potential_keyword, data_to_parse) = split_type_and_ep(tested_string);
     let keyword_manager = Manager::new();
     let trim_keyword = potential_keyword.trim_matches(delimiter.as_slice());
     if let Some(keyword) = keyword_manager.find(&trim_keyword.to_uppercase()) {
-        found_elements.add(keyword.get_category(),trim_keyword);
-        parse_single_subtoken(delimiter,&data_to_parse, found_elements);
+        found_elements.add(keyword.get_category(), trim_keyword);
+        parse_single_subtoken(delimiter, &data_to_parse, found_elements);
         return true;
     }
     false
 }
 
-pub fn match_fractal_episode(tested_string: &str, found_elements: &mut Elements) -> bool{
+pub fn match_fractal_episode(tested_string: &str, found_elements: &mut Elements) -> bool {
     let multiple_ep_regex = Regex::new(r"\d+\.5$").unwrap();
-    if multiple_ep_regex.is_match(tested_string){
+    if multiple_ep_regex.is_match(tested_string) {
         found_elements.add(Category::EpisodeNumber, tested_string);
         return true;
     }
     false
 }
 
-pub fn match_japanese_counter(tested_string: &str, found_elements: &mut Elements) -> bool{
+pub fn match_japanese_counter(tested_string: &str, found_elements: &mut Elements) -> bool {
     let japanese_regex = Regex::new(r"(?P<episode_number>\d+)\u8A71$").unwrap();
     if japanese_regex.is_match(tested_string) {
-        let episode_number = japanese_regex.captures(tested_string).unwrap().name("episode_number").unwrap().as_str();
+        let episode_number = japanese_regex
+            .captures(tested_string)
+            .unwrap()
+            .name("episode_number")
+            .unwrap()
+            .as_str();
         found_elements.add(Category::EpisodeNumber, episode_number);
         return true;
     }
@@ -159,8 +180,10 @@ pub fn match_japanese_counter(tested_string: &str, found_elements: &mut Elements
 }
 
 pub fn match_number_sign_patern(tested_string: &str, found_elements: &mut Elements) -> bool {
-    let number_sign_regex = Regex::new(r"^#(?P<ep_1>\d{1,4})(?:[-~&+](?P<ep_2>\d{1,4}))?(?:[vV](?P<version>\d))?$").unwrap();
-    if number_sign_regex.is_match(tested_string){
+    let number_sign_regex =
+        Regex::new(r"^#(?P<ep_1>\d{1,4})(?:[-~&+](?P<ep_2>\d{1,4}))?(?:[vV](?P<version>\d))?$")
+            .unwrap();
+    if number_sign_regex.is_match(tested_string) {
         let captured_data = number_sign_regex.captures(tested_string).unwrap();
         let ep_nb = captured_data.name("ep_1").unwrap();
         found_elements.add(Category::EpisodeNumber, ep_nb.as_str());
@@ -175,18 +198,20 @@ pub fn match_number_sign_patern(tested_string: &str, found_elements: &mut Elemen
     false
 }
 
-pub fn match_partial_episode_pattern(tested_string: &str, found_elements: &mut Elements) -> bool  {
+pub fn match_partial_episode_pattern(tested_string: &str, found_elements: &mut Elements) -> bool {
     let mut non_number = false;
     let mut suffix_array = Vec::default();
-    for test_char in tested_string.chars(){
+    for test_char in tested_string.chars() {
         if !non_number && test_char.is_ascii_digit() {
             continue;
         }
         non_number = true;
         suffix_array.push(test_char);
     }
-    println!("{:?}",suffix_array);
-    if suffix_array.len() == 1 && vec!['A','B','C'].contains(&suffix_array.first().unwrap().to_ascii_uppercase()){
+    println!("{:?}", suffix_array);
+    if suffix_array.len() == 1
+        && vec!['A', 'B', 'C'].contains(&suffix_array.first().unwrap().to_ascii_uppercase())
+    {
         found_elements.add(Category::EpisodeNumber, tested_string);
         return true;
     }

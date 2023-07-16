@@ -1,7 +1,12 @@
 use elements::Elements;
 use error_stack::{Report, Result};
 use errors::ParsingError;
-use parsing::{number::is_anime_year, extensions::{get_extension, remove_extension}, string::{parse_release_group, parse_anime_title, parse_episode_title}, episode::parse_episode_number};
+use parsing::{
+    episode::parse_episode_number,
+    extensions::{get_extension, remove_extension},
+    number::is_anime_year,
+    string::{parse_anime_title, parse_episode_title, parse_release_group},
+};
 use tokenizer::{tokenize, Token};
 use utils::remove_ignored_string;
 
@@ -9,8 +14,8 @@ pub mod elements;
 pub mod errors;
 pub mod keyword;
 pub mod parsing;
-pub mod tokenizer;
 pub mod split;
+pub mod tokenizer;
 pub mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -96,15 +101,17 @@ impl Parser {
             &self.allowed_delimiters,
         );
 
-        let mut tokens_no_keyword : Vec<Token> = Vec::default();
+        let mut tokens_no_keyword: Vec<Token> = Vec::default();
         for mut t in raw_token {
             _e = t.parse(&mut _e);
             if t.is_isolated_number() {
                 let token_value = t.sub_tokens().get(0).unwrap().value();
-                if is_anime_year(&token_value) {                    
+                if is_anime_year(&token_value) {
                     _e = t.keyword_found(elements::Category::AnimeYear, 0, &mut _e)
                 }
-                if (token_value == "480" || token_value == "720" || token_value == "1080") && _e.is_category_empty(elements::Category::VideoResolution){
+                if (token_value == "480" || token_value == "720" || token_value == "1080")
+                    && _e.is_category_empty(elements::Category::VideoResolution)
+                {
                     _e = t.keyword_found(elements::Category::VideoResolution, 0, &mut _e)
                 }
             }
