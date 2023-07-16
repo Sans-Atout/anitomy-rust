@@ -1,12 +1,18 @@
 use anitomy_rust::{
-    elements::{Category, Elements},
+    elements::{Category, Elements, Element},
     parsing::{
-        episode::{match_multiple_ep, match_type_episode, parse_single_ep, match_japanese_counter, match_fractal_episode, parse_single_subtoken, match_season_ep_patern},
+        episode::{
+            match_fractal_episode, match_japanese_counter, match_multiple_ep,
+            match_partial_episode_pattern, match_season_ep_patern, match_type_episode,
+            parse_single_ep, parse_single_subtoken,
+        },
         number::{
             contains_digit, is_anime_year, is_crc32, is_digit, is_hexa, is_resolution,
             ordinals_to_nb,
-        },
+        }, title::{parse_anime_title, parse_release_group},
     },
+    tokenizer::Token,
+    Parser,
 };
 
 #[test]
@@ -160,16 +166,51 @@ fn test_fractal() {
 }
 
 #[test]
-fn test_parse_single_subtoken(){
+fn test_parse_single_subtoken() {
     let d: Vec<char> = vec![' ', '_', '.', '&', '+', ',', '|'];
     let mut e = Elements::new();
-    assert!(parse_single_subtoken(&d,"01v2",&mut e));
-    assert!(parse_single_subtoken(&d,"1.5",&mut e));
-    assert!(parse_single_subtoken(&d,"01-03",&mut e));
-    assert!(parse_single_subtoken(&d,"S01E02",&mut e));
-    assert!(parse_single_subtoken(&d,"ONA1.5",&mut e));
-    assert!(parse_single_subtoken(&d,"125話",&mut e));
-    assert!(!parse_single_subtoken(&d,"03-02",&mut e));
+    assert!(parse_single_subtoken(&d, "01v2", &mut e));
+    assert!(parse_single_subtoken(&d, "1.5", &mut e));
+    assert!(parse_single_subtoken(&d, "01-03", &mut e));
+    assert!(parse_single_subtoken(&d, "S01E02", &mut e));
+    assert!(parse_single_subtoken(&d, "ONA1.5", &mut e));
+    assert!(parse_single_subtoken(&d, "125話", &mut e));
+    assert!(!parse_single_subtoken(&d, "03-02", &mut e));
+    assert!(parse_single_subtoken(&d, "125A", &mut e));
+    assert!(parse_single_subtoken(&d, "125a", &mut e));
+    assert!(parse_single_subtoken(&d, "#32v1", &mut e));
+}
+
+#[test]
+fn test_season_ep_patern() {
+    let mut e = Elements::new();
+    assert!(match_season_ep_patern("S02E01", &mut e));
+    assert!(match_season_ep_patern("S02E01-03", &mut e));
+    assert!(!match_season_ep_patern("SAE01", &mut e));
+    assert!(match_season_ep_patern("S01-02E01", &mut e));
+    assert!(match_season_ep_patern("01x02", &mut e));
+}
+
+#[test]
+fn test_match_partial_episode_pattern() {
+    let mut e = Elements::new();
+    assert!(match_partial_episode_pattern("125a", &mut e));
+}
+
+#[test]
+fn test_find_release_group() {
+    let d: Vec<char> = vec![' ', '_', '.','-', '&', '+', ',', '|'];
+    let mut e = Elements::new();
+    let mut parsing_data = vec![
+        Token::new("Kira-Fansub", &d, true),
+        Token::new(" Uchuu no Stellvia ep 14 ", &d, false),
+        Token::new("BD 1280x960 24fps AAC", &d, true),
+        Token::new("06EE7355", &d, true),
+    ];
+    parse_release_group(&mut parsing_data, &mut e);
+    let tested = e.find(Category::ReleaseGroup).unwrap();
+    let wanted = Element::new(Category::ReleaseGroup, "Kira Fansub");
+    assert_eq!( tested,wanted )
 }
 
 #[test]

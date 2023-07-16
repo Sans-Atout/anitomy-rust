@@ -17,11 +17,9 @@ pub fn parse_episode_number(delimiter : &Vec<char>,tokens_to_parse : &mut Vec<To
             if is_digit(&sub_token.value()) || !contains_digit(&sub_token.value()){
                 continue;
             }
-    
             if parse_single_subtoken(delimiter, &sub_token.value(), found_elements) {
                 sub_token.category(SubTokenCategory::Found);
             }
-    
         }
     }
 
@@ -50,6 +48,16 @@ pub fn parse_single_subtoken(delimiter : &Vec<char>,string_to_parse : &str, foun
 
     // Episode like : 1.5 etc
     if match_fractal_episode(string_to_parse, found_elements) {
+        return true;
+    }
+
+    // Episode 125a
+    if match_partial_episode_pattern(string_to_parse, found_elements) {
+        return true;
+    }
+
+    // Episode like #02v2
+    if match_number_sign_patern(string_to_parse, found_elements) {
         return true;
     }
 
@@ -147,5 +155,41 @@ pub fn match_japanese_counter(tested_string: &str, found_elements: &mut Elements
         found_elements.add(Category::EpisodeNumber, episode_number);
         return true;
     }
+    false
+}
+
+pub fn match_number_sign_patern(tested_string: &str, found_elements: &mut Elements) -> bool {
+    let number_sign_regex = Regex::new(r"^#(?P<ep_1>\d{1,4})(?:[-~&+](?P<ep_2>\d{1,4}))?(?:[vV](?P<version>\d))?$").unwrap();
+    if number_sign_regex.is_match(tested_string){
+        let captured_data = number_sign_regex.captures(tested_string).unwrap();
+        let ep_nb = captured_data.name("ep_1").unwrap();
+        found_elements.add(Category::EpisodeNumber, ep_nb.as_str());
+        if let Some(ep_2) = captured_data.name("ep_2") {
+            found_elements.add(Category::EpisodeNumber, ep_2.as_str());
+        }
+        if let Some(version) = captured_data.name("version") {
+            found_elements.add(Category::EpisodeNumber, version.as_str());
+        }
+        return true;
+    }
+    false
+}
+
+pub fn match_partial_episode_pattern(tested_string: &str, found_elements: &mut Elements) -> bool  {
+    let mut non_number = false;
+    let mut suffix_array = Vec::default();
+    for test_char in tested_string.chars(){
+        if !non_number && test_char.is_ascii_digit() {
+            continue;
+        }
+        non_number = true;
+        suffix_array.push(test_char);
+    }
+    println!("{:?}",suffix_array);
+    if suffix_array.len() == 1 && vec!['A','B','C'].contains(&suffix_array.first().unwrap().to_ascii_uppercase()){
+        found_elements.add(Category::EpisodeNumber, tested_string);
+        return true;
+    }
+
     false
 }

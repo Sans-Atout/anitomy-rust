@@ -166,6 +166,9 @@ impl Token {
         &mut self.tokens
     }
 
+    pub fn is_inside_delimiter(&self) -> bool {
+        self.inside_delimiter
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
