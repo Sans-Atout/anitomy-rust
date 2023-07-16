@@ -89,7 +89,7 @@ impl Element {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Default)]
+#[derive(Debug, Eq, Clone, Default)]
 pub struct Elements {
     elements: Vec<Element>,
 }
@@ -146,5 +146,19 @@ impl Elements {
 
     pub fn is_category_empty(&self, c: Category) -> bool {
         self.count(c) == 0
+    }
+}
+
+impl PartialEq for Elements{
+    fn eq(&self, other: &Self) -> bool {
+        if self.elements.len() != other.elements.len() {
+            return false;
+        }
+        for e in self.elements.iter() {
+            if !other.elements.contains(e) {
+                return false;
+            }
+        }
+        true
     }
 }

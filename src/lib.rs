@@ -118,10 +118,10 @@ impl Parser {
             tokens_no_keyword.push(t);
         }
 
-        parse_anime_title(&mut tokens_no_keyword, &mut _e);
         if self.ep_number {
             parse_episode_number(&self.allowed_delimiters, &mut tokens_no_keyword, &mut _e)
         }
+        parse_anime_title(&mut tokens_no_keyword, &mut _e);
 
         if self.release_group {
             parse_release_group(&mut tokens_no_keyword, &mut _e);

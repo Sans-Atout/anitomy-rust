@@ -19,6 +19,7 @@ pub fn parse_episode_number(
             continue;
         }
         for sub_token in token.sub_tokens() {
+            
             if sub_token.value().is_empty() {
                 sub_token.category(SubTokenCategory::Found);
                 continue;
@@ -38,7 +39,6 @@ pub fn parse_single_subtoken(
     string_to_parse: &str,
     found_elements: &mut Elements,
 ) -> bool {
-    // Multi episode matching test
     if match_multiple_ep(string_to_parse, found_elements) {
         return true;
     }
@@ -208,7 +208,6 @@ pub fn match_partial_episode_pattern(tested_string: &str, found_elements: &mut E
         non_number = true;
         suffix_array.push(test_char);
     }
-    println!("{:?}", suffix_array);
     if suffix_array.len() == 1
         && vec!['A', 'B', 'C'].contains(&suffix_array.first().unwrap().to_ascii_uppercase())
     {
