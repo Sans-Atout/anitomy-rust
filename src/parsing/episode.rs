@@ -19,7 +19,9 @@ pub fn parse_episode_number(
             continue;
         }
         for sub_token in token.sub_tokens() {
-            
+            if sub_token.is_found() {
+                continue;
+            }
             if sub_token.value().is_empty() {
                 sub_token.category(SubTokenCategory::Found);
                 continue;

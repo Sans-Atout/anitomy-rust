@@ -1,6 +1,6 @@
 use crate::{
     elements::{Category, Elements},
-    tokenizer::Token,
+    tokenizer::Token, keyword::Manager,
 };
 
 pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements) {
@@ -70,4 +70,49 @@ pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: 
     if string_to_categorise != String::default() {
         e.add(c, string_to_categorise.trim());
     }
+}
+
+
+pub fn parse_multiple_keyword(e: &mut Elements, keyword_manager : &Manager, left : &str, right : &str) -> bool {
+
+    let mut tested = format!("{}.{}",left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+        let category = found.get_category();
+        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if  !is_not {
+            e.add(category, tested.trim());
+            return true;
+        }
+    }
+
+    tested = format!("{} {}",left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+        let category = found.get_category();
+        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if  !is_not {
+            e.add(category, tested.trim());
+            return true;
+        }
+    }
+
+    tested = format!("{}-{}",left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+        let category = found.get_category();
+        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if  !is_not {
+            e.add(category, tested.trim());
+            return true;
+        }
+    }
+
+    tested = format!("{}_{}",left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+        let category = found.get_category();
+        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if  !is_not {
+            e.add(category, tested.trim());
+            return true;
+        }
+    }
+    false
 }
