@@ -511,6 +511,7 @@ fn test_a5b250cb566804f842474b3382892aa091bd1d70(){
 fn test_09f2bd48e05e8990e3a17b64458e2c3a8060f19f(){
 	let wanted = Elements::new()
 		.add(Category::AnimeTitle,"Fate Stay Night")
+		.add(Category::EpisodePrefix, "Ep")
 		.add(Category::EpisodeNumber,"05")
 		.add(Category::EpisodeTitle,"The Two Magi Part1")
 		.add(Category::FileExtension,"mkv")
