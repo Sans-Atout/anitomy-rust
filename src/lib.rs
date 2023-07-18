@@ -34,7 +34,7 @@ impl Parser {
         Parser {
             file_name: f_name.to_string(),
             ignored_string: Vec::new(),
-            allowed_delimiters: vec![' ', '_', '.', '&', '+', ',', '|'],
+            allowed_delimiters: vec![' ', '_', '.', '-', '&', '+', ',', '|'],
             ep_number: true,
             ep_title: true,
             file_extension: true,

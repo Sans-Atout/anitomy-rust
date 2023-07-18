@@ -1,7 +1,7 @@
 use crate::{
     elements::{Category, Elements},
     keyword::{Keyword, Manager},
-    parsing::number::{is_crc32, is_digit, is_resolution, ordinals_to_nb},
+    parsing::{number::{is_crc32, is_digit, is_resolution, ordinals_to_nb}, string::parse_multiple_keyword},
     split::split_by_delimiter,
 };
 
@@ -84,10 +84,21 @@ impl Token {
             }
 
             if let Some(key_match) =
-                keyword_manager.find(&self.tokens[st_index].value.to_uppercase())
-            {
+                keyword_manager.find(&self.tokens[st_index].value.to_uppercase()){
                 tmp_elements = self.manage_found_keyword(key_match, st_index, &tmp_elements);
+                continue;
             }
+            if st_index + 1 < self.tokens.len() {
+                let left = &self.tokens[st_index].value;
+                let right = &self.tokens[st_index+1].value;
+
+                if parse_multiple_keyword(&mut tmp_elements,&keyword_manager, left, right) {
+                    self.tokens[st_index].category = SubTokenCategory::Found;
+                    self.tokens[st_index + 1].category = SubTokenCategory::Found;
+                }
+                continue;
+            }
+            
         }
         tmp_elements.to_owned()
     }
@@ -143,7 +154,6 @@ impl Token {
             self.tokens[id].category = SubTokenCategory::Found;
             return tmp_elements;
         }
-
         if tmp_category == Category::VolumePrefix {
             if id + 1 < self.tokens.len() {
                 tmp_elements =
