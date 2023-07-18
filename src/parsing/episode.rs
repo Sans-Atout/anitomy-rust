@@ -151,6 +151,10 @@ pub fn match_type_episode(
     let trim_keyword = potential_keyword.trim_matches(delimiter.as_slice());
     if let Some(keyword) = keyword_manager.find(&trim_keyword.to_uppercase()) {
         found_elements.add(keyword.get_category(), trim_keyword);
+        if is_digit(&data_to_parse) {
+            found_elements.add(Category::EpisodeNumber, &data_to_parse);
+            return true;
+        }
         parse_single_subtoken(delimiter, &data_to_parse, found_elements);
         return true;
     }
