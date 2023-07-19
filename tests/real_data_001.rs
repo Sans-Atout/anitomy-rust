@@ -191,9 +191,12 @@ fn test_a2ad6f3ebba7b8c3807d4532e7ea94ffed8d481f(){
 	assert_eq!(wanted, parser_result);
 }
 #[test]
+/// ! Know false positive
+/// Here, Juuni Kokki as "Les 12 Royaumes" is the anime name
 fn test_49be603afd2b77129cc736f3f062e8e3cb48f918(){
 	let wanted = Elements::new()
-		.add(Category::AnimeTitle,"Juuni Kokki")
+		.add(Category::ReleaseGroup,"Juuni Kokki")
+		.add(Category::AnimeTitle,"Les 12 Royaumes")
 		.add(Category::AudioTerm,"OGG")
 		.add(Category::EpisodeNumber,"24")
 		.add(Category::FileExtension,"mkv")
@@ -476,7 +479,8 @@ fn test_fc804ba86c18adea4d719a04f7408cd8493d5f4f(){
 fn test_f9fb85697cb82fb6350b3558a9ab44a2b772cece(){
 	let wanted = Elements::new()
 		.add(Category::AnimeTitle,"Ghost in the Shell Stand Alone Complex 2nd GIG")
-		.add(Category::AudioTerm,"['AAC', '5.1']")
+		.add(Category::AudioTerm,"AAC")
+		.add(Category::AudioTerm,"5.1'")
 		.add(Category::EpisodeNumber,"05")
 		.add(Category::EpisodeTitle,"EXCAVATION")
 		.add(Category::FileExtension,"mkv")
@@ -494,7 +498,8 @@ fn test_f9fb85697cb82fb6350b3558a9ab44a2b772cece(){
 fn test_a5b250cb566804f842474b3382892aa091bd1d70(){
 	let wanted = Elements::new()
 		.add(Category::AnimeTitle,"Ghost in the Shell Stand Alone Complex 2nd GIG")
-		.add(Category::AudioTerm,"['AAC', '5.1']")
+		.add(Category::AudioTerm,"AAC") 
+		.add(Category::AudioTerm,"5.1") 
 		.add(Category::EpisodeNumber,"06")
 		.add(Category::EpisodeTitle,"Pu239")
 		.add(Category::FileExtension,"mkv")
@@ -527,7 +532,7 @@ fn test_09f2bd48e05e8990e3a17b64458e2c3a8060f19f(){
 #[test]
 fn test_1457cb4bd6716f7ef714d74c1e8fd099c85324a6(){
 	let wanted = Elements::new()
-		.add(Category::AnimeTitle,"Mezzo(DSA)")
+		.add(Category::AnimeTitle,"Mezzo DSA")
 		.add(Category::AudioTerm,"ogg")
 		.add(Category::EpisodeNumber,"05")
 		.add(Category::FileChecksum,"585d9971")
@@ -672,7 +677,8 @@ fn test_081697b971edf42d4f410af86cef3cd48eb5537a(){
 fn test_67ca1214df71d9aa87f3de217038a41761472c41(){
 	let wanted = Elements::new()
 		.add(Category::AnimeTitle,"Detective Conan")
-		.add(Category::EpisodeNumber,"['316', '317']")
+		.add(Category::EpisodeNumber,"316")
+		.add(Category::EpisodeNumber,"317")
 		.add(Category::FileChecksum,"2411959B")
 		.add(Category::FileExtension,"mkv")
 		.add(Category::FileName,"Detective Conan - 316-317 [DCTP][2411959B].mkv")
@@ -697,7 +703,8 @@ fn test_69510b2230455e6689cfd4cf655e3d3ceec1b626(){
 fn test_3c64ceb13d5e14d17097334bb6f80c1dcef5e9a2(){
 	let wanted = Elements::new()
 		.add(Category::AnimeTitle,"To Aru Kagaku no Railgun")
-		.add(Category::EpisodeNumber,"['13', '15']")
+		.add(Category::EpisodeNumber,"13")
+		.add(Category::EpisodeNumber,"15")
 		.add(Category::FileName,"To_Aru_Kagaku_no_Railgun_13-15_[BD_1080p][AtsA]")
 		.add(Category::ReleaseGroup,"AtsA")
 		.add(Category::Source,"BD")

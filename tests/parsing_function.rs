@@ -209,7 +209,7 @@ fn test_find_release_group() {
     ];
     parse_release_group(&mut parsing_data, &mut e);
     let tested = e.find(Category::ReleaseGroup).unwrap();
-    let wanted = Element::new(Category::ReleaseGroup, "Kira Fansub");
+    let wanted = Element::new(Category::ReleaseGroup, "Kira-Fansub");
     assert_eq!(tested, wanted)
 }
 
