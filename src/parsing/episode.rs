@@ -14,7 +14,7 @@ pub fn parse_episode_number(
     tokens_to_parse: &mut Vec<Token>,
     found_elements: &mut Elements,
 ) {
-    for token in tokens_to_parse {
+    for token in tokens_to_parse.iter_mut() {
         if !token.contains_unknow() {
             continue;
         }
@@ -34,6 +34,28 @@ pub fn parse_episode_number(
             }
         }
     }
+    if found_elements.is_category_empty(Category::EpisodeNumber) {
+        for token_index in (0..tokens_to_parse.len()).rev() {
+            if let Some(tmp_token) = tokens_to_parse.get_mut(token_index) {
+                if !tmp_token.contains_unknow(){
+                    continue;
+                }
+                let sub_token = tmp_token.sub_tokens();
+                for sub_token_index in (0..sub_token.len()).rev() {
+                    if let Some(single_sub_token) = sub_token.get_mut(sub_token_index){
+                        if single_sub_token.is_found() || !is_digit(&single_sub_token.value()){
+                            continue;
+                        }
+                        single_sub_token.category(SubTokenCategory::Found);
+                        found_elements.add(Category::EpisodeNumber, &single_sub_token.value());
+                        return;
+                    }
+                }
+    
+            }
+        }
+    }
+
 }
 
 pub fn parse_single_subtoken(
