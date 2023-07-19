@@ -1,6 +1,7 @@
 use crate::{
     elements::{Category, Elements},
-    tokenizer::Token, keyword::Manager,
+    keyword::Manager,
+    tokenizer::Token,
 };
 
 pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements) {
@@ -29,9 +30,18 @@ pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements) 
         return;
     }
     for token in tokens.iter_mut() {
-        if token.is_inside_delimiter() && token.contains_unknow() {
-            parse_particular_string_subtoken(token, found_elements, Category::ReleaseGroup);
-            return;
+        if token.is_inside_delimiter() {
+            if token.is_full_unknow() {
+                for sub_token in token.sub_tokens(){
+                    sub_token.category(crate::tokenizer::SubTokenCategory::Found);
+                }
+                found_elements.add(Category::ReleaseGroup, token.raw_token());
+                return;
+            }
+            if token.contains_unknow() {
+                parse_particular_string_subtoken(token, found_elements, Category::ReleaseGroup);
+                return;
+            }
         }
     }
 }
@@ -72,44 +82,51 @@ pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: 
     }
 }
 
-
-pub fn parse_multiple_keyword(e: &mut Elements, keyword_manager : &Manager, left : &str, right : &str) -> bool {
-
-    let mut tested = format!("{}.{}",left, right);
-    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+pub fn parse_multiple_keyword(
+    e: &mut Elements,
+    keyword_manager: &Manager,
+    left: &str,
+    right: &str,
+) -> bool {
+    let mut tested = format!("{}.{}", left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()) {
         let category = found.get_category();
-        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
-        if  !is_not {
+        let is_not =
+            !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if !is_not {
             e.add(category, tested.trim());
             return true;
         }
     }
 
-    tested = format!("{} {}",left, right);
-    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+    tested = format!("{} {}", left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()) {
         let category = found.get_category();
-        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
-        if  !is_not {
+        let is_not =
+            !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if !is_not {
             e.add(category, tested.trim());
             return true;
         }
     }
 
-    tested = format!("{}-{}",left, right);
-    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+    tested = format!("{}-{}", left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()) {
         let category = found.get_category();
-        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
-        if  !is_not {
+        let is_not =
+            !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if !is_not {
             e.add(category, tested.trim());
             return true;
         }
     }
 
-    tested = format!("{}_{}",left, right);
-    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()){
+    tested = format!("{}_{}", left, right);
+    if let Some(found) = keyword_manager.find(&tested.trim().to_uppercase()) {
         let category = found.get_category();
-        let is_not = !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
-        if  !is_not {
+        let is_not =
+            !category.is_searchable() || (category.is_singular() && !e.is_category_empty(category));
+        if !is_not {
             e.add(category, tested.trim());
             return true;
         }

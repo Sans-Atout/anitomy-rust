@@ -177,6 +177,15 @@ impl Token {
         false
     }
 
+    pub fn is_full_unknow(&self) -> bool {
+        for t in &self.tokens {
+            if t.category != SubTokenCategory::Unknow {
+                return false;
+            }
+        }
+        true
+    }
+
     pub fn is_isolated_number(&self) -> bool {
         let first_token = self.tokens.get(0).unwrap();
         self.tokens.len() == 1 && is_digit(&first_token.value) && !&first_token.is_found()
@@ -184,6 +193,10 @@ impl Token {
 
     pub fn sub_tokens(&mut self) -> &mut Vec<SubToken> {
         &mut self.tokens
+    }
+
+    pub fn raw_token(&self) -> &String {
+        &self.raw_token
     }
 
     pub fn is_inside_delimiter(&self) -> bool {
