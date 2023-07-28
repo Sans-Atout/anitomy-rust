@@ -9,7 +9,7 @@ use parsing::{
 };
 use utils::remove_ignored_string;
 
-use crate::{split::split_raw_data, token::token::Token};
+use crate::{split::split_raw_data, token::main_token::Token};
 
 pub mod elements;
 pub mod errors;

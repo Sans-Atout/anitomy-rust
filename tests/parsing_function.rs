@@ -11,7 +11,7 @@ use anitomy_rust::{
             ordinals_to_nb,
         },
         string::{parse_anime_title, parse_episode_title, parse_release_group},
-    }, token::{token::Token, subtoken::SubTokenCategory},
+    }, token::{main_token::Token, subtoken::SubTokenCategory},
 };
 
 #[test]

@@ -1,2 +1,2 @@
 pub mod subtoken;
-pub mod token;
+pub mod main_token;

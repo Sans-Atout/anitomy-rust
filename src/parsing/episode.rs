@@ -3,7 +3,7 @@ use regex::Regex;
 use crate::{
     elements::{Category, Elements},
     keyword::Manager,
-    split::split_type_and_ep, token::{token::Token, subtoken::SubTokenCategory},
+    split::split_type_and_ep, token::{main_token::Token, subtoken::SubTokenCategory},
     
 };
 

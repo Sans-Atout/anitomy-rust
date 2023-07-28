@@ -1,6 +1,6 @@
 use anitomy_rust::elements::Category;
 use anitomy_rust::token::subtoken::{SubToken, SubTokenCategory};
-use anitomy_rust::token::token::Token;
+use anitomy_rust::token::main_token::Token;
 use anitomy_rust::elements::Elements;
 
 #[test]

@@ -1,7 +1,7 @@
 use crate::{
     elements::{Category, Elements},
     keyword::Manager,
-    token::{subtoken::SubTokenCategory, token::Token},
+    token::{subtoken::SubTokenCategory, main_token::Token},
 };
 
 pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements) {

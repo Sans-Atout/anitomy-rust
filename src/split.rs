@@ -1,4 +1,4 @@
-use crate::token::token::Token;
+use crate::token::main_token::Token;
 
 pub fn split_type_and_ep(to_parse: &str) -> (String, String) {
     let mut keyword_char: Vec<char> = Vec::default();

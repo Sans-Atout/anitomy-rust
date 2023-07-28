@@ -1,4 +1,4 @@
-use anitomy_rust::{split::{split_token, split_raw_data}, token::token::Token};
+use anitomy_rust::{split::{split_token, split_raw_data}, token::main_token::Token};
 
 #[test]
 fn split_regex() {
