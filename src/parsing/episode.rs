@@ -3,8 +3,8 @@ use regex::Regex;
 use crate::{
     elements::{Category, Elements},
     keyword::Manager,
-    split::split_type_and_ep,
-    tokenizer::{SubTokenCategory, Token},
+    split::split_type_and_ep, token::{token::Token, subtoken::SubTokenCategory},
+    
 };
 
 use super::number::{contains_digit, is_digit};
@@ -19,7 +19,7 @@ pub fn parse_episode_number(
             continue;
         }
         for sub_token in token.sub_tokens() {
-            if sub_token.is_found() {
+            if sub_token.is_category(SubTokenCategory::Found) {
                 continue;
             }
             if sub_token.value().is_empty() {
@@ -43,7 +43,7 @@ pub fn parse_episode_number(
                 let sub_token = tmp_token.sub_tokens();
                 for sub_token_index in (0..sub_token.len()).rev() {
                     if let Some(single_sub_token) = sub_token.get_mut(sub_token_index){
-                        if single_sub_token.is_found() || !is_digit(&single_sub_token.value()){
+                        if single_sub_token.is_category(SubTokenCategory::Found) || !is_digit(&single_sub_token.value()){
                             continue;
                         }
                         single_sub_token.category(SubTokenCategory::Found);

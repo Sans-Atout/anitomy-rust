@@ -1,7 +1,7 @@
 use crate::{
     elements::{Category, Elements},
     keyword::Manager,
-    tokenizer::Token,
+    token::{subtoken::SubTokenCategory, token::Token},
 };
 
 pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements) {
@@ -33,7 +33,7 @@ pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements) 
         if token.is_inside_delimiter() {
             if token.is_full_unknow() {
                 for sub_token in token.sub_tokens(){
-                    sub_token.category(crate::tokenizer::SubTokenCategory::Found);
+                    sub_token.category(SubTokenCategory::Found);
                 }
                 found_elements.add(Category::ReleaseGroup, token.raw_token());
                 return;
@@ -59,12 +59,12 @@ pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: 
     let all_subtoken = token.sub_tokens();
     let mut sub_token_id = 0;
     let mut string_to_categorise = String::default();
-    while all_subtoken[sub_token_id].is_found() {
+    while all_subtoken[sub_token_id].is_category(SubTokenCategory::Found) {
         sub_token_id += 1;
     }
 
     while sub_token_id < all_subtoken.len() {
-        if all_subtoken[sub_token_id].is_found() {
+        if all_subtoken[sub_token_id].is_category(SubTokenCategory::Found) {
             e.add(c, string_to_categorise.trim());
             string_to_categorise = String::default();
             break;
@@ -74,7 +74,7 @@ pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: 
             string_to_categorise,
             all_subtoken[sub_token_id].value()
         );
-        all_subtoken[sub_token_id].category(crate::tokenizer::SubTokenCategory::Found);
+        all_subtoken[sub_token_id].category(SubTokenCategory::Found);
         sub_token_id += 1;
     }
     if string_to_categorise != String::default() {

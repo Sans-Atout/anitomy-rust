@@ -7,7 +7,6 @@ use parsing::{
     number::is_anime_year,
     string::{parse_anime_title, parse_episode_title, parse_release_group},
 };
-use tokenizer::{tokenize, Token};
 use utils::remove_ignored_string;
 
 pub mod elements;
@@ -15,7 +14,7 @@ pub mod errors;
 pub mod keyword;
 pub mod parsing;
 pub mod split;
-pub mod tokenizer;
+pub mod token;
 pub mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
