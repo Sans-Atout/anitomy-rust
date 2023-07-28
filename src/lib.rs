@@ -9,6 +9,8 @@ use parsing::{
 };
 use utils::remove_ignored_string;
 
+use crate::{split::split_raw_data, token::token::Token};
+
 pub mod elements;
 pub mod errors;
 pub mod keyword;
@@ -95,8 +97,8 @@ impl Parser {
                 .attach_printable(format!("Can not parse file : {}", self.file_name)));
         }
 
-        let raw_token = tokenize(
-            &remove_ignored_string(&to_parse_str, self.ignored_string.to_owned()),
+        let raw_token = split_raw_data(
+            &remove_ignored_string(&to_parse_str, &self.ignored_string),
             &self.allowed_delimiters,
         );
 
@@ -132,4 +134,6 @@ impl Parser {
 
         Ok(_e)
     }
+
+
 }
