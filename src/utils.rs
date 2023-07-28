@@ -1,9 +1,9 @@
 use unicode_normalization::UnicodeNormalization;
 
-pub fn remove_ignored_string(working_string: &str, ignored_str: Vec<String>) -> String {
+pub fn remove_ignored_string(working_string: &str, ignored_str: &[String]) -> String {
     let mut return_string = working_string.to_string();
     for i_s in ignored_str {
-        return_string = return_string.replace(&i_s, "");
+        return_string = return_string.replace(i_s, "");
     }
     return_string
 }
