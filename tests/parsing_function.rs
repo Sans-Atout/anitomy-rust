@@ -218,8 +218,8 @@ fn test_find_anime_title_001() {
     let mut e = Elements::new();
     let mut anime_title_subtoken: Token = Token::new(" Uchuu no Stellvia ep 14 ", &d, false, false);
     let subtoken = anime_title_subtoken.sub_tokens();
+    subtoken[3].category(SubTokenCategory::Found);
     subtoken[4].category(SubTokenCategory::Found);
-    subtoken[5].category(SubTokenCategory::Found);
     let mut parsing_data = vec![
         Token::new("Kira-Fansub", &d, true,false),
         anime_title_subtoken,
@@ -239,8 +239,8 @@ fn test_find_anime_title_002() {
     let mut e = Elements::new();
     let mut anime_title_subtoken: Token = Token::new(" Uchuu no Stellvia ep 14 ", &d, true, false);
     let subtoken = anime_title_subtoken.sub_tokens();
+    subtoken[3].category(SubTokenCategory::Found);
     subtoken[4].category(SubTokenCategory::Found);
-    subtoken[5].category(SubTokenCategory::Found);
     let mut parsing_data = vec![
         Token::new("Kira-Fansub", &d, true, false),
         anime_title_subtoken,
@@ -261,8 +261,8 @@ fn test_find_episode_title() {
     let mut anime_title_subtoken: Token =
         Token::new(" Uchuu no Stellvia ep 14 My Super Episode title", &d, false, false);
     let subtoken = anime_title_subtoken.sub_tokens();
+    subtoken[3].category(SubTokenCategory::Found);
     subtoken[4].category(SubTokenCategory::Found);
-    subtoken[5].category(SubTokenCategory::Found);
     let mut parsing_data = vec![
         Token::new("Kira-Fansub", &d, true, false),
         anime_title_subtoken,

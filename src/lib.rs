@@ -4,12 +4,11 @@ use errors::ParsingError;
 use parsing::{
     episode::parse_episode_number,
     extensions::{get_extension, remove_extension},
-    number::is_anime_year,
     string::{parse_anime_title, parse_episode_title, parse_release_group},
 };
 use utils::remove_ignored_string;
 
-use crate::{split::split_raw_data, token::main_token::Token};
+use crate::{split::split_raw_data, parsing::parsing_keywords};
 
 pub mod elements;
 pub mod errors;
@@ -83,12 +82,12 @@ impl Parser {
     }
 
     pub fn parse(&self) -> Result<Elements, ParsingError> {
-        let mut _e = Elements::new().add(elements::Category::FileName, &self.file_name);
+        let mut found_elements = Elements::new().add(elements::Category::FileName, &self.file_name);
 
         // Remove file name extension
         let extension = get_extension(&self.file_name).unwrap_or_default();
         if !extension.is_empty() {
-            _e.add(elements::Category::FileExtension, &extension);
+            found_elements.add(elements::Category::FileExtension, &extension);
         }
 
         let to_parse_str = remove_extension(&self.file_name);
@@ -97,42 +96,25 @@ impl Parser {
                 .attach_printable(format!("Can not parse file : {}", self.file_name)));
         }
 
-        let raw_token = split_raw_data(
+        let mut tokens = split_raw_data(
             &remove_ignored_string(&to_parse_str, &self.ignored_string),
             &self.allowed_delimiters,
         );
-
-        let mut tokens_no_keyword: Vec<Token> = Vec::default();
-        for mut t in raw_token {
-            _e = t.parse(&mut _e);
-            if t.is_isolated_number() {
-                let token_value = t.sub_tokens().get(0).unwrap().value();
-                if is_anime_year(&token_value) {
-                    _e = t.keyword_found(elements::Category::AnimeYear, 0, &mut _e)
-                }
-                if (token_value == "480" || token_value == "720" || token_value == "1080")
-                    && _e.is_category_empty(elements::Category::VideoResolution)
-                {
-                    _e = t.keyword_found(elements::Category::VideoResolution, 0, &mut _e)
-                }
-            }
-            tokens_no_keyword.push(t);
-        }
+        parsing_keywords(&mut found_elements, &mut tokens);
 
         if self.ep_number {
-            parse_episode_number(&self.allowed_delimiters, &mut tokens_no_keyword, &mut _e)
+            parse_episode_number(&self.allowed_delimiters, &mut tokens, &mut found_elements)
         }
-        parse_anime_title(&mut tokens_no_keyword, &mut _e);
+        parse_anime_title(&mut tokens, &mut found_elements);
 
         if self.release_group {
-            parse_release_group(&mut tokens_no_keyword, &mut _e);
+            parse_release_group(&mut tokens, &mut found_elements);
         }
 
         if self.ep_title {
-            parse_episode_title(&mut tokens_no_keyword, &mut _e);
+            parse_episode_title(&mut tokens, &mut found_elements);
         }
-
-        Ok(_e)
+        Ok(found_elements)
     }
 
 
