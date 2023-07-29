@@ -30,7 +30,7 @@ pub fn is_hexa(p_hexa: &str) -> bool {
 }
 
 pub fn is_digit(w: &str) -> bool {
-    let digit_regex = Regex::new(r"^[-+0-9]+$").unwrap();
+    let digit_regex = Regex::new(r"^(-|\+)*[0-9]+$").unwrap();
     digit_regex.is_match(&w.to_uppercase())
 }
 

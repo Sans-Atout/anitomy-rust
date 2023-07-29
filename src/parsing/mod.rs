@@ -1,5 +1,5 @@
 use crate::{
-    elements::{Category, Elements, self},
+    elements::{Category, Elements},
     keyword::Manager,
     token::{main_token::Token, subtoken::SubTokenCategory},
 };
