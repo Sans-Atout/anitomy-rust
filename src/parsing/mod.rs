@@ -1,5 +1,5 @@
 use crate::{
-    elements::{Category, Elements},
+    elements::{Category, Elements, self},
     keyword::Manager,
     token::{main_token::Token, subtoken::SubTokenCategory},
 };
@@ -22,6 +22,15 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
             continue;
         }
         if is_digit(&tested_value) && tested_value.len() != 8 {
+            if index + 1 < sub_tokens.len() {
+                let left = sub_tokens[index].value();
+                let right = sub_tokens[index + 1].value();
+                if left == "5" && right == "1" {
+                    sub_tokens[index].category(SubTokenCategory::Found);
+                    sub_tokens[index + 1].category(SubTokenCategory::Found);
+                    elements.add(Category::AudioTerm, "5.1");                    
+                }
+            }    
             continue;
         }
         if is_crc32(&tested_value) && elements.is_category_empty(Category::FileChecksum) {

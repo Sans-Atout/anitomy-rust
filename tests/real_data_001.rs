@@ -195,7 +195,7 @@ fn test_a2ad6f3ebba7b8c3807d4532e7ea94ffed8d481f(){
 /// Here, Juuni Kokki as "Les 12 Royaumes" is the anime name
 fn test_49be603afd2b77129cc736f3f062e8e3cb48f918(){
 	let wanted = Elements::new()
-		.add(Category::ReleaseGroup,"Juuni Kokki")
+		.add(Category::ReleaseGroup,"Juuni.Kokki")
 		.add(Category::AnimeTitle,"Les 12 Royaumes")
 		.add(Category::AudioTerm,"OGG")
 		.add(Category::EpisodeNumber,"24")
@@ -204,6 +204,7 @@ fn test_49be603afd2b77129cc736f3f062e8e3cb48f918(){
 		.add(Category::Language,"JAP")
 		.add(Category::Subtitles,"Sub")
 		.add(Category::VideoTerm,"x264")
+		.add(Category::EpisodePrefix, "Ep")
 	;
 	let parser_result = Parser::new("[Juuni.Kokki]-(Les.12.Royaumes)-[Ep.24]-[x264+OGG]-[JAP+FR+Sub.FR]-[Chap]-[AzF].mkv").parse().unwrap();
 	assert_eq!(wanted, parser_result);
@@ -413,8 +414,10 @@ fn test_ec8455cb47f00c300b1de6530c75861486ac0580(){
 		.add(Category::FileName,"Mobile_Suit_Gundam_00_Season_2_Ep07_A_Reunion_and_a_Parting_[1080p,BluRay,x264]_-_THORA.mkv")
 		.add(Category::ReleaseGroup,"THORA")
 		.add(Category::Source,"BluRay")
+		.add(Category::AnimeSeasonPrefix, "Season")
 		.add(Category::VideoResolution,"1080p")
 		.add(Category::VideoTerm,"x264")
+		.add(Category::EpisodePrefix, "Ep")
 	;
 	let parser_result = Parser::new("Mobile_Suit_Gundam_00_Season_2_Ep07_A_Reunion_and_a_Parting_[1080p,BluRay,x264]_-_THORA.mkv").parse().unwrap();
 	assert_eq!(wanted, parser_result);
@@ -480,10 +483,11 @@ fn test_f9fb85697cb82fb6350b3558a9ab44a2b772cece(){
 	let wanted = Elements::new()
 		.add(Category::AnimeTitle,"Ghost in the Shell Stand Alone Complex 2nd GIG")
 		.add(Category::AudioTerm,"AAC")
-		.add(Category::AudioTerm,"5.1'")
+		.add(Category::AudioTerm,"5.1")
 		.add(Category::EpisodeNumber,"05")
 		.add(Category::EpisodeTitle,"EXCAVATION")
 		.add(Category::FileExtension,"mkv")
+		.add(Category::EpisodePrefix,"Ep")
 		.add(Category::FileName,"Ghost_in_the_Shell_Stand_Alone_Complex_2nd_GIG_Ep05v2_EXCAVATION_[720p,HDTV,x264,AAC_5.1]_-_THORA.mkv")
 		.add(Category::ReleaseGroup,"THORA")
 		.add(Category::ReleaseVersion,"2")
@@ -508,6 +512,7 @@ fn test_a5b250cb566804f842474b3382892aa091bd1d70(){
 		.add(Category::Source,"HDTV")
 		.add(Category::VideoResolution,"720p")
 		.add(Category::VideoTerm,"x264")
+		.add(Category::EpisodePrefix, "Ep")
 	;
 	let parser_result = Parser::new("Ghost_in_the_Shell_Stand_Alone_Complex_2nd_GIG_Ep06_Pu239_[720p,HDTV,x264,AAC_5.1]_-_THORA.mkv").parse().unwrap();
 	assert_eq!(wanted, parser_result);

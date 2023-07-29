@@ -15,7 +15,7 @@ impl Token {
         let splited_token = split_token(raw, delimiter);
         let mut all_tokens: Vec<SubToken> = Vec::new();
         for token in splited_token {
-            all_tokens.push(SubToken::new(token.trim_matches(delimiter)));
+            all_tokens.push(SubToken::new(&token));
         }
         Token {
             weak_delimiter: is_weak && all_tokens.len() == 1,

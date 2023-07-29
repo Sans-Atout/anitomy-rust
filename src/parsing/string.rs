@@ -4,10 +4,10 @@ use crate::{
     token::{subtoken::SubTokenCategory, main_token::Token},
 };
 
-pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements) {
+pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements, d : &[char]) {
     for token in tokens.iter_mut() {
         if token.contains_unknow() && !token.is_inside_delimiter() {
-            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle);
+            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle, d);
             return;
         }
     }
@@ -19,13 +19,13 @@ pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements) {
                 is_first_inside_delimiter_token = false;
                 continue;
             }
-            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle);
+            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle, d);
             return;
         }
     }
 }
 
-pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements) {
+pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements, d : &[char]) {
     if !found_elements.is_category_empty(Category::ReleaseGroup) {
         return;
     }
@@ -39,23 +39,23 @@ pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements) 
                 return;
             }
             if token.contains_unknow() {
-                parse_particular_string_subtoken(token, found_elements, Category::ReleaseGroup);
+                parse_particular_string_subtoken(token, found_elements, Category::ReleaseGroup, d);
                 return;
             }
         }
     }
 }
 
-pub fn parse_episode_title(tokens: &mut [Token], found_elements: &mut Elements) {
+pub fn parse_episode_title(tokens: &mut [Token], found_elements: &mut Elements, d : &[char]) {
     for token in tokens.iter_mut() {
         if token.contains_unknow() && !token.is_inside_delimiter() {
-            parse_particular_string_subtoken(token, found_elements, Category::EpisodeTitle);
+            parse_particular_string_subtoken(token, found_elements, Category::EpisodeTitle, d);
             return;
         }
     }
 }
 
-pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: Category) {
+pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: Category, d : &[char]) {
     let all_subtoken = token.sub_tokens();
     let mut sub_token_id = 0;
     let mut string_to_categorise = String::default();
@@ -65,7 +65,7 @@ pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: 
 
     while sub_token_id < all_subtoken.len() {
         if all_subtoken[sub_token_id].is_category(SubTokenCategory::Found) {
-            e.add(c, string_to_categorise.trim());
+            e.add(c, string_to_categorise.trim_matches(d));
             string_to_categorise = String::default();
             break;
         }
@@ -78,7 +78,7 @@ pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: 
         sub_token_id += 1;
     }
     if string_to_categorise != String::default() {
-        e.add(c, string_to_categorise.trim());
+        e.add(c, string_to_categorise.trim_matches(d));
     }
 }
 

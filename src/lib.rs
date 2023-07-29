@@ -105,14 +105,14 @@ impl Parser {
         if self.ep_number {
             parse_episode_number(&self.allowed_delimiters, &mut tokens, &mut found_elements)
         }
-        parse_anime_title(&mut tokens, &mut found_elements);
+        parse_anime_title(&mut tokens, &mut found_elements,&self.allowed_delimiters);
 
         if self.release_group {
-            parse_release_group(&mut tokens, &mut found_elements);
+            parse_release_group(&mut tokens, &mut found_elements,&self.allowed_delimiters);
         }
 
         if self.ep_title {
-            parse_episode_title(&mut tokens, &mut found_elements);
+            parse_episode_title(&mut tokens, &mut found_elements,&self.allowed_delimiters);
         }
         Ok(found_elements)
     }

@@ -206,7 +206,7 @@ fn test_find_release_group() {
         Token::new("BD 1280x960 24fps AAC", &d, true, false),
         Token::new("06EE7355", &d, true, true),
     ];
-    parse_release_group(&mut parsing_data, &mut e);
+    parse_release_group(&mut parsing_data, &mut e,&d);
     let tested = e.find(Category::ReleaseGroup).unwrap();
     let wanted = Element::new(Category::ReleaseGroup, "Kira-Fansub");
     assert_eq!(tested, wanted)
@@ -227,7 +227,7 @@ fn test_find_anime_title_001() {
         Token::new("06EE7355", &d, true, false),
     ];
 
-    parse_anime_title(&mut parsing_data, &mut e);
+    parse_anime_title(&mut parsing_data, &mut e,&d);
     let tested = e.find(Category::AnimeTitle).unwrap();
     let wanted = Element::new(Category::AnimeTitle, "Uchuu no Stellvia");
     assert_eq!(tested, wanted)
@@ -248,7 +248,7 @@ fn test_find_anime_title_002() {
         Token::new("06EE7355", &d, true, false),
     ];
 
-    parse_anime_title(&mut parsing_data, &mut e);
+    parse_anime_title(&mut parsing_data, &mut e,&d);
     let tested = e.find(Category::AnimeTitle).unwrap();
     let wanted = Element::new(Category::AnimeTitle, "Uchuu no Stellvia");
     assert_eq!(tested, wanted)
@@ -270,7 +270,7 @@ fn test_find_episode_title() {
         Token::new("06EE7355", &d, true,false),
     ];
 
-    parse_episode_title(&mut parsing_data, &mut e);
+    parse_episode_title(&mut parsing_data, &mut e,&d);
     let tested = e.find(Category::EpisodeTitle).unwrap();
     let wanted = Element::new(Category::EpisodeTitle, "Uchuu no Stellvia");
     assert_eq!(tested, wanted)
