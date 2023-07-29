@@ -17,7 +17,7 @@ impl SubToken {
         self.to_owned()
     }
 
-    pub fn is_category(&self, c : SubTokenCategory) -> bool {
+    pub fn is_category(&self, c: SubTokenCategory) -> bool {
         self.category == c
     }
 

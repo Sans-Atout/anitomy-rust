@@ -10,10 +10,7 @@ fn remove_one_string() {
 #[test]
 fn remove_multiple() {
     let tested_string = "Hello World!";
-    let r2 = remove_ignored_string(
-        tested_string,
-        &["World".to_string(), "Hello".to_string()],
-    );
+    let r2 = remove_ignored_string(tested_string, &["World".to_string(), "Hello".to_string()]);
     assert_eq!(r2, " !");
 }
 

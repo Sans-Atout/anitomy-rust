@@ -57,20 +57,19 @@ pub fn split_raw_data(raw_data: &str, delimiter: &[char]) -> Vec<Token> {
 }
 
 pub fn split_token(raw_token: &str, delimiter: &[char]) -> Vec<String> {
-    let mut tokenized_token : Vec<String> = Vec::default();
+    let mut tokenized_token: Vec<String> = Vec::default();
     let token_as_char: Vec<char> = raw_token.trim_matches(delimiter).chars().collect();
 
     let mut token_index = 0;
     let mut tmp_sub_token: Vec<char> = Vec::default();
 
     while token_index < token_as_char.len() {
-        
         let token_char = token_as_char[token_index];
         token_index += 1;
 
         let is_delimiter = delimiter.contains(&token_char);
-        
-        if is_delimiter  {
+
+        if is_delimiter {
             if tmp_sub_token.is_empty() {
                 continue;
             }
@@ -82,11 +81,13 @@ pub fn split_token(raw_token: &str, delimiter: &[char]) -> Vec<String> {
                 continue;
             }
 
-            if delimiter.contains(&token_as_char[token_index]) && delimiter.contains(&token_as_char[token_index+1]){
+            if delimiter.contains(&token_as_char[token_index])
+                && delimiter.contains(&token_as_char[token_index + 1])
+            {
                 tokenized_token.push(token_as_char[token_index].to_string());
                 token_index += 1;
             }
-            continue;    
+            continue;
         }
         tmp_sub_token.push(token_char);
     }

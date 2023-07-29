@@ -25,7 +25,6 @@ impl Token {
         }
     }
 
-
     pub fn contains_unknow(&self) -> bool {
         for t in &self.tokens {
             if t.is_category(SubTokenCategory::Unknow) {
@@ -46,7 +45,9 @@ impl Token {
 
     pub fn is_isolated_number(&self) -> bool {
         let first_token = self.tokens.get(0).unwrap();
-        self.tokens.len() == 1 && is_digit(&first_token.value()) && !&first_token.is_category(SubTokenCategory::Found)
+        self.tokens.len() == 1
+            && is_digit(&first_token.value())
+            && !&first_token.is_category(SubTokenCategory::Found)
     }
 
     pub fn sub_tokens(&mut self) -> &mut Vec<SubToken> {

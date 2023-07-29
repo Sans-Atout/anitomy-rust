@@ -1,4 +1,7 @@
-use anitomy_rust::{split::{split_token, split_raw_data}, token::main_token::Token};
+use anitomy_rust::{
+    split::{split_raw_data, split_token},
+    token::main_token::Token,
+};
 
 #[test]
 fn split_regex() {
@@ -18,7 +21,7 @@ fn split_regex() {
 }
 
 #[test]
-fn non_normal_split(){
+fn non_normal_split() {
     let d: &[char; 8] = &[' ', '_', '.', '-', '&', '+', ',', '|'];
     let tested = split_raw_data("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD].mkv",d);
     let mut wanted = vec![
@@ -29,15 +32,18 @@ fn non_normal_split(){
         Token::new("1280x720_H.264_FLAC", d, true, false),
         Token::new("1234ABCD", d, true, false),
     ];
-    assert_ne!(wanted,tested);
+    assert_ne!(wanted, tested);
     wanted.push(Token::new(".mkv", d, false, false));
-    assert_eq!(wanted,tested);
+    assert_eq!(wanted, tested);
 }
 
 #[test]
-fn normal_split(){
+fn normal_split() {
     let d: &[char; 8] = &[' ', '_', '.', '-', '&', '+', ',', '|'];
-    let tested = split_raw_data("[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD]",d);
+    let tested = split_raw_data(
+        "[TaigaSubs]_Toradora!_(2008)_-_01v2_-_Tiger_and_Dragon_[1280x720_H.264_FLAC][1234ABCD]",
+        d,
+    );
     let wanted = vec![
         Token::new("TaigaSubs", d, true, false),
         Token::new("_Toradora!_", d, false, false),
@@ -46,19 +52,16 @@ fn normal_split(){
         Token::new("1280x720_H.264_FLAC", d, true, false),
         Token::new("1234ABCD", d, true, false),
     ];
-    assert_eq!(wanted,tested);
+    assert_eq!(wanted, tested);
 }
 
 #[test]
-fn test_split_sub_token(){
-    let tested = split_token("_-_01v2_-_Tiger_and_Dragon_", &[' ', '_', '.', '-', '&', '+', ',', '|']);
-    let wanted = vec![
-        "01v2",
-        "-",
-        "Tiger",
-        "and",
-        "Dragon"
-    ];
+fn test_split_sub_token() {
+    let tested = split_token(
+        "_-_01v2_-_Tiger_and_Dragon_",
+        &[' ', '_', '.', '-', '&', '+', ',', '|'],
+    );
+    let wanted = vec!["01v2", "-", "Tiger", "and", "Dragon"];
 
-    assert_eq!(wanted,tested);
+    assert_eq!(wanted, tested);
 }

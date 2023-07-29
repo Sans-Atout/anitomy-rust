@@ -8,7 +8,7 @@ use parsing::{
 };
 use utils::remove_ignored_string;
 
-use crate::{split::split_raw_data, parsing::parsing_keywords};
+use crate::{parsing::parsing_keywords, split::split_raw_data};
 
 pub mod elements;
 pub mod errors;
@@ -105,17 +105,17 @@ impl Parser {
         if self.ep_number {
             parse_episode_number(&self.allowed_delimiters, &mut tokens, &mut found_elements)
         }
-        parse_anime_title(&mut tokens, &mut found_elements,&self.allowed_delimiters);
+        println!("{:?}", tokens);
+
+        parse_anime_title(&mut tokens, &mut found_elements, &self.allowed_delimiters);
 
         if self.release_group {
-            parse_release_group(&mut tokens, &mut found_elements,&self.allowed_delimiters);
+            parse_release_group(&mut tokens, &mut found_elements, &self.allowed_delimiters);
         }
 
         if self.ep_title {
-            parse_episode_title(&mut tokens, &mut found_elements,&self.allowed_delimiters);
+            parse_episode_title(&mut tokens, &mut found_elements, &self.allowed_delimiters);
         }
         Ok(found_elements)
     }
-
-
 }

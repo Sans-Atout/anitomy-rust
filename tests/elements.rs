@@ -90,10 +90,17 @@ fn empty_category() {
 }
 
 #[test]
-fn is_equal(){
-    let e_1 = Elements::new().add(Category::AnimeSeason, "01").add(Category::EpisodeNumber, "01");
-    let e_2 = Elements::new().add(Category::EpisodeNumber, "01").add(Category::AnimeSeason, "01");
-    let e_3 = Elements::new().add(Category::EpisodeNumber, "01").add(Category::AnimeSeason, "01").add(Category::AnimeYear, "2009");
-    assert_eq!(e_1,e_2);
-    assert_ne!(e_1,e_3);
+fn is_equal() {
+    let e_1 = Elements::new()
+        .add(Category::AnimeSeason, "01")
+        .add(Category::EpisodeNumber, "01");
+    let e_2 = Elements::new()
+        .add(Category::EpisodeNumber, "01")
+        .add(Category::AnimeSeason, "01");
+    let e_3 = Elements::new()
+        .add(Category::EpisodeNumber, "01")
+        .add(Category::AnimeSeason, "01")
+        .add(Category::AnimeYear, "2009");
+    assert_eq!(e_1, e_2);
+    assert_ne!(e_1, e_3);
 }

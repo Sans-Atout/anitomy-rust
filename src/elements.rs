@@ -149,7 +149,7 @@ impl Elements {
     }
 }
 
-impl PartialEq for Elements{
+impl PartialEq for Elements {
     fn eq(&self, other: &Self) -> bool {
         if self.elements.len() != other.elements.len() {
             return false;

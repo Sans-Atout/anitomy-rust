@@ -3,8 +3,8 @@ use regex::Regex;
 use crate::{
     elements::{Category, Elements},
     keyword::Manager,
-    split::split_type_and_ep, token::{main_token::Token, subtoken::SubTokenCategory},
-    
+    split::split_type_and_ep,
+    token::{main_token::Token, subtoken::SubTokenCategory},
 };
 
 use super::number::{contains_digit, is_digit};
@@ -37,66 +37,72 @@ pub fn parse_episode_number(
     }
     if found_elements.is_category_empty(Category::EpisodeNumber) {
         for token in tokens_to_parse.iter_mut() {
-            if !token.contains_unknow(){
+            if !token.contains_unknow() {
                 continue;
             }
             let sub_tokens = token.sub_tokens();
-            for index in 0..sub_tokens.len(){
+            for index in 0..sub_tokens.len() {
                 let tested_value = sub_tokens[index].value();
-                if is_digit(&tested_value){
-                    if let Some(next_value) = sub_tokens.get(index+1) {
-                        if is_digit(&next_value.value()){
+                if is_digit(&tested_value) {
+                    if let Some(next_value) = sub_tokens.get(index + 1) {
+                        if is_digit(&next_value.value()) {
                             let right = next_value.value().parse::<i32>().unwrap();
-                            let left = tested_value.parse::<i32>().unwrap() ;
+                            let left = tested_value.parse::<i32>().unwrap();
                             if left < right {
                                 sub_tokens[index].category(SubTokenCategory::Found);
-                                sub_tokens[index+1].category(SubTokenCategory::Found);
-                                found_elements.add(Category::EpisodeNumber, &sub_tokens[index].value());
-                                found_elements.add(Category::EpisodeNumber, &sub_tokens[index+1].value());
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index].value());
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index + 1].value());
                                 return;
                             }
-
                         }
                     }
-                    if let Some(sub_token) = sub_tokens.get(index+2) {
-                        if is_digit(&sub_token.value()){
-                            let middle = sub_tokens[index+1].value();
+                    if let Some(sub_token) = sub_tokens.get(index + 2) {
+                        if is_digit(&sub_token.value()) {
+                            let middle = sub_tokens[index + 1].value();
                             let right = sub_token.value().parse::<i32>().unwrap();
                             let left = tested_value.parse::<i32>().unwrap();
                             let p_delimiter = middle.chars().next().unwrap();
                             if middle == "of" && left < right {
                                 sub_tokens[index].category(SubTokenCategory::Found);
-                                sub_tokens[index+1].category(SubTokenCategory::Found);
-                                sub_tokens[index+2].category(SubTokenCategory::Found);
-                                found_elements.add(Category::EpisodeNumber, &sub_tokens[index].value());
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                sub_tokens[index + 2].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index].value());
                                 return;
                             }
 
-                            if delimiter.contains(&p_delimiter) && middle.len() == 1  && left < right{
+                            if delimiter.contains(&p_delimiter) && middle.len() == 1 && left < right
+                            {
                                 sub_tokens[index].category(SubTokenCategory::Found);
-                                sub_tokens[index+1].category(SubTokenCategory::Found);
-                                found_elements.add(Category::EpisodeNumber, &sub_tokens[index].value());
-                                found_elements.add(Category::EpisodeNumber, &sub_tokens[index+1].value());
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index].value());
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index + 1].value());
                                 return;
                             }
                         }
                     }
                 }
             }
-            
         }
     }
 
     if found_elements.is_category_empty(Category::EpisodeNumber) {
         for token_index in 0..tokens_to_parse.len() {
             if let Some(tmp_token) = tokens_to_parse.get_mut(token_index) {
-                if !tmp_token.contains_unknow(){
+                if !tmp_token.contains_unknow() {
                     continue;
                 }
                 let sub_token = tmp_token.sub_tokens();
                 for sub_token_index in 0..sub_token.len() {
-                    if let Some(single_sub_token) = sub_token.get_mut(sub_token_index){
-                        if single_sub_token.is_category(SubTokenCategory::Found) || !is_digit(&single_sub_token.value()){
+                    if let Some(single_sub_token) = sub_token.get_mut(sub_token_index) {
+                        if single_sub_token.is_category(SubTokenCategory::Found)
+                            || !is_digit(&single_sub_token.value())
+                        {
                             continue;
                         }
                         single_sub_token.category(SubTokenCategory::Found);
@@ -104,11 +110,9 @@ pub fn parse_episode_number(
                         return;
                     }
                 }
-    
             }
         }
     }
-
 }
 
 pub fn parse_single_subtoken(

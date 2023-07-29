@@ -28,9 +28,9 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
                 if left == "5" && right == "1" {
                     sub_tokens[index].category(SubTokenCategory::Found);
                     sub_tokens[index + 1].category(SubTokenCategory::Found);
-                    elements.add(Category::AudioTerm, "5.1");                    
+                    elements.add(Category::AudioTerm, "5.1");
                 }
-            }    
+            }
             continue;
         }
         if is_crc32(&tested_value) && elements.is_category_empty(Category::FileChecksum) {
@@ -45,9 +45,7 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
         }
         if let Some(keyword) = manager.find(&tested_value.to_uppercase()) {
             let c = keyword.get_category();
-            if (!c.is_searchable())
-                || (c.is_singular() && !elements.is_category_empty(c))
-            {
+            if (!c.is_searchable()) || (c.is_singular() && !elements.is_category_empty(c)) {
                 continue;
             }
 
@@ -131,7 +129,7 @@ pub fn parsing_keywords(elements: &mut Elements, tokens: &mut Vec<Token>) {
             let value = token.sub_tokens()[0].value();
             if is_anime_year(&value) {
                 elements.add(Category::AnimeYear, &value);
-                token.sub_tokens()[0].category(SubTokenCategory::Found);    
+                token.sub_tokens()[0].category(SubTokenCategory::Found);
             }
             if (value == "480" || value == "720" || value == "1080")
                 && elements.is_category_empty(Category::VideoResolution)

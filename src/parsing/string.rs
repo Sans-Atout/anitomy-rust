@@ -1,12 +1,13 @@
 use crate::{
     elements::{Category, Elements},
     keyword::Manager,
-    token::{subtoken::SubTokenCategory, main_token::Token},
+    token::{main_token::Token, subtoken::SubTokenCategory},
 };
 
-pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements, d : &[char]) {
+pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements, d: &[char]) {
     for token in tokens.iter_mut() {
         if token.contains_unknow() && !token.is_inside_delimiter() {
+            println!("found token : {:?}", token);
             parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle, d);
             return;
         }
@@ -25,14 +26,14 @@ pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements, d 
     }
 }
 
-pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements, d : &[char]) {
+pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements, d: &[char]) {
     if !found_elements.is_category_empty(Category::ReleaseGroup) {
         return;
     }
     for token in tokens.iter_mut() {
         if token.is_inside_delimiter() {
             if token.is_full_unknow() {
-                for sub_token in token.sub_tokens(){
+                for sub_token in token.sub_tokens() {
                     sub_token.category(SubTokenCategory::Found);
                 }
                 found_elements.add(Category::ReleaseGroup, token.raw_token());
@@ -46,7 +47,7 @@ pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements, 
     }
 }
 
-pub fn parse_episode_title(tokens: &mut [Token], found_elements: &mut Elements, d : &[char]) {
+pub fn parse_episode_title(tokens: &mut [Token], found_elements: &mut Elements, d: &[char]) {
     for token in tokens.iter_mut() {
         if token.contains_unknow() && !token.is_inside_delimiter() {
             parse_particular_string_subtoken(token, found_elements, Category::EpisodeTitle, d);
@@ -55,7 +56,12 @@ pub fn parse_episode_title(tokens: &mut [Token], found_elements: &mut Elements, 
     }
 }
 
-pub fn parse_particular_string_subtoken(token: &mut Token, e: &mut Elements, c: Category, d : &[char]) {
+pub fn parse_particular_string_subtoken(
+    token: &mut Token,
+    e: &mut Elements,
+    c: Category,
+    d: &[char],
+) {
     let all_subtoken = token.sub_tokens();
     let mut sub_token_id = 0;
     let mut string_to_categorise = String::default();

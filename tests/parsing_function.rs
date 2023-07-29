@@ -11,7 +11,8 @@ use anitomy_rust::{
             ordinals_to_nb,
         },
         string::{parse_anime_title, parse_episode_title, parse_release_group},
-    }, token::{main_token::Token, subtoken::SubTokenCategory},
+    },
+    token::{main_token::Token, subtoken::SubTokenCategory},
 };
 
 #[test]
@@ -206,7 +207,7 @@ fn test_find_release_group() {
         Token::new("BD 1280x960 24fps AAC", &d, true, false),
         Token::new("06EE7355", &d, true, true),
     ];
-    parse_release_group(&mut parsing_data, &mut e,&d);
+    parse_release_group(&mut parsing_data, &mut e, &d);
     let tested = e.find(Category::ReleaseGroup).unwrap();
     let wanted = Element::new(Category::ReleaseGroup, "Kira-Fansub");
     assert_eq!(tested, wanted)
@@ -221,13 +222,13 @@ fn test_find_anime_title_001() {
     subtoken[3].category(SubTokenCategory::Found);
     subtoken[4].category(SubTokenCategory::Found);
     let mut parsing_data = vec![
-        Token::new("Kira-Fansub", &d, true,false),
+        Token::new("Kira-Fansub", &d, true, false),
         anime_title_subtoken,
-        Token::new("BD 1280x960 24fps AAC", &d, true,true),
+        Token::new("BD 1280x960 24fps AAC", &d, true, true),
         Token::new("06EE7355", &d, true, false),
     ];
 
-    parse_anime_title(&mut parsing_data, &mut e,&d);
+    parse_anime_title(&mut parsing_data, &mut e, &d);
     let tested = e.find(Category::AnimeTitle).unwrap();
     let wanted = Element::new(Category::AnimeTitle, "Uchuu no Stellvia");
     assert_eq!(tested, wanted)
@@ -248,7 +249,7 @@ fn test_find_anime_title_002() {
         Token::new("06EE7355", &d, true, false),
     ];
 
-    parse_anime_title(&mut parsing_data, &mut e,&d);
+    parse_anime_title(&mut parsing_data, &mut e, &d);
     let tested = e.find(Category::AnimeTitle).unwrap();
     let wanted = Element::new(Category::AnimeTitle, "Uchuu no Stellvia");
     assert_eq!(tested, wanted)
@@ -258,8 +259,12 @@ fn test_find_anime_title_002() {
 fn test_find_episode_title() {
     let d: Vec<char> = vec![' ', '_', '.', '-', '&', '+', ',', '|'];
     let mut e = Elements::new();
-    let mut anime_title_subtoken: Token =
-        Token::new(" Uchuu no Stellvia ep 14 My Super Episode title", &d, false, false);
+    let mut anime_title_subtoken: Token = Token::new(
+        " Uchuu no Stellvia ep 14 My Super Episode title",
+        &d,
+        false,
+        false,
+    );
     let subtoken = anime_title_subtoken.sub_tokens();
     subtoken[3].category(SubTokenCategory::Found);
     subtoken[4].category(SubTokenCategory::Found);
@@ -267,10 +272,10 @@ fn test_find_episode_title() {
         Token::new("Kira-Fansub", &d, true, false),
         anime_title_subtoken,
         Token::new("BD 1280x960 24fps AAC", &d, true, true),
-        Token::new("06EE7355", &d, true,false),
+        Token::new("06EE7355", &d, true, false),
     ];
 
-    parse_episode_title(&mut parsing_data, &mut e,&d);
+    parse_episode_title(&mut parsing_data, &mut e, &d);
     let tested = e.find(Category::EpisodeTitle).unwrap();
     let wanted = Element::new(Category::EpisodeTitle, "Uchuu no Stellvia");
     assert_eq!(tested, wanted)
