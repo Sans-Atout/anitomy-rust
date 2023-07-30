@@ -31,7 +31,6 @@ pub fn parse_episode_number(
             }
             if parse_single_subtoken(delimiter, &sub_token.value(), found_elements) {
                 sub_token.category(SubTokenCategory::Found);
-                return;
             }
         }
     }
@@ -40,6 +39,7 @@ pub fn parse_episode_number(
             if !token.contains_unknow() {
                 continue;
             }
+            let raw_data = token.raw_token();
             let sub_tokens = token.sub_tokens();
             for index in 0..sub_tokens.len() {
                 let tested_value = sub_tokens[index].value();
@@ -48,6 +48,16 @@ pub fn parse_episode_number(
                         if is_digit(&next_value.value()) {
                             let right = next_value.value().parse::<i32>().unwrap();
                             let left = tested_value.parse::<i32>().unwrap();
+                            let fractal_regex =Regex::new(&format!(r"{}\.{}",left,right)).unwrap();
+
+                            if right == 5 && fractal_regex.is_match(&raw_data) {
+                                sub_tokens[index].category(SubTokenCategory::Found);
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &format!("{}.5",left));
+
+                            }
+
                             if left < right {
                                 sub_tokens[index].category(SubTokenCategory::Found);
                                 sub_tokens[index + 1].category(SubTokenCategory::Found);
@@ -229,9 +239,18 @@ pub fn match_type_episode(
     let keyword_manager = Manager::new();
     let trim_keyword = potential_keyword.trim_matches(delimiter.as_slice());
     if let Some(keyword) = keyword_manager.find(&trim_keyword.to_uppercase()) {
-        found_elements.add(keyword.get_category(), trim_keyword);
+        let tmp_c = keyword.get_category();
+        found_elements.add(tmp_c, trim_keyword);
         if is_digit(&data_to_parse) {
-            found_elements.add(Category::EpisodeNumber, &data_to_parse);
+            if tmp_c == Category::AnimeSeasonPrefix {
+                found_elements.add(Category::AnimeSeason, &data_to_parse);
+            }
+            if tmp_c == Category::EpisodePrefix {
+                found_elements.add(Category::EpisodeNumber, &data_to_parse);
+            }
+            if tmp_c == Category::VolumePrefix {
+                found_elements.add(Category::VolumeNumber, &data_to_parse);
+            }
             return true;
         }
         parse_single_subtoken(delimiter, &data_to_parse, found_elements);

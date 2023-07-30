@@ -418,6 +418,8 @@ fn test_62738764d5a9b418fd8ad7e56aadba512c814899() {
             Category::FileName,
             "Code_Geass_R2_TV_[20_of_25]_[ru_jp]_[HDTV]_[Varies_&_Cuba77_&_AnimeReactor_RU].mkv",
         )
+        .add(Category::Language, "ru")
+        .add(Category::Language, "jp")
         .add(Category::ReleaseGroup, "Varies & Cuba77 & AnimeReactor RU")
         .add(Category::Source, "HDTV");
     let parser_result = Parser::new(
@@ -552,8 +554,9 @@ fn test_2d32536c96b199939261e9ea80efd360ef9c900e() {
         .add(
             Category::FileName,
             "Noein_[01_of_24]_[ru_jp]_[bodlerov_&_torrents_ru].mkv",
-        )
-        .add(Category::ReleaseGroup, "bodlerov & torrents ru");
+        )        .add(Category::Language, "ru")
+        .add(Category::Language, "jp")
+        .add(Category::ReleaseGroup, "bodlerov_&_torrents_ru");
     let parser_result = Parser::new("Noein_[01_of_24]_[ru_jp]_[bodlerov_&_torrents_ru].mkv")
         .parse()
         .unwrap();
@@ -831,7 +834,9 @@ fn test_e2fcb66e127b09279605cc6e9db81cce5aa21e62() {
 #[test]
 fn test_5e414360884314b781ba9a96ce5d8e0d71445379() {
     let wanted = Elements::new()
-        .add(Category::AnimeTitle, "Ookiku Furikabutte S2")
+        .add(Category::AnimeTitle, "Ookiku Furikabutte")
+        .add(Category::AnimeSeasonPrefix, "S")
+        .add(Category::AnimeSeason, "2")
         .add(Category::EpisodeNumber, "09")
         .add(Category::FileChecksum, "BD841253")
         .add(Category::FileExtension, "mkv")

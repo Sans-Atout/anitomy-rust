@@ -36,7 +36,7 @@ pub fn parse_release_group(tokens: &mut [Token], found_elements: &mut Elements, 
                 for sub_token in token.sub_tokens() {
                     sub_token.category(SubTokenCategory::Found);
                 }
-                found_elements.add(Category::ReleaseGroup, token.raw_token());
+                found_elements.add(Category::ReleaseGroup, &token.raw_token());
                 return;
             }
             if token.contains_unknow() {
@@ -71,7 +71,9 @@ pub fn parse_particular_string_subtoken(
 
     while sub_token_id < all_subtoken.len() {
         if all_subtoken[sub_token_id].is_category(SubTokenCategory::Found) {
-            e.add(c, string_to_categorise.trim_matches(d));
+            if !string_to_categorise.trim_matches(d).is_empty() {
+                e.add(c, string_to_categorise.trim_matches(d));
+            }
             string_to_categorise = String::default();
             break;
         }
@@ -83,7 +85,7 @@ pub fn parse_particular_string_subtoken(
         all_subtoken[sub_token_id].category(SubTokenCategory::Found);
         sub_token_id += 1;
     }
-    if string_to_categorise != String::default() {
+    if !string_to_categorise.is_empty() {
         e.add(c, string_to_categorise.trim_matches(d));
     }
 }

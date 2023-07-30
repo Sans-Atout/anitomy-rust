@@ -54,8 +54,8 @@ impl Token {
         &mut self.tokens
     }
 
-    pub fn raw_token(&self) -> &String {
-        &self.raw_token
+    pub fn raw_token(&self) -> String {
+        self.raw_token.to_owned()
     }
 
     pub fn is_inside_delimiter(&self) -> bool {

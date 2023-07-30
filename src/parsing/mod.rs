@@ -45,7 +45,7 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
         }
         if let Some(keyword) = manager.find(&tested_value.to_uppercase()) {
             let c = keyword.get_category();
-            if (!c.is_searchable()) || (c.is_singular() && !elements.is_category_empty(c)) {
+            if (!c.is_searchable()) || (c.is_singular() && !elements.is_category_empty(c)) || elements.contains(c,&tested_value ){
                 continue;
             }
 

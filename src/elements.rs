@@ -103,6 +103,10 @@ impl Elements {
         self.elements.len()
     }
 
+    pub fn contains(&self, c : Category, v : &str) -> bool{
+        self.elements.contains(&Element::new(c, v))
+    }
+
     pub fn add(&mut self, c: Category, v: &str) -> Elements {
         self.elements.push(Element::new(c, v));
         self.to_owned()
