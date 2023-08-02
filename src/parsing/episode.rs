@@ -275,7 +275,7 @@ pub fn match_type_episode(
             if tmp_c == Category::AnimeSeasonPrefix {
                 found_elements.add(Category::AnimeSeason, &data_to_parse);
             }
-            if tmp_c == Category::EpisodePrefix {
+            if tmp_c == Category::EpisodePrefix || tmp_c == Category::AnimeType {
                 found_elements.add(Category::EpisodeNumber, &data_to_parse);
             }
             if tmp_c == Category::VolumePrefix {

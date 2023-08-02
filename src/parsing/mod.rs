@@ -102,6 +102,11 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
                 sub_tokens[index].category(SubTokenCategory::Found);
                 continue;
             }
+            if c == Category::AnimeType {
+                elements.add(c, &tested_value);
+                continue;
+
+            }
             if c != Category::Unknown {
                 elements.add(c, &tested_value);
                 sub_tokens[index].category(SubTokenCategory::Found);

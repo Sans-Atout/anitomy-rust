@@ -150,6 +150,7 @@ impl Manager {
             .add("2.0CH", Keyword::new(Category::AudioTerm))
             .add("2CH", Keyword::new(Category::AudioTerm))
             .add("5.1CH", Keyword::new(Category::AudioTerm))
+            .add("HE-AAC", Keyword::new(Category::AudioTerm))
             .add("DTS", Keyword::new(Category::AudioTerm))
             .add("DTS-ES", Keyword::new(Category::AudioTerm))
             .add("DTS5.1", Keyword::new(Category::AudioTerm))
