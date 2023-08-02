@@ -171,6 +171,7 @@ fn test_parse_single_subtoken() {
     let mut e = Elements::new();
     assert!(parse_single_subtoken(&d, "01v2", &mut e));
     assert!(parse_single_subtoken(&d, "1.5", &mut e));
+    assert!(match_fractal_episode("1.5", &mut e));
     assert!(parse_single_subtoken(&d, "01-03", &mut e));
     assert!(parse_single_subtoken(&d, "S01E02", &mut e));
     assert!(parse_single_subtoken(&d, "ONA1.5", &mut e));

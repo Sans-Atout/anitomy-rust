@@ -18,19 +18,27 @@ pub fn parse_episode_number(
         if !token.contains_unknow() {
             continue;
         }
-        for sub_token in token.sub_tokens() {
-            if sub_token.is_category(SubTokenCategory::Found) {
+        let subtokens = token.sub_tokens();
+        for subtoken_id in 0..subtokens.len() {
+            if subtokens[subtoken_id].is_category(SubTokenCategory::Found) {
                 continue;
             }
-            if sub_token.value().is_empty() {
-                sub_token.category(SubTokenCategory::Found);
+            if subtokens[subtoken_id].value().is_empty() {
+                subtokens[subtoken_id].category(SubTokenCategory::Found);
                 continue;
             }
-            if is_digit(&sub_token.value()) || !contains_digit(&sub_token.value()) {
+            if is_digit(&subtokens[subtoken_id].value())
+                || !contains_digit(&subtokens[subtoken_id].value())
+            {
                 continue;
             }
-            if parse_single_subtoken(delimiter, &sub_token.value(), found_elements) {
-                sub_token.category(SubTokenCategory::Found);
+            if parse_single_subtoken(delimiter, &subtokens[subtoken_id].value(), found_elements) {
+                subtokens[subtoken_id].category(SubTokenCategory::Found);
+            }
+            // Episode like : 1.5 etc
+            if match_fractal_episode(&subtokens[subtoken_id].value(), found_elements) {
+                subtokens[subtoken_id].category(SubTokenCategory::Found);
+                subtokens[subtoken_id + 1].category(SubTokenCategory::Found);
             }
         }
     }
@@ -48,16 +56,19 @@ pub fn parse_episode_number(
                         if is_digit(&next_value.value()) {
                             let right = next_value.value().parse::<i32>().unwrap();
                             let left = tested_value.parse::<i32>().unwrap();
-                            let fractal_regex =Regex::new(&format!(r"{}\.{}",left,right)).unwrap();
+                            let fractal_regex =
+                                Regex::new(&format!(r"{}\.{}", left, right)).unwrap();
 
-                            if right == 5 && fractal_regex.is_match(&raw_data) {
+                            let fractal_match = fractal_regex.is_match(&raw_data);
+                            if right == 5 && fractal_match {
                                 sub_tokens[index].category(SubTokenCategory::Found);
                                 sub_tokens[index + 1].category(SubTokenCategory::Found);
-                                found_elements
-                                    .add(Category::EpisodeNumber, &format!("{}.5",left));
-
+                                found_elements.add(Category::EpisodeNumber, &format!("{}.5", left));
+                                return;
                             }
-
+                            if fractal_match {
+                                continue;
+                            }
                             if left < right {
                                 sub_tokens[index].category(SubTokenCategory::Found);
                                 sub_tokens[index + 1].category(SubTokenCategory::Found);
@@ -107,16 +118,35 @@ pub fn parse_episode_number(
                 if !tmp_token.contains_unknow() {
                     continue;
                 }
+                let raw_token = tmp_token.raw_token();
                 let sub_token = tmp_token.sub_tokens();
-                for sub_token_index in 0..sub_token.len() {
-                    if let Some(single_sub_token) = sub_token.get_mut(sub_token_index) {
-                        if single_sub_token.is_category(SubTokenCategory::Found)
-                            || !is_digit(&single_sub_token.value())
+                let mut subtoken_index = 0;
+                while subtoken_index < sub_token.len() {
+                    if let Some(tested_subtoken) = sub_token.get(subtoken_index) {
+                        subtoken_index += 1;
+                        if tested_subtoken.is_category(SubTokenCategory::Found)
+                            || !is_digit(&tested_subtoken.value())
                         {
                             continue;
                         }
-                        single_sub_token.category(SubTokenCategory::Found);
-                        found_elements.add(Category::EpisodeNumber, &single_sub_token.value());
+                        if let Some(next_token) = sub_token.get(subtoken_index) {
+                            if is_digit(&next_token.value())
+                                && !next_token.is_category(SubTokenCategory::Found)
+                            {
+                                let fractal_regex_string = format!(
+                                    r"{}\.{}",
+                                    &tested_subtoken.value(),
+                                    &next_token.value()
+                                );
+                                let fractal_regex = Regex::new(&fractal_regex_string).unwrap();
+                                if fractal_regex.is_match(&raw_token) {
+                                    subtoken_index += 1;
+                                    continue;
+                                }
+                            }
+                        }
+                        found_elements.add(Category::EpisodeNumber, &tested_subtoken.value());
+                        sub_token[subtoken_index - 1].category(SubTokenCategory::Found);
                         return;
                     }
                 }
