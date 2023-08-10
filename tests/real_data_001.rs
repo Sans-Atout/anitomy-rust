@@ -687,7 +687,7 @@ fn test_09f2bd48e05e8990e3a17b64458e2c3a8060f19f() {
 #[test]
 fn test_1457cb4bd6716f7ef714d74c1e8fd099c85324a6() {
     let wanted = Elements::new()
-        .add(Category::AnimeTitle, "Mezzo DSA")
+        .add(Category::AnimeTitle, "Mezzo(DSA)")
         .add(Category::AudioTerm, "ogg")
         .add(Category::EpisodeNumber, "05")
         .add(Category::FileChecksum, "585d9971")
@@ -827,7 +827,7 @@ fn test_b3517e241415fc72103b83ac6fe11e9bc4757177() {
 #[test]
 fn test_e2fcb66e127b09279605cc6e9db81cce5aa21e62() {
     let wanted = Elements::new()
-        .add(Category::AnimeTitle, "Nurse Witch Komugi-chan Magikarte")
+        .add(Category::AnimeTitle, "Nurse Witch Komugi chan Magikarte")
         .add(Category::EpisodeNumber, "02.5")
         .add(Category::FileChecksum, "902BB314")
         .add(Category::FileExtension, "mkv")
