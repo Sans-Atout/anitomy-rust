@@ -299,8 +299,11 @@ fn test_989b47b818d1abebd279af59793bdc22b8525ce9() {
             Category::FileName,
             "[kito].Nazca.episode.01.DVDRip.[x264.He-aac.{Jpn}+Sub{Fr}].mkv",
         )
+        .add(Category::AudioTerm, "He-aac")
+        .add(Category::Subtitles, "Sub")
         .add(Category::Language, "Fr")
         .add(Category::Language, "Jpn")
+        .add(Category::EpisodePrefix, "episode")
         .add(Category::ReleaseGroup, "kito")
         .add(Category::Source, "DVDRip")
         .add(Category::VideoTerm, "x264");
@@ -426,7 +429,7 @@ fn test_62738764d5a9b418fd8ad7e56aadba512c814899() {
         )
         .add(Category::Language, "ru")
         .add(Category::Language, "jp")
-        .add(Category::ReleaseGroup, "Varies & Cuba77 & AnimeReactor RU")
+        .add(Category::ReleaseGroup, "Varies_&_Cuba77_&_AnimeReactor_RU")
         .add(Category::Source, "HDTV");
     let parser_result = Parser::new(
         "Code_Geass_R2_TV_[20_of_25]_[ru_jp]_[HDTV]_[Varies_&_Cuba77_&_AnimeReactor_RU].mkv",

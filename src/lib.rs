@@ -105,7 +105,6 @@ impl Parser {
         if self.ep_number {
             parse_episode_number(&self.allowed_delimiters, &mut tokens, &mut found_elements)
         }
-        println!("{:?}", tokens);
 
         parse_anime_title(&mut tokens, &mut found_elements, &self.allowed_delimiters);
 
@@ -116,6 +115,7 @@ impl Parser {
         if self.ep_title {
             parse_episode_title(&mut tokens, &mut found_elements, &self.allowed_delimiters);
         }
+        
         Ok(found_elements)
     }
 }

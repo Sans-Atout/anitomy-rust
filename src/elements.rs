@@ -160,6 +160,7 @@ impl PartialEq for Elements {
         }
         for e in self.elements.iter() {
             if !other.elements.contains(e) {
+                println!("{:?}", e);
                 return false;
             }
         }
