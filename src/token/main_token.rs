@@ -61,4 +61,8 @@ impl Token {
     pub fn is_inside_delimiter(&self) -> bool {
         self.inside_delimiter
     }
+
+    pub fn is_weak(&self) -> bool {
+        self.weak_delimiter
+    }
 }
