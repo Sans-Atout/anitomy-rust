@@ -107,6 +107,23 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
                 continue;
 
             }
+            if c == Category::Language {
+                let mut language_found = false;
+                if let Ok(languages) = elements.find_all(Category::Language) {
+                    for language in languages{
+                        if language.value.to_uppercase() == tested_value.to_uppercase(){
+                            language_found = true;
+                            break;
+                        }
+                    }
+                }
+                if language_found {
+                    continue;
+                }
+                elements.add(c, &tested_value);
+                sub_tokens[index].category(SubTokenCategory::Found);
+                continue;
+            }
             if c != Category::Unknown {
                 elements.add(c, &tested_value);
                 sub_tokens[index].category(SubTokenCategory::Found);

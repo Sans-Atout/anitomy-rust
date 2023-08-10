@@ -78,7 +78,7 @@ impl Manager {
             )
             .add(
                 "MOVIE",
-                Keyword::new(Category::AnimeType).identifiable(false),
+                Keyword::new(Category::VolumePrefix).identifiable(false),
             )
             .add("OAD", Keyword::new(Category::AnimeType).identifiable(false))
             .add("OAV", Keyword::new(Category::AnimeType).identifiable(false))
@@ -202,6 +202,7 @@ impl Manager {
             .add("ENGLISH", Keyword::new(Category::Language))
             .add("ESPANOL", Keyword::new(Category::Language))
             .add("JAP", Keyword::new(Category::Language))
+            .add("JPN", Keyword::new(Category::Language))
             .add("PT-BR", Keyword::new(Category::Language))
             .add("SPANISH", Keyword::new(Category::Language))
             .add("VOSTFR", Keyword::new(Category::Language))

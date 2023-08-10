@@ -274,8 +274,8 @@ fn test_49be603afd2b77129cc736f3f062e8e3cb48f918() {
 fn test_581972780a0f66afb7363c403a40dac3cb09675b() {
     let wanted = Elements::new()
         .add(Category::AnimeTitle, "One Piece")
-        .add(Category::AnimeType, "Movie")
-        .add(Category::EpisodeNumber, "9")
+        .add(Category::VolumePrefix, "Movie")
+        .add(Category::VolumeNumber, "9")
         .add(Category::FileExtension, "avi")
         .add(
             Category::FileName,
@@ -299,6 +299,8 @@ fn test_989b47b818d1abebd279af59793bdc22b8525ce9() {
             Category::FileName,
             "[kito].Nazca.episode.01.DVDRip.[x264.He-aac.{Jpn}+Sub{Fr}].mkv",
         )
+        .add(Category::Language, "Fr")
+        .add(Category::Language, "Jpn")
         .add(Category::ReleaseGroup, "kito")
         .add(Category::Source, "DVDRip")
         .add(Category::VideoTerm, "x264");
