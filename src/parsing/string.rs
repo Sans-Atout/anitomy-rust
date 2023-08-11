@@ -107,7 +107,7 @@ fn find_anime_title(tokens : &mut [Token], starting_index : usize, d: &[char]) -
 
     while token_index < tokens.len() {
         let is_weak = tokens[token_index].is_weak();
-        println!("----------------------\ntoken [{:?}]\n[{}][{}]\n----------------------n",tokens[token_index],!tokens[token_index].contains_unknow(),(tokens[token_index].is_inside_delimiter() || !is_weak));
+        println!("----------------------\ntoken [{:?}]\n[{}][{}]\n----------------------\n",tokens[token_index],!tokens[token_index].contains_unknow(),(tokens[token_index].is_inside_delimiter() || !is_weak));
         if !tokens[token_index].contains_unknow() || (tokens[token_index].is_inside_delimiter() && !is_weak) {
             return anime_title.trim_matches(d).to_owned();
         }
