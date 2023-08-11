@@ -103,7 +103,7 @@ impl Elements {
         self.elements.len()
     }
 
-    pub fn contains(&self, c : Category, v : &str) -> bool{
+    pub fn contains(&self, c: Category, v: &str) -> bool {
         self.elements.contains(&Element::new(c, v))
     }
 

@@ -63,7 +63,8 @@ pub fn parse_episode_number(
                             if right == 5 && fractal_match {
                                 sub_tokens[index].category(SubTokenCategory::Found);
                                 sub_tokens[index + 1].category(SubTokenCategory::Found);
-                                found_elements.add(Category::EpisodeNumber, &format!("{}.5", tested_value));
+                                found_elements
+                                    .add(Category::EpisodeNumber, &format!("{}.5", tested_value));
                                 return;
                             }
                             if fractal_match {

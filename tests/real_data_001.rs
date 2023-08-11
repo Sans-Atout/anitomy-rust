@@ -565,7 +565,8 @@ fn test_2d32536c96b199939261e9ea80efd360ef9c900e() {
         .add(
             Category::FileName,
             "Noein_[01_of_24]_[ru_jp]_[bodlerov_&_torrents_ru].mkv",
-        )        .add(Category::Language, "ru")
+        )
+        .add(Category::Language, "ru")
         .add(Category::Language, "jp")
         .add(Category::ReleaseGroup, "bodlerov_&_torrents_ru");
     let parser_result = Parser::new("Noein_[01_of_24]_[ru_jp]_[bodlerov_&_torrents_ru].mkv")

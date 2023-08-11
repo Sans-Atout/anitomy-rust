@@ -115,8 +115,7 @@ impl Parser {
         if self.ep_title {
             parse_episode_title(&mut tokens, &mut found_elements, &self.allowed_delimiters);
         }
-        
+
         Ok(found_elements)
     }
-
 }

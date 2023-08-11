@@ -45,12 +45,20 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
         }
         if let Some(keyword) = manager.find(&tested_value.to_uppercase()) {
             let c = keyword.get_category();
-            if (!c.is_searchable()) || (c.is_singular() && !elements.is_category_empty(c)) || elements.contains(c,&tested_value ){
+            if (!c.is_searchable())
+                || (c.is_singular() && !elements.is_category_empty(c))
+                || elements.contains(c, &tested_value)
+            {
                 continue;
             }
 
-            if tested_value.to_uppercase() == "E" && index+2 < sub_tokens.len(){
-                let supiscious_keyword = format!("{}-{}-{}",tested_value,sub_tokens[index+1].value(),sub_tokens[index+2].value());
+            if tested_value.to_uppercase() == "E" && index + 2 < sub_tokens.len() {
+                let supiscious_keyword = format!(
+                    "{}-{}-{}",
+                    tested_value,
+                    sub_tokens[index + 1].value(),
+                    sub_tokens[index + 2].value()
+                );
                 if supiscious_keyword.to_uppercase() == "E-AC-3" {
                     sub_tokens[index].category(SubTokenCategory::Found);
                     sub_tokens[index + 1].category(SubTokenCategory::Found);
@@ -59,8 +67,9 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
                     continue;
                 }
             }
-            if tested_value.to_uppercase() == "DTS" && index+1 < sub_tokens.len() {
-                let supiscious_keyword = format!("{}-{}",tested_value,sub_tokens[index+1].value());
+            if tested_value.to_uppercase() == "DTS" && index + 1 < sub_tokens.len() {
+                let supiscious_keyword =
+                    format!("{}-{}", tested_value, sub_tokens[index + 1].value());
                 if supiscious_keyword.to_uppercase() == "DTS-ES" {
                     sub_tokens[index].category(SubTokenCategory::Found);
                     sub_tokens[index + 1].category(SubTokenCategory::Found);
@@ -124,13 +133,12 @@ pub fn parsing_single_token(elements: &mut Elements, token: &mut Token, manager:
             if c == Category::AnimeType {
                 elements.add(c, &tested_value);
                 continue;
-
             }
             if c == Category::Language {
                 let mut language_found = false;
                 if let Ok(languages) = elements.find_all(Category::Language) {
-                    for language in languages{
-                        if language.value.to_uppercase() == tested_value.to_uppercase(){
+                    for language in languages {
+                        if language.value.to_uppercase() == tested_value.to_uppercase() {
                             language_found = true;
                             break;
                         }
