@@ -4,7 +4,7 @@ use crate::{
     elements::{Category, Elements},
     keyword::Manager,
     split::split_type_and_ep,
-    tokenizer::{SubTokenCategory, Token},
+    token::{main_token::Token, subtoken::SubTokenCategory},
 };
 
 use super::number::{contains_digit, is_digit};
@@ -14,20 +14,143 @@ pub fn parse_episode_number(
     tokens_to_parse: &mut Vec<Token>,
     found_elements: &mut Elements,
 ) {
-    for token in tokens_to_parse {
+    for token in tokens_to_parse.iter_mut() {
         if !token.contains_unknow() {
             continue;
         }
-        for sub_token in token.sub_tokens() {
-            if sub_token.value().is_empty() {
-                sub_token.category(SubTokenCategory::Found);
+        let subtokens = token.sub_tokens();
+        for subtoken_id in 0..subtokens.len() {
+            if subtokens[subtoken_id].is_category(SubTokenCategory::Found) {
                 continue;
             }
-            if is_digit(&sub_token.value()) || !contains_digit(&sub_token.value()) {
+            if subtokens[subtoken_id].value().is_empty() {
+                subtokens[subtoken_id].category(SubTokenCategory::Found);
                 continue;
             }
-            if parse_single_subtoken(delimiter, &sub_token.value(), found_elements) {
-                sub_token.category(SubTokenCategory::Found);
+            if is_digit(&subtokens[subtoken_id].value())
+                || !contains_digit(&subtokens[subtoken_id].value())
+            {
+                continue;
+            }
+            if parse_single_subtoken(delimiter, &subtokens[subtoken_id].value(), found_elements) {
+                subtokens[subtoken_id].category(SubTokenCategory::Found);
+            }
+            // Episode like : 1.5 etc
+            if match_fractal_episode(&subtokens[subtoken_id].value(), found_elements) {
+                subtokens[subtoken_id].category(SubTokenCategory::Found);
+                subtokens[subtoken_id + 1].category(SubTokenCategory::Found);
+            }
+        }
+    }
+    if found_elements.is_category_empty(Category::EpisodeNumber) {
+        for token in tokens_to_parse.iter_mut() {
+            if !token.contains_unknow() {
+                continue;
+            }
+            let raw_data = token.raw_token();
+            let sub_tokens = token.sub_tokens();
+            for index in 0..sub_tokens.len() {
+                let tested_value = sub_tokens[index].value();
+                if is_digit(&tested_value) {
+                    if let Some(next_value) = sub_tokens.get(index + 1) {
+                        if is_digit(&next_value.value()) {
+                            let right = next_value.value().parse::<i32>().unwrap();
+                            let left = tested_value.parse::<i32>().unwrap();
+                            let fractal_regex =
+                                Regex::new(&format!(r"{}\.{}", tested_value, right)).unwrap();
+
+                            let fractal_match = fractal_regex.is_match(&raw_data);
+                            if right == 5 && fractal_match {
+                                sub_tokens[index].category(SubTokenCategory::Found);
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &format!("{}.5", tested_value));
+                                return;
+                            }
+                            if fractal_match {
+                                continue;
+                            }
+                            if left < right {
+                                sub_tokens[index].category(SubTokenCategory::Found);
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index].value());
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index + 1].value());
+                                return;
+                            }
+                        }
+                    }
+                    if let Some(sub_token) = sub_tokens.get(index + 2) {
+                        if is_digit(&sub_token.value()) {
+                            let middle = sub_tokens[index + 1].value();
+                            let right = sub_token.value().parse::<i32>().unwrap();
+                            let left = tested_value.parse::<i32>().unwrap();
+                            let p_delimiter = middle.chars().next().unwrap();
+                            if middle == "of" && left < right {
+                                sub_tokens[index].category(SubTokenCategory::Found);
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                sub_tokens[index + 2].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index].value());
+                                return;
+                            }
+
+                            if delimiter.contains(&p_delimiter) && middle.len() == 1 && left < right
+                            {
+                                sub_tokens[index].category(SubTokenCategory::Found);
+                                sub_tokens[index + 1].category(SubTokenCategory::Found);
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index].value());
+                                found_elements
+                                    .add(Category::EpisodeNumber, &sub_tokens[index + 1].value());
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if found_elements.is_category_empty(Category::EpisodeNumber) {
+        for token_index in 0..tokens_to_parse.len() {
+            if let Some(tmp_token) = tokens_to_parse.get_mut(token_index) {
+                if !tmp_token.contains_unknow() {
+                    continue;
+                }
+                let raw_token = tmp_token.raw_token();
+                let sub_token = tmp_token.sub_tokens();
+                let mut subtoken_index = 0;
+                while subtoken_index < sub_token.len() {
+                    if let Some(tested_subtoken) = sub_token.get(subtoken_index) {
+                        subtoken_index += 1;
+                        if tested_subtoken.is_category(SubTokenCategory::Found)
+                            || !is_digit(&tested_subtoken.value())
+                        {
+                            continue;
+                        }
+                        if let Some(next_token) = sub_token.get(subtoken_index) {
+                            if is_digit(&next_token.value())
+                                && !next_token.is_category(SubTokenCategory::Found)
+                            {
+                                let fractal_regex_string = format!(
+                                    r"{}\.{}",
+                                    &tested_subtoken.value(),
+                                    &next_token.value()
+                                );
+                                let fractal_regex = Regex::new(&fractal_regex_string).unwrap();
+                                if fractal_regex.is_match(&raw_token) {
+                                    subtoken_index += 1;
+                                    continue;
+                                }
+                            }
+                        }
+                        found_elements.add(Category::EpisodeNumber, &tested_subtoken.value());
+                        sub_token[subtoken_index - 1].category(SubTokenCategory::Found);
+                        return;
+                    }
+                }
             }
         }
     }
@@ -38,7 +161,6 @@ pub fn parse_single_subtoken(
     string_to_parse: &str,
     found_elements: &mut Elements,
 ) -> bool {
-    // Multi episode matching test
     if match_multiple_ep(string_to_parse, found_elements) {
         return true;
     }
@@ -148,7 +270,20 @@ pub fn match_type_episode(
     let keyword_manager = Manager::new();
     let trim_keyword = potential_keyword.trim_matches(delimiter.as_slice());
     if let Some(keyword) = keyword_manager.find(&trim_keyword.to_uppercase()) {
-        found_elements.add(keyword.get_category(), trim_keyword);
+        let tmp_c = keyword.get_category();
+        found_elements.add(tmp_c, trim_keyword);
+        if is_digit(&data_to_parse) {
+            if tmp_c == Category::AnimeSeasonPrefix {
+                found_elements.add(Category::AnimeSeason, &data_to_parse);
+            }
+            if tmp_c == Category::EpisodePrefix || tmp_c == Category::AnimeType {
+                found_elements.add(Category::EpisodeNumber, &data_to_parse);
+            }
+            if tmp_c == Category::VolumePrefix {
+                found_elements.add(Category::VolumeNumber, &data_to_parse);
+            }
+            return true;
+        }
         parse_single_subtoken(delimiter, &data_to_parse, found_elements);
         return true;
     }
@@ -208,7 +343,6 @@ pub fn match_partial_episode_pattern(tested_string: &str, found_elements: &mut E
         non_number = true;
         suffix_array.push(test_char);
     }
-    println!("{:?}", suffix_array);
     if suffix_array.len() == 1
         && vec!['A', 'B', 'C'].contains(&suffix_array.first().unwrap().to_ascii_uppercase())
     {

@@ -78,7 +78,7 @@ impl Manager {
             )
             .add(
                 "MOVIE",
-                Keyword::new(Category::AnimeType).identifiable(false),
+                Keyword::new(Category::VolumePrefix).identifiable(false),
             )
             .add("OAD", Keyword::new(Category::AnimeType).identifiable(false))
             .add("OAV", Keyword::new(Category::AnimeType).identifiable(false))
@@ -150,6 +150,7 @@ impl Manager {
             .add("2.0CH", Keyword::new(Category::AudioTerm))
             .add("2CH", Keyword::new(Category::AudioTerm))
             .add("5.1CH", Keyword::new(Category::AudioTerm))
+            .add("HE-AAC", Keyword::new(Category::AudioTerm))
             .add("DTS", Keyword::new(Category::AudioTerm))
             .add("DTS-ES", Keyword::new(Category::AudioTerm))
             .add("DTS5.1", Keyword::new(Category::AudioTerm))
@@ -201,11 +202,15 @@ impl Manager {
             .add("ENGLISH", Keyword::new(Category::Language))
             .add("ESPANOL", Keyword::new(Category::Language))
             .add("JAP", Keyword::new(Category::Language))
+            .add("JPN", Keyword::new(Category::Language))
             .add("PT-BR", Keyword::new(Category::Language))
             .add("SPANISH", Keyword::new(Category::Language))
             .add("VOSTFR", Keyword::new(Category::Language))
             .add("ESP", Keyword::new(Category::Language).identifiable(false))
             .add("ITA", Keyword::new(Category::Language).identifiable(false))
+            .add("FR", Keyword::new(Category::Language).identifiable(false))
+            .add("JP", Keyword::new(Category::Language).identifiable(false))
+            .add("RU", Keyword::new(Category::Language).identifiable(false))
             .add("REMASTER", Keyword::new(Category::Other))
             .add("REMASTERED", Keyword::new(Category::Other))
             .add("UNCENSORED", Keyword::new(Category::Other))
