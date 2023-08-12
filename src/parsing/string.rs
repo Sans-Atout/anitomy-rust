@@ -8,28 +8,6 @@ use crate::{
 
 use super::number::is_digit;
 
-pub fn parse_anime_title_old(tokens: &mut [Token], found_elements: &mut Elements, d: &[char]) {
-    for token in tokens.iter_mut() {
-        if token.contains_unknow() && !token.is_inside_delimiter() {
-            println!("found token : {:?}", token);
-            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle, d);
-            return;
-        }
-    }
-
-    let mut is_first_inside_delimiter_token = true;
-    for token in tokens.iter_mut() {
-        if token.contains_unknow() && token.is_inside_delimiter() {
-            if is_first_inside_delimiter_token {
-                is_first_inside_delimiter_token = false;
-                continue;
-            }
-            parse_particular_string_subtoken(token, found_elements, Category::AnimeTitle, d);
-            return;
-        }
-    }
-}
-
 pub fn parse_anime_title(tokens: &mut [Token], found_elements: &mut Elements, d: &[char]) {
     let mut tmp_index = 0;
     let mut anime_title = String::default();

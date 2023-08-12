@@ -26,10 +26,6 @@ fn testing_anime_season_prefix() {
     assert_eq!(tested.unwrap(), wanted)
 }
 #[test]
-fn testing_anime_title() {
-    // TODO
-}
-#[test]
 fn testing_anime_type() {
     let elements = Parser::new("Ushio to Tora (TV)").parse();
     assert!(elements.is_ok());

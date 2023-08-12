@@ -74,7 +74,7 @@ fn test_f42fe1e2a97c9eb5bf923a1f77172259ad6c1193() {
     assert_eq!(wanted, parser_result);
 }
 #[test]
-///! False positive
+/// ! False positive
 fn test_fc92da9e05a8dc196678d3ca567a98186a6825b7() {
     let wanted = Elements::new()
         .add(Category::AnimeTitle, "Special A")

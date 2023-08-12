@@ -514,8 +514,7 @@ fn test_59258c2b46b31fe8843a482d1ee7a338a504a7be() {
         .add(Category::Source, "BD")
         .add(Category::VideoTerm, "H264")
         .add(Category::VideoTerm, "10bit")
-        .add(Category::EpisodePrefix, "ep")
-        ;
+        .add(Category::EpisodePrefix, "ep");
     let parser_result =
         Parser::new("Aim_For_The_Top!_Gunbuster-ep1.BD(H264.FLAC.10bit)[KAA][69ECCDCF].mkv")
             .parse()
@@ -845,7 +844,8 @@ fn test_eb302b3d4af37a92584d9217e24f1efe08db24ee() {
     let wanted = Elements::new()
         .add(Category::AnimeTitle, "Howl's Moving Castle")
         .add(Category::AnimeYear, "2004")
-        .add(Category::AudioTerm, "flac").add(Category::AudioTerm,"dts")
+        .add(Category::AudioTerm, "flac")
+        .add(Category::AudioTerm, "dts")
         .add(Category::FileExtension, "mkv")
         .add(
             Category::FileName,
