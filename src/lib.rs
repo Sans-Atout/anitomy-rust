@@ -9,14 +9,13 @@ use parsing::{
 use utils::remove_ignored_string;
 
 pub mod chunk;
-
 pub mod elements;
 pub mod errors;
-pub mod keyword;
-pub mod parsing;
-pub mod split;
+mod keyword;
+mod parsing;
+mod split;
 mod utils;
-pub mod utils;
+mod traits;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Parser {

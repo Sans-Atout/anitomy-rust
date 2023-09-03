@@ -1,11 +1,22 @@
 use unicode_normalization::UnicodeNormalization;
 
-pub fn remove_ignored_string(working_string: &str, ignored_str: &[String]) -> String {
-    let mut return_string = working_string.to_string();
-    for i_s in ignored_str {
-        return_string = return_string.replace(i_s, "");
+use crate::{chunk::Chunk, traits::ExtendedString};
+
+impl ExtendedString for str {
+    fn remove_ignored(&self, ignored: &[String]) -> String {
+        let mut return_value = self.to_string();
+        for string in ignored {
+            return_value = return_value.replace(string, "");
+        }
+        return_value
     }
-    return_string
+
+    fn normalize(&self) -> String {
+        self.nfkd()
+            .filter(|c| c.is_ascii())
+            .collect::<String>()
+            .to_uppercase()
+    }
 }
 
 pub fn normalize(to_normalize: &str) -> String {
