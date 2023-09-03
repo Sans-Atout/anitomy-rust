@@ -8,14 +8,14 @@ use parsing::{
 };
 use utils::remove_ignored_string;
 
-use crate::{parsing::parsing_keywords, split::split_raw_data};
+pub mod chunk;
 
 pub mod elements;
 pub mod errors;
 pub mod keyword;
 pub mod parsing;
 pub mod split;
-pub mod token;
+mod utils;
 pub mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
