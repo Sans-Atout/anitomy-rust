@@ -116,5 +116,5 @@ for data in test_data:
     print(str(printable).format(id=data["id"],status=data["status"],passed=data["passed"],total=data["total"]))
 
 success_rate = round(100*PASSED/TOTAL)
-printable = "\n"+Fore.RESET + "#" * len(TITLE) + "\nTest sucess rate :[" + Fore.MAGENTA  +"{rate}"+Fore.RESET+" %]\n"+ Fore.RESET +"#" * len(TITLE)
+printable = "\n"+Fore.RESET + "#" * (len(TITLE)+3) + "\nTest sucess rate : [" + Fore.MAGENTA  +"{rate}"+Fore.RESET+" %]\n"+ Fore.RESET +"#" * (len(TITLE)+3)
 print(str(printable).format(rate = success_rate))

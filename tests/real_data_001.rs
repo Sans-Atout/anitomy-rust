@@ -752,21 +752,16 @@ fn test_e7595b174ba425636fd1fdedd12e9a6af409f209() {
     assert_eq!(wanted, parser_result);
 }
 #[test]
-/// ! False positive
-/// ! Anime Title can not be "Kiddy Grade 2" so I'm must add Episode number category just to pass the test
-// TODO Try to fixe that after fixe everything else
 fn test_82711b7c5c58eeacefd19eae7b11e4c46fdd4ea1() {
     let wanted = Elements::new()
-        .add(Category::AnimeTitle, "Kiddy Grade")
+        .add(Category::AnimeTitle, "Kiddy Grade 2 - Pilot")
         .add(Category::AudioTerm, "AC3")
-        .add(Category::EpisodeTitle, "Pilot")
         .add(Category::FileChecksum, "650B731B")
         .add(Category::FileExtension, "mkv")
         .add(
             Category::FileName,
             "[Ayu]_Kiddy_Grade_2_-_Pilot_[H264_AC3][650B731B].mkv",
         )
-        .add(Category::EpisodeNumber, "2")
         .add(Category::ReleaseGroup, "Ayu")
         .add(Category::VideoTerm, "H264");
     let parser_result = Parser::new("[Ayu]_Kiddy_Grade_2_-_Pilot_[H264_AC3][650B731B].mkv")

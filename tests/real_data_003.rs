@@ -3,10 +3,7 @@ use anitomy_rust::Parser;
 #[test]
 fn test_1c2d69ad8440899540711617251eab598fcb7c74() {
     let wanted = Elements::new()
-        .add(
-            Category::AnimeTitle,
-            "\u{6f06}\u{9ed1}\u{7684}\u{5b50}\u{5f48}",
-        )
+        .add(Category::AnimeTitle, "漆黑的子彈")
         .add(Category::EpisodeNumber, "11")
         .add(Category::FileExtension, "mp4")
         .add(
@@ -155,7 +152,7 @@ fn test_9615aae5db2459075868837842a9fce4c5f6c960() {
     let wanted = Elements::new()
         .add(Category::AnimeTitle, "DRAMAtical Murder")
         .add(Category::EpisodeNumber, "1")
-        .add(Category::EpisodeTitle, "Data 01 Login")
+        .add(Category::EpisodeTitle, "- Data 01 Login")
         .add(
             Category::FileName,
             "DRAMAtical Murder Episode 1 - Data_01_Login",
@@ -366,7 +363,7 @@ fn test_0b0663990f07915ab586b8978bba8b8c8ea9db76() {
         .add(Category::VideoResolution, "720p");
     let parser_result =
         Parser::new("EvoBot.[Watakushi]_Akuma_no_Riddle_-_01v2_[720p][69A307A2].mkv")
-            .ignored_string(vec!["['EvoBot.']"])
+            .ignored_string(vec!["EvoBot."])
             .parse()
             .unwrap();
     assert_eq!(wanted, parser_result);

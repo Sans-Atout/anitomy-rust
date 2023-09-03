@@ -3,6 +3,39 @@ use std::vec;
 use crate::errors::CategoryNotFound;
 use error_stack::{Report, Result};
 
+const SEARCHABLE_CATEGORIES: [Category; 17] = [
+    Category::AnimeSeasonPrefix,
+    Category::AnimeType,
+    Category::AudioTerm,
+    Category::DeviceCompatibility,
+    Category::EpisodePrefix,
+    Category::FileChecksum,
+    Category::Language,
+    Category::Other,
+    Category::ReleaseGroup,
+    Category::ReleaseInformation,
+    Category::ReleaseVersion,
+    Category::Source,
+    Category::Subtitles,
+    Category::VideoResolution,
+    Category::VideoResolution,
+    Category::VideoTerm,
+    Category::VolumePrefix,
+];
+
+const NON_SINGULAR_CATEGORIES: [Category; 10] = [
+    Category::AnimeSeason,
+    Category::AnimeType,
+    Category::AudioTerm,
+    Category::DeviceCompatibility,
+    Category::EpisodeNumber,
+    Category::Language,
+    Category::Other,
+    Category::ReleaseInformation,
+    Category::Source,
+    Category::VideoTerm,
+];
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Category {
     AnimeSeason,
@@ -35,42 +68,11 @@ pub enum Category {
 
 impl Category {
     pub fn is_singular(&self) -> bool {
-        let non_singular_categories = vec![
-            Category::AnimeSeason,
-            Category::AnimeType,
-            Category::AudioTerm,
-            Category::DeviceCompatibility,
-            Category::EpisodeNumber,
-            Category::Language,
-            Category::Other,
-            Category::ReleaseInformation,
-            Category::Source,
-            Category::VideoTerm,
-        ];
-        !non_singular_categories.contains(self)
+        !NON_SINGULAR_CATEGORIES.contains(self)
     }
 
     pub fn is_searchable(&self) -> bool {
-        let searchable = vec![
-            Category::AnimeSeasonPrefix,
-            Category::AnimeType,
-            Category::AudioTerm,
-            Category::DeviceCompatibility,
-            Category::EpisodePrefix,
-            Category::FileChecksum,
-            Category::Language,
-            Category::Other,
-            Category::ReleaseGroup,
-            Category::ReleaseInformation,
-            Category::ReleaseVersion,
-            Category::Source,
-            Category::Subtitles,
-            Category::VideoResolution,
-            Category::VideoResolution,
-            Category::VideoTerm,
-            Category::VolumePrefix,
-        ];
-        searchable.contains(self)
+        SEARCHABLE_CATEGORIES.contains(self)
     }
 }
 

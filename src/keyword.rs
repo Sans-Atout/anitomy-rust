@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::elements::Category;
+use crate::{elements::Category, traits::ExtendedString};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Keyword {
@@ -149,6 +149,7 @@ impl Manager {
             )
             .add("2.0CH", Keyword::new(Category::AudioTerm))
             .add("2CH", Keyword::new(Category::AudioTerm))
+            .add("5.1", Keyword::new(Category::AudioTerm))
             .add("5.1CH", Keyword::new(Category::AudioTerm))
             .add("HE-AAC", Keyword::new(Category::AudioTerm))
             .add("DTS", Keyword::new(Category::AudioTerm))
@@ -323,6 +324,95 @@ impl Manager {
     }
 
     pub fn find(&self, s: &str) -> Option<&Keyword> {
-        self.keywords.get(s)
+        self.keywords.get(&s.normalize())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::{
+        elements::Category,
+        keyword::{Keyword, Manager},
+    };
+
+    #[test]
+    fn keyword_001() {
+        let keyword = Keyword::new(Category::AnimeSeason)
+            .identifiable(false)
+            .valid(false)
+            .searchable(false);
+        assert!(!keyword.is_identifiable());
+        assert!(!keyword.is_searchable());
+        assert!(!keyword.is_valid());
+    }
+
+    #[test]
+    fn keyword_002() {
+        let keyword = Keyword::new(Category::AnimeSeason)
+            .identifiable(false)
+            .searchable(false);
+        assert!(!keyword.is_identifiable());
+        assert!(!keyword.is_searchable());
+        assert!(keyword.is_valid());
+    }
+
+    #[test]
+    fn keyword_003() {
+        let keyword = Keyword::new(Category::AnimeSeason)
+            .identifiable(false)
+            .valid(false);
+        assert!(!keyword.is_identifiable());
+        assert!(keyword.is_searchable());
+        assert!(!keyword.is_valid());
+    }
+
+    #[test]
+    fn keyword_004() {
+        let keyword = Keyword::new(Category::AnimeSeason)
+            .searchable(false)
+            .valid(false);
+        assert!(keyword.is_identifiable());
+        assert!(!keyword.is_searchable());
+        assert!(!keyword.is_valid());
+    }
+
+    #[test]
+    fn keyword_005() {
+        let keyword = Keyword::new(Category::AnimeSeason).valid(false);
+        assert!(keyword.is_identifiable());
+        assert!(keyword.is_searchable());
+        assert!(!keyword.is_valid());
+    }
+
+    #[test]
+    fn keyword_006() {
+        let keyword = Keyword::new(Category::AnimeSeason).searchable(false);
+        assert!(keyword.is_identifiable());
+        assert!(!keyword.is_searchable());
+        assert!(keyword.is_valid());
+    }
+
+    #[test]
+    fn keyword_007() {
+        let keyword = Keyword::new(Category::AnimeSeason).identifiable(false);
+        assert!(!keyword.is_identifiable());
+        assert!(keyword.is_searchable());
+        assert!(keyword.is_valid());
+    }
+
+    #[test]
+    fn keyword_008() {
+        let keyword = Keyword::new(Category::AnimeSeason);
+        assert!(keyword.is_identifiable());
+        assert!(keyword.is_searchable());
+        assert!(keyword.is_valid());
+    }
+
+    #[test]
+    fn manager_find() {
+        let manager = Manager::new();
+        assert!(manager.find("VOLUME").is_some());
+        assert!(manager.find("VolumE").is_some());
+        assert!(manager.find("My CUSTOM KEYWORD").is_none());
     }
 }
