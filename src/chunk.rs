@@ -69,6 +69,104 @@ impl Display for Status {
         }
     }
 }
+
+impl ChunksManipulation for Vec<Chunk> {
+
+    fn isolated_id(&self) -> Option<usize> {
+        let mut is_unique_unk = true;
+        let mut id = 0;
+        let mut return_id = -1;
+        while let Some(c) = self.get(id) {
+            if c.is_status(Status::Unknown) {
+                if !is_unique_unk {
+                    return None;
+                }
+                is_unique_unk = false;
+                return_id = id as i32;
+            }
+            id += 1;
+        }
+        usize::try_from(return_id).ok()
+    }
+
+    fn get_isolated_number(&self) -> Vec<usize> {
+        let mut isolated_number_id = Vec::default();
+        let mut starting_id = 0;
+        let mut id = 0;
+        let mut splitter_position: Vec<(usize, usize)> = Vec::default();
+        let mut contain_unknown = false;
+
+        while id < self.len() {
+            if self[id].is_status(Status::StrongDelimiter) {
+                if contain_unknown {
+                    if !splitter_position.is_empty() {
+                        contain_unknown = false;
+                        for split_id in 0..splitter_position.len() {
+                            let (_, starting) = splitter_position[split_id];
+                            let ending = match splitter_position.get(split_id + 1) {
+                                Some((s, _)) => s.to_owned(),
+                                None => id,
+                            };
+                            for (in_split_id, chunk) in
+                                self.iter().enumerate().take(ending).skip(starting)
+                            {
+                                if chunk.may_be_isolated() {
+                                    isolated_number_id.push(in_split_id);
+                                }
+                            }
+                        }
+                        splitter_position = Vec::default();
+                        starting_id = id;
+                        id += 1;
+                        continue;
+                    }
+                    for (usize_id, chunk) in self.iter().enumerate().take(id).skip(starting_id) {
+                        if chunk.may_be_isolated() {
+                            isolated_number_id.push(usize_id);
+                        }
+                    }
+                }
+                starting_id = id;
+                id += 1;
+                continue;
+            }
+            if self[id].is_status(Status::WeakDelimiter)
+                && self
+                    .get(id + 1)
+                    .is_some_and(|c| c.is_status(Status::WeakDelimiter))
+                && self
+                    .get(id + 2)
+                    .is_some_and(|c| c.is_status(Status::WeakDelimiter))
+            {
+                splitter_position.push((id, id + 2));
+                id += 3;
+                contain_unknown = false;
+                continue;
+            }
+            if self[id].may_be_isolated() {
+                contain_unknown = true;
+            }
+            id += 1;
+        }
+        if !splitter_position.is_empty() {
+            for split_id in 0..splitter_position.len() {
+                let (_, starting) = splitter_position[split_id];
+                let ending = match splitter_position.get(split_id + 1) {
+                    Some((s, _)) => s.to_owned(),
+                    None => self.len(),
+                };
+                for (in_split_id, chunk) in self.iter().enumerate().take(ending).skip(starting) {
+                    if chunk.may_be_isolated() {
+                        isolated_number_id.push(in_split_id);
+                    }
+                }
+            }
+        }
+        println!("hint : [{:?}]", splitter_position);
+        isolated_number_id
+    }
+}
+
 #[cfg(test)]
 pub mod test {
     use super::Chunk;
