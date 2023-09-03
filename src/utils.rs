@@ -19,17 +19,45 @@ impl ExtendedString for str {
     }
 }
 
-pub fn normalize(to_normalize: &str) -> String {
-    let all_char = to_normalize.nfkd();
-    let mut normalized_char: Vec<char> = vec![];
-    for c in all_char {
-        if c.is_ascii() {
-            normalized_char.push(c);
-        }
+#[cfg(test)]
+mod test {
+    use crate::traits::ExtendedString;
+
+    #[test]
+    fn remove_one_string() {
+        let tested_string = "Hello World!";
+        let r1 = tested_string.remove_ignored(&["World".to_string()]);
+        assert_eq!(r1, "Hello !");
     }
-    normalized_char
-        .iter()
-        .cloned()
-        .collect::<String>()
-        .to_uppercase()
+
+    #[test]
+    fn remove_multiple() {
+        let tested_string = "Hello World!";
+        let r1 = tested_string.remove_ignored(&["World".to_string(), "Hello".to_string()]);
+        assert_eq!(r1, " !");
+    }
+
+    #[test]
+    fn normalize() {
+        assert_eq!("HELLO WORLD !", "Hello World !".normalize());
+        assert_eq!("EPISODE1", "épisode1".normalize());
+    }
+
+    #[test]
+    fn nothing_to_remove() {
+        let tested_string = "EvoBot.[Watakushi]_Akuma_no_Riddle_-_01v2_[720p][69A307A2].mkv";
+        let r2 = tested_string.remove_ignored(&["['EvoBot.']".to_string()]);
+        assert_eq!(r2, tested_string);
+    }
+
+    #[test]
+    fn real_test_data() {
+        let tested_string = "EvoBot.[Watakushi]_Akuma_no_Riddle_-_01v2_[720p][69A307A2].mkv";
+        let r2 = tested_string.remove_ignored(&["EvoBot.".to_string()]);
+        assert_eq!(
+            r2,
+            "[Watakushi]_Akuma_no_Riddle_-_01v2_[720p][69A307A2].mkv"
+        );
+    }
 }
+
