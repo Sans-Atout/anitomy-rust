@@ -1,11 +1,8 @@
-use regex::Regex;
-
 use crate::chunk::Status;
 use crate::{
     chunk::Chunk,
     elements::{Category, Elements},
-    keyword::Manager,
-    split::{CLOSING_DELIMITER, OPENING_DELIMITER},
+    split::OPENING_DELIMITER,
 };
 
 pub fn parse_anime_title(chunks: &mut [Chunk], e: &mut Elements, d: &[char]) {
@@ -52,7 +49,6 @@ pub fn parse_anime_title(chunks: &mut [Chunk], e: &mut Elements, d: &[char]) {
         Category::AnimeTitle,
         anime_title.trim_matches(trim_delimiter.as_slice()),
     );
-
 }
 
 pub fn parse_release_group(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
@@ -136,5 +132,8 @@ pub fn parse_episode_title(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
     OPENING_DELIMITER.map(|d| trim_delimiter.push(d));
     println!("##########################################################");
 
-    e.add(Category::EpisodeTitle, episode_title.trim_matches(trim_delimiter.as_slice()));
+    e.add(
+        Category::EpisodeTitle,
+        episode_title.trim_matches(trim_delimiter.as_slice()),
+    );
 }

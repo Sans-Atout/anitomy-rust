@@ -1,7 +1,11 @@
-use crate::{chunk::Chunk};
+use crate::chunk::Chunk;
 
-pub const OPENING_DELIMITER : [char; 7] = ['[', '(', '{', '\u{300C}', '\u{300E}', '\u{3010}', '\u{FF08}'];
-pub const CLOSING_DELIMITER : [char; 7] = [']', ')', '}', '\u{300D}', '\u{300F}', '\u{3011}', '\u{FF09}'];
+pub const OPENING_DELIMITER: [char; 7] = [
+    '[', '(', '{', '\u{300C}', '\u{300E}', '\u{3010}', '\u{FF08}',
+];
+pub const CLOSING_DELIMITER: [char; 7] = [
+    ']', ')', '}', '\u{300D}', '\u{300F}', '\u{3011}', '\u{FF09}',
+];
 
 pub fn split_type_and_ep(to_parse: &str) -> (String, String) {
     let mut keyword_char: Vec<char> = Vec::default();
@@ -32,21 +36,29 @@ pub fn split_raw_data(raw_data: &str, delimiter: &[char]) -> Vec<Chunk> {
     let mut _important_delimiter_end: char = char::default();
 
     let raw_chars: Vec<char> = raw_data.chars().collect();
-    let mut depth : i16 = 0;
-    let mut tmp_word : Vec<char> = Vec::default();
+    let mut depth: i16 = 0;
+    let mut tmp_word: Vec<char> = Vec::default();
 
     for c in raw_chars {
         if OPENING_DELIMITER.contains(&c) {
-            tmp_word =  reset_tmp_word(&mut token, &tmp_word, &depth);
+            tmp_word = reset_tmp_word(&mut token, &tmp_word, &depth);
             depth += 1;
-            if let Ok(chunk) = Chunk::new(&format!("{c}"), depth, crate::chunk::Status::StrongDelimiter){
+            if let Ok(chunk) = Chunk::new(
+                &format!("{c}"),
+                depth,
+                crate::chunk::Status::StrongDelimiter,
+            ) {
                 token.push(chunk)
             }
             continue;
         }
         if CLOSING_DELIMITER.contains(&c) {
-            tmp_word =  reset_tmp_word(&mut token, &tmp_word, &depth);
-            if let Ok(chunk) = Chunk::new(&format!("{c}"), depth, crate::chunk::Status::StrongDelimiter){
+            tmp_word = reset_tmp_word(&mut token, &tmp_word, &depth);
+            if let Ok(chunk) = Chunk::new(
+                &format!("{c}"),
+                depth,
+                crate::chunk::Status::StrongDelimiter,
+            ) {
                 token.push(chunk)
             }
             if depth > 0 {
@@ -54,9 +66,11 @@ pub fn split_raw_data(raw_data: &str, delimiter: &[char]) -> Vec<Chunk> {
             }
             continue;
         }
-        if delimiter.contains(&c){
-            tmp_word =  reset_tmp_word(&mut token, &tmp_word, &depth);
-            if let Ok(chunk) = Chunk::new(&format!("{c}"), depth, crate::chunk::Status::WeakDelimiter){
+        if delimiter.contains(&c) {
+            tmp_word = reset_tmp_word(&mut token, &tmp_word, &depth);
+            if let Ok(chunk) =
+                Chunk::new(&format!("{c}"), depth, crate::chunk::Status::WeakDelimiter)
+            {
                 token.push(chunk)
             }
             continue;
@@ -65,20 +79,27 @@ pub fn split_raw_data(raw_data: &str, delimiter: &[char]) -> Vec<Chunk> {
     }
 
     if !tmp_word.is_empty() {
-        if let Ok(chunk) = Chunk::new(&tmp_word.iter().collect::<String>(), depth, crate::chunk::Status::Unknown) {
+        if let Ok(chunk) = Chunk::new(
+            &tmp_word.iter().collect::<String>(),
+            depth,
+            crate::chunk::Status::Unknown,
+        ) {
             token.push(chunk);
         }
-    
     }
 
     token
 }
 
-fn reset_tmp_word(token : &mut Vec<Chunk>, word : &[char], depth : &i16) -> Vec<char>{
-    if word.is_empty(){
+fn reset_tmp_word(token: &mut Vec<Chunk>, word: &[char], depth: &i16) -> Vec<char> {
+    if word.is_empty() {
         return Vec::default();
     }
-    if let Ok(chunk) = Chunk::new(&word.iter().collect::<String>(), *depth, crate::chunk::Status::Unknown) {
+    if let Ok(chunk) = Chunk::new(
+        &word.iter().collect::<String>(),
+        *depth,
+        crate::chunk::Status::Unknown,
+    ) {
         token.push(chunk);
     }
     Vec::default()

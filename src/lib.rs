@@ -1,12 +1,17 @@
 use elements::Elements;
 use error_stack::{Report, Result};
 use errors::ParsingError;
-use parsing::{extensions::{get_extension, remove_extension}, string::{parse_anime_title, parse_release_group, parse_episode_title}};
+use parsing::{
+    extensions::{get_extension, remove_extension},
+    string::{parse_anime_title, parse_episode_title, parse_release_group},
+};
 use split::split_raw_data;
 
 use crate::{
-    parsing::{episode::parse_episode_number, keywords::parsing_keywords, number::parsing_isolated_number},
-    traits::{ExtendedString, ChunksManipulation},
+    parsing::{
+        episode::parse_episode_number, keywords::parsing_keywords, number::parsing_isolated_number,
+    },
+    traits::{ChunksManipulation, ExtendedString},
 };
 
 pub mod chunk;
@@ -15,8 +20,8 @@ pub mod errors;
 mod keyword;
 mod parsing;
 mod split;
-mod utils;
 mod traits;
+mod utils;
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Parser {
@@ -104,14 +109,14 @@ impl Parser {
             parse_episode_number(&self.allowed_delimiters, &mut chunks, &mut found);
         }
 
-        parsing_isolated_number(&mut found,&chunks.get_isolated_number() ,&mut chunks);
+        parsing_isolated_number(&mut found, &chunks.get_isolated_number(), &mut chunks);
         parse_anime_title(&mut chunks, &mut found, &self.allowed_delimiters);
 
-        if self.release_group{
-            parse_release_group(&mut chunks, &mut found, &self.allowed_delimiters); 
+        if self.release_group {
+            parse_release_group(&mut chunks, &mut found, &self.allowed_delimiters);
         }
 
-        if self.ep_title{
+        if self.ep_title {
             parse_episode_title(&mut chunks, &mut found, &self.allowed_delimiters);
         }
 

@@ -1,6 +1,6 @@
 use unicode_normalization::UnicodeNormalization;
 
-use crate::{chunk::Chunk, traits::ExtendedString};
+use crate::traits::ExtendedString;
 
 impl ExtendedString for str {
     fn remove_ignored(&self, ignored: &[String]) -> String {
@@ -60,4 +60,3 @@ mod test {
         );
     }
 }
-

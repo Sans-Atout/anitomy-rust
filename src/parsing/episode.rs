@@ -41,10 +41,10 @@ pub fn parse_episode_number(d: &[char], c: &mut [Chunk], e: &mut Elements) -> bo
                 && c.get(index + 4).is_some_and(|c| c.value().is_digit())
             {
                 c[index].found();
-                c[index+1].found();
-                c[index+2].found();
-                c[index+3].found();
-                c[index+4].found();
+                c[index + 1].found();
+                c[index + 2].found();
+                c[index + 3].found();
+                c[index + 4].found();
                 e.add(Category::EpisodeNumber, &c[index].value());
                 return true;
             }
@@ -52,7 +52,7 @@ pub fn parse_episode_number(d: &[char], c: &mut [Chunk], e: &mut Elements) -> bo
         }
     }
     for chunk in c {
-        if chunk.is_status(Status::Found){
+        if chunk.is_status(Status::Found) {
             continue;
         }
         if match_episode_string(d, &chunk.value(), e) {
@@ -217,7 +217,7 @@ impl EpisodeMatching for str {
                 if category == Category::AnimeSeasonPrefix {
                     e.add(Category::AnimeSeason, &data);
                 }
-                if category == Category::EpisodePrefix || category == Category::AnimeType  {
+                if category == Category::EpisodePrefix || category == Category::AnimeType {
                     e.add(Category::EpisodeNumber, &data);
                 }
 

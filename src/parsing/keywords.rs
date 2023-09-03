@@ -1,7 +1,7 @@
 use crate::keyword::Keyword;
-use crate::parsing::number;
-use crate::traits::{ParsingNumber, EpisodeMatching, ExtendedString};
-use crate::{chunk, elements};
+
+use crate::traits::{EpisodeMatching, ExtendedString, ParsingNumber};
+
 use crate::{
     chunk::{Chunk, Status},
     elements::{Category, Elements},
@@ -30,7 +30,10 @@ pub fn parsing_keywords(elements: &mut Elements, tokens: &mut [Chunk]) {
 
     for index in 0..tokens.len() {
         let tested = tokens[index].value();
-        if tested.is_empty() || !tokens[index].is_status(crate::chunk::Status::Unknown) || (tested.is_digit() && tested.len() != 8 ){
+        if tested.is_empty()
+            || !tokens[index].is_status(crate::chunk::Status::Unknown)
+            || (tested.is_digit() && tested.len() != 8)
+        {
             continue;
         }
 
@@ -120,7 +123,7 @@ fn manage_single_keyword(e: &mut Elements, t: &mut [Chunk], k: &Keyword, i: usiz
 
     if category == Category::AnimeSeasonPrefix {
         if t.get(i - 2).is_some() {
-            let ordinal_value = t[i-2].value();
+            let ordinal_value = t[i - 2].value();
             if !ordinal_value.ordinals_to_nb().is_empty() {
                 e.add(Category::AnimeSeason, ordinal_value.ordinals_to_nb());
                 e.add(Category::AnimeSeasonPrefix, &tested);
@@ -161,7 +164,7 @@ fn manage_single_keyword(e: &mut Elements, t: &mut [Chunk], k: &Keyword, i: usiz
                     t[i + 3].value(),
                     t[i + 4].value()
                 );
-                if episode_test.is_multiple_ep( e) {
+                if episode_test.is_multiple_ep(e) {
                     e.add(Category::EpisodePrefix, &t[i].value());
                     t[i].found();
                     t[i + 1].found();
@@ -171,10 +174,13 @@ fn manage_single_keyword(e: &mut Elements, t: &mut [Chunk], k: &Keyword, i: usiz
                     return true;
                 }
 
-                if t.get(i + 6).is_some() && t[i + 2].value().is_digit()
-                        && t[i + 3].is_status(Status::WeakDelimiter)
-                        && t[i + 4].value() == "("
-                        && t[i + 5].value().is_digit() && t[i + 6].value() == ")" {
+                if t.get(i + 6).is_some()
+                    && t[i + 2].value().is_digit()
+                    && t[i + 3].is_status(Status::WeakDelimiter)
+                    && t[i + 4].value() == "("
+                    && t[i + 5].value().is_digit()
+                    && t[i + 6].value() == ")"
+                {
                     e.add(Category::EpisodePrefix, &t[i].value());
                     e.add(Category::EpisodeNumber, &t[i + 1].value());
                     e.add(Category::EpisodeNumberAlt, &t[i + 5].value());
@@ -222,14 +228,14 @@ fn manage_single_keyword(e: &mut Elements, t: &mut [Chunk], k: &Keyword, i: usiz
         return true;
     }
 
-    if category == Category::VolumePrefix && t.get(i+2).is_some() {
-        let potential_volume_number = t[i+2].value();
-        if potential_volume_number.is_digit(){
+    if category == Category::VolumePrefix && t.get(i + 2).is_some() {
+        let potential_volume_number = t[i + 2].value();
+        if potential_volume_number.is_digit() {
             e.add(Category::VolumePrefix, &t[i].value());
             e.add(Category::VolumeNumber, &potential_volume_number);
             t[i].found();
-            t[i+1].found();
-            t[i+2].found();
+            t[i + 1].found();
+            t[i + 2].found();
             return true;
         }
     }
@@ -240,12 +246,15 @@ fn manage_single_keyword(e: &mut Elements, t: &mut [Chunk], k: &Keyword, i: usiz
     }
 
     if category == Category::Language {
-        if let Ok(languages) = e.find_all(Category::Language){
-            if languages.iter().any(|l| l.value.normalize() == tested.normalize()){
+        if let Ok(languages) = e.find_all(Category::Language) {
+            if languages
+                .iter()
+                .any(|l| l.value.normalize() == tested.normalize())
+            {
                 return false;
             }
             t[i].found();
-            e.add(Category::Language,&tested);
+            e.add(Category::Language, &tested);
             return true;
         }
     }

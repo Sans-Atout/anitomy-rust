@@ -1,12 +1,7 @@
-use itertools::Itertools;
 use regex::Regex;
 
 use crate::elements::Category;
-use crate::{
-    chunk::{Chunk, Status},
-    elements::Elements,
-    traits::{ChunksManipulation, ParsingNumber},
-};
+use crate::{chunk::Chunk, elements::Elements, traits::ParsingNumber};
 const ANIME_YEAR_MIN: i32 = 1917;
 const ANIME_YEAR_MAX: i32 = 2050;
 
@@ -61,7 +56,7 @@ impl ParsingNumber for str {
 
 pub fn parsing_isolated_number(e: &mut Elements, isolated: &[usize], chunks: &mut [Chunk]) {
     println!("||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
-    println!("{:?}",isolated);
+    println!("{:?}", isolated);
     for id in isolated {
         let tested = chunks[*id].value();
         println!("tested : {}", tested);
@@ -71,13 +66,15 @@ pub fn parsing_isolated_number(e: &mut Elements, isolated: &[usize], chunks: &mu
                 chunks[*id].found();
                 continue;
             }
-            if (&tested == "480" || &tested == "720" || &tested == "1080") && e.is_category_empty(Category::VideoResolution){
+            if (&tested == "480" || &tested == "720" || &tested == "1080")
+                && e.is_category_empty(Category::VideoResolution)
+            {
                 e.add(Category::VideoResolution, &tested);
                 chunks[*id].found();
                 continue;
             }
         }
-        if e.is_category_empty(Category::EpisodeNumber){
+        if e.is_category_empty(Category::EpisodeNumber) {
             e.add(Category::EpisodeNumber, &tested);
             chunks[*id].found();
         }

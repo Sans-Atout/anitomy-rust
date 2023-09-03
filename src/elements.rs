@@ -1,5 +1,3 @@
-use std::vec;
-
 use crate::errors::CategoryNotFound;
 use error_stack::{Report, Result};
 
@@ -172,7 +170,7 @@ impl PartialEq for Elements {
 
 #[cfg(test)]
 mod test {
-    use crate::elements::{Elements,Element, Category};
+    use crate::elements::{Category, Element, Elements};
 
     #[test]
     fn elements_eq() {

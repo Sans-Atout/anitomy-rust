@@ -71,7 +71,6 @@ impl Display for Status {
 }
 
 impl ChunksManipulation for Vec<Chunk> {
-
     fn isolated_id(&self) -> Option<usize> {
         let mut is_unique_unk = true;
         let mut id = 0;
