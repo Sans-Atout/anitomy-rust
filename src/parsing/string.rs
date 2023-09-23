@@ -56,6 +56,41 @@ pub fn parse_release_group(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
         return;
     }
 
+    if let Some(release_group) = release_group_rare_case(c,d){
+        e.add(Category::ReleaseGroup, &release_group);
+        return;
+
+    }
+    
+    if let Some(release_group) = release_group_normal_process(c, d){
+        e.add(Category::ReleaseGroup, &release_group); 
+    }
+}
+
+fn release_group_rare_case(c: &mut [Chunk], d: &[char]) -> Option<String>{
+    let mut chunk_id = 0;
+    while let Some(chunk ) = c.get(chunk_id) {
+        if chunk.value().to_lowercase().trim_end_matches('s') == "fansub" {
+            let start_id = chunk_id;
+            let mut tmp_id = start_id;
+            while c.get(tmp_id-1).is_some_and(|c| !c.is_status(Status::StrongDelimiter)) {
+                if tmp_id <= 1 {
+                    break;
+                }
+                tmp_id -= 1;
+            }
+        }
+        if c.get(chunk_id+1).is_some_and(|c| c.value() == "by" && chunk.value() == "encoded"){
+            //todo!("Implement encoded by");
+            return Some(String::default());
+        }
+        chunk_id += 1;
+
+    }
+    None
+}
+
+fn release_group_normal_process(c: &mut [Chunk], d: &[char]) -> Option<String>{
     let mut chunk_id = 0;
     while c
         .get(chunk_id)
@@ -64,7 +99,7 @@ pub fn parse_release_group(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
         chunk_id += 1;
     }
     if chunk_id == c.len() {
-        return;
+        return None;
     }
 
     let mut release_group = String::default();
@@ -76,9 +111,14 @@ pub fn parse_release_group(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
         chunk_id += 1;
     }
 
+    release_group = release_group.clean(d);
+
     if !release_group.is_empty() {
-        e.add(Category::ReleaseGroup, release_group.trim_matches(d));
+        return Some(release_group);
     }
+
+    None
+
 }
 
 pub fn parse_episode_title(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
@@ -117,6 +157,15 @@ pub fn parse_episode_title(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
     {
         if c[chunk_index].is_status(Status::WeakDelimiter) && !before_is_delimiter {
             before_is_delimiter = true;
+
+            if chunk_index > 1 {
+                let is_special_digit = c.get(chunk_index-1).is_some_and(|c| c.value().is_digit()) && c.get(chunk_index+1).is_some_and(|c| c.value().is_digit());
+                if  is_special_digit {
+                    episode_title = format!("{}{}", episode_title, c[chunk_index].value());
+                    chunk_index += 1;
+                    continue;
+                }
+            }
             episode_title = format!("{} ", episode_title);
             chunk_index += 1;
             continue;
@@ -136,4 +185,46 @@ pub fn parse_episode_title(c: &mut [Chunk], e: &mut Elements, d: &[char]) {
         Category::EpisodeTitle,
         episode_title.trim_matches(trim_delimiter.as_slice()),
     );
+}
+
+fn anime_title_start_id(chunks : &[Chunk]) -> Option<usize>{
+    if chunks.is_empty() {
+        return None
+    }
+    let mut start_id : usize = 0;
+    if chunks.get(0).is_some_and(|c| c.is_status(Status::StrongDelimiter)){
+        while chunks.get(start_id).is_some_and(|c| c.depth() > 0 || !c.is_status(Status::Unknown)){
+            start_id += 1;
+        }
+        if start_id != chunks.len(){
+            return Some(start_id)
+        }
+
+        start_id = 0;
+        let mut strong_count = 0;
+        
+        while let Some(c) = chunks.get(start_id){
+            if c.is_status(Status::Unknown) && strong_count > 2 {
+                break;
+            }
+            if c.is_status(Status::StrongDelimiter){
+                strong_count += 1; 
+            }
+            start_id += 1;
+        }
+        if start_id != chunks.len() {
+            return Some(start_id)
+        }
+    }
+
+    start_id = 0;
+    while chunks.get(start_id).is_some_and(|c| !c.is_status(Status::Unknown)) {
+        start_id +=1;
+    }
+
+    if start_id != chunks.len() {
+        return Some(start_id)
+    }
+
+    None
 }
